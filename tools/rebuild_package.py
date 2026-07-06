@@ -13,6 +13,7 @@ Final structure:
     4_Shared_Toolkit/        (PDF + Excel toolkit + PowerPoint + Word templates)
   Facilitators/
     PDF/  Word/              (staff only)
+  Answer_Key/                  (facilitator only - case key)
 """
 
 import shutil
@@ -34,6 +35,7 @@ from fpdf import FPDF
 ROOT = Path(__file__).resolve().parents[1]
 PART = ROOT / "Participants"
 FAC = ROOT / "Facilitators"
+KEY = ROOT / "Answer_Key"
 TOOLS = ROOT / "tools"
 CACHE = TOOLS / ".cache"
 VENV_PY = ROOT / ".venv" / "bin" / "python"
@@ -460,8 +462,8 @@ def build_facilitator_docs():
     # Facilitator Guide
     d = newdoc("Facilitator Guide", "How to run the six-week Momentum engagement")
     add_heading(d, "Before you start", 1)
-    add_body(d, "Distribute only the Participants/ folder. Never share the Facilitators/ folder. "
-             "Confirm each team has five or six members and assign one Buddy per team.")
+    add_body(d, "Distribute only the Participants/ folder. Never share Facilitators/ or "
+             "Answer_Key/. Confirm each team has five or six members and assign one Buddy per team.")
     add_heading(d, "Kickoff (Day 1) - what to say", 1)
     add_body(d, "Set the tone in the first ten minutes:")
     add_bullet(d, "You are consultants, not students. The Board is paying for judgement.")
@@ -706,8 +708,10 @@ def build_root_pdfs():
         ["4_Shared_Toolkit", "Toolkit workbook, presentation guide, board deck, shared templates", "Excel, PDF, PowerPoint, Word"],
     ], widths=[2.2, 3.4, 1.6])
     pdf.add_heading("Facilitators/  (staff only - do not share)")
-    pdf.add_para("Facilitator guide, buddy guide, assessment rubric, solution paths, data-task "
-                 "solutions, debrief guide and FAQ - in PDF and Word.")
+    pdf.add_para("Facilitator guide, buddy guide, assessment rubric, debrief guide and FAQ - in PDF and Word.")
+    pdf.add_heading("Answer_Key/  (staff only - do not share)")
+    pdf.add_para("Case key: data inconsistencies register, expected deliverables and outcomes, "
+                 "strategic solution paths, and a searchable Excel register.")
     pdf.output(str(ROOT / "PACKAGE_MAP.pdf"))
     print("  Root: PACKAGE_MAP.pdf")
 
@@ -717,7 +721,7 @@ def build_root_pdfs():
 # ---------------------------------------------------------------------------
 
 def clean():
-    for target in (PART, FAC):
+    for target in (PART, FAC, KEY):
         if target.exists():
             shutil.rmtree(target)
     # Remove any stray legacy numbered folders / old readmes
@@ -766,13 +770,18 @@ def main():
     print("=== Step 6: Facilitator materials ===")
     build_facilitator_docs()
 
-    print("=== Step 7: Root quick-start PDFs ===")
+    print("=== Step 7: Answer Key ===")
+    import answer_key as ak
+    ak.build_all(docx_to_pdf)
+
+    print("=== Step 8: Root quick-start PDFs ===")
     build_root_pdfs()
 
     print("\nDone. Structure:")
     for d in sorted(PART.iterdir()):
         print(f"  Participants/{d.name}/")
     print("  Facilitators/PDF, Facilitators/Word")
+    print("  Answer_Key/ (PDF, Excel, Word)")
 
 
 if __name__ == "__main__":
