@@ -326,16 +326,22 @@ def csv_to_excel(raw_dir: Path, out_xlsx: Path):
         ws[c].font = header_font
         ws[c].fill = header_fill
     notes = [
-        ("beneficiary_id", "Duplicate IDs exist by design; de-duplicate carefully"),
-        ("placed_90d", "Coded as Y / Yes / 1 / N / No / 0 / blank - normalise before counting"),
-        ("province", "'HCMC' and 'Ho Chi Minh City' both appear - standardise"),
-        ("date fields", "Mixed formats (dd/mm/yyyy and yyyy-mm-dd)"),
-        ("age", "At least one impossible value - investigate, do not delete silently"),
-        ("wage_vnd_monthly", "At least one obvious typo/outlier"),
-        ("hub = DN (Dong Nai)", "Underperforms; Q3 costs appear double-entered in hub_costs_2025"),
-        ("volunteer_hours", "Hours may be logged against mentors marked inactive - decide how to handle"),
-        ("employment_type", "Formal vs Gig - the placement rate depends on which you count"),
-        ("sample size", "This export (~520) is smaller than the 2,847 in D-01; state this limitation"),
+        ("beneficiary_id", "Duplicate IDs exist by design in the registry only; keep the row with the latest last_updated and log the conflict"),
+        ("placed_90d", "Coded as Y / Yes / 1 / N / No / 0 / blank. Blank = missing follow-up (not 'not placed'). Primary rate = completion_status Completed only"),
+        ("province", "'HCMC' and 'Ho Chi Minh City' both appear - standardise before grouping"),
+        ("date fields", "Mixed formats (dd/mm/yyyy and yyyy-mm-dd) - standardise before joins"),
+        ("date_of_birth / age", "One record has an impossible age (~42). Treat as data error; do not infer ineligibility for the whole file"),
+        ("wage_vnd_monthly", "One extreme outlier - see notes column ('Data entry error wage'); exclude or cap for averages"),
+        ("hub = DN (Dong Nai)", "Underperforms; September 2025 costs appear twice in hub_costs_2025"),
+        ("volunteer_hours.status", "Use the status column. Hours against Inactive mentors (e.g. M-099) - exclude for mentor-hour averages or justify"),
+        ("programme_attendance", "SF/PD = classroom sessions; BM = mentor-circle sessions (fewer). All three programmes are present"),
+        ("employment_type", "Formal vs Gig - placement rate depends on which you count; report both for VPBank"),
+        ("amount_vnd_m", "At least one funding cell is text with a thousands comma (UK aid 2025-Q3 = '1,250') - coerce before SUM"),
+        ("hub_capacity_jan2026", "Staff FTE, mentors, caseload, burn and throughput headroom - required when choosing scale scenarios"),
+        ("mentor counts", "D-01 (~95 org-wide) ≠ hub_capacity active_mentors sum (~26) ≠ "
+         "volunteer_hours mentor IDs (~44 Active + Inactive M-099) - state the grain"),
+        ("export size", "beneficiary_registry ~802 rows / 800 unique IDs; aligns with guideline served 2025. D-01 is 2024 public completers/71% - different grain"),
+        ("scale / reflection", "Any growth recommendation must weigh mission + Board ambition against staff, mentor and finance capacity"),
     ]
     for i, (a, b) in enumerate(notes, 5):
         ws.cell(row=i, column=1, value=a)
@@ -422,25 +428,25 @@ def build_ppt(out_path: Path):
     title_slide()
     content_slide(
         "GBF should [action] - because [reason]",
-        "[Lead stat + source, e.g. waitlist 2,400; placement 63% formal]",
+        "[Lead evidence + source - your finding, not the engagement letter]",
         "[The single most important 'so what']",
         "[The specific decision you want from the Board]",
         "Open with the answer. You have 60 seconds of Board attention.")
     content_slide(
-        "Demand has outpaced funding",
-        "Waitlist ~2,400 (D-01); income grew 3% while need grew far faster (D-12)",
-        "There is moral urgency to grow - but scaling a broken model repeats Dong Nai",
-        "[Frame the central trade-off]")
+        "What is at stake if the Board postpones",
+        "[Waitlist / funding / staff pressure - cite sources]",
+        "There is urgency - but urgency is not a blank cheque for any growth path",
+        "[Frame the tension without naming a preferred dilemma]")
     content_slide(
-        "Young people drop out when transport costs bite",
-        "BN-02 and ST-05; survey barrier data; Dong Nai internship drop-out 38% (D-02)",
-        "A modest transport stipend may lift completion more than any new hub",
-        "[Recommend a transport pilot? Quantify it]")
+        "What the evidence forces you to confront",
+        "[One hard finding with BN-/ST-/FM- cite]",
+        "[Why this finding changes the decision]",
+        "[What a weak team would ignore]")
     content_slide(
-        "The headline placement rate flatters us",
-        "71% broad vs ~63% formal (ST-02); definition footnote in D-01",
-        "Honest dual reporting protects the VPBank relationship, not endangers it",
-        "[Recommend a reporting standard]")
+        "Where definitions change the story",
+        "[Measurement / placement definition finding]",
+        "Honest dual reporting protects the funder relationship, not endangers it",
+        "[Recommend a reporting standard only if you earned it]")
     content_slide(
         "We weighed [X] against [Y] and [Z]",
         "Prioritisation matrix; funding scenarios (DB-5)",
@@ -487,37 +493,52 @@ def build_facilitator_docs():
              "Answer_Key/. Confirm each team has five or six members and assign one Buddy per team. "
              "Operational datasets live only in Workflow B's folder - do not hand A the Excel. "
              "Programme window: 26 July to 20 September 2026.")
+    add_heading(d, "Logistics to tell teams at kickoff", 1)
+    add_bullet(d, "Issue Participants/ as a Drive share or ZIP - do not send teams to a public "
+               "GitHub download.")
+    add_bullet(d, "Team workspace: Google Drive / Google Workspace (or Microsoft 365 if assigned). "
+               "Weekly submissions via the programme Google Form (Buddy shares URL).")
+    add_bullet(d, "File naming: TeamShortName_Owner_DeliverableCode_Version.ext")
+    add_bullet(d, "Official A-B exchange: create A_B_Exchange/ in the team Drive; file "
+               "Data Estate Brief, Demand Brief, Analysis Plan, R-xx and FM-xx PDFs; update the "
+               "Request Log. Chat is not the assessment record.")
+    add_bullet(d, "Handoff gate: 4_Shared_Toolkit/Templates/Cross_Workflow_Handoff_Checklist.docx. "
+               "Online ticks only (typed name + date) - no wet signature. Full steps: Guideline "
+               "Section 8. Formal checkpoint W6-02 (Wed 2 Sep, 12:00 ICT).")
+    add_bullet(d, "Week 3 Buddy+5 ritual: B presents Estate Brief → A presents Demand → B owns "
+               "Analysis Plan (catalog not raw data; demand not columns).")
     add_heading(d, "What this case is testing (staff only)", 1)
     add_body(d, "Do not state these lenses to participants.")
     add_bullet(d, "Efficiency versus ethics: growth/targets/placement metrics against dignity, "
                "quality, and who gets left behind. Teams should discover and sit with the tension.")
     add_bullet(d, "Empathy versus outside-in: whether recommendations are grounded in beneficiary "
                "voices or designed for people whose context the team has not taken seriously.")
-    add_bullet(d, "Active querying: A must work out what to ask; B must translate. Penalise "
-               "teams that reverse-engineer from D-01 alone or share the raw file.")
+    add_bullet(d, "Active querying: B briefs the data estate (catalog only); A states demand; "
+               "B owns the analysis plan and translates Findings. Penalise raw-file sharing or "
+               "A prescribing joins from a schema dump.")
     add_heading(d, "Kickoff (Day 1) - what to say", 1)
     add_body(d, "Set the tone in the first ten minutes:")
     add_bullet(d, "You are consultants, not students. The Board is paying for judgement.")
     add_bullet(d, "There is no single right answer. We assess your reasoning and evidence.")
     add_bullet(d, "Everything you need is in the pack. Do not go looking outside it.")
-    add_bullet(d, "Two workflows hold incomplete information. A frames questions; B owns the data "
-               "and translates findings. You must talk to each other.")
+    add_bullet(d, "Two workflows hold incomplete information. B briefs what data exists; A states "
+               "what they need; B plans and answers. You must talk to each other.")
     add_bullet(d, "We will not tell you which sources to trust. Interrogate definitions, "
                "audiences and contradictions - then record your ratings in the credibility matrix.")
     add_heading(d, "Week-by-week facilitation", 1)
     add_table(d, ["Week", "Watch for", "Nudge if..."], [
         ("1", "Rushing past the data room; A asking for 'the data file'; roles unassigned",
          "they skip Charter / Request Log setup"),
-        ("2", "Treating every source as equal; credibility matrix empty or copy-paste ratings",
-         "they want you to say which documents are 'safe'"),
-        ("3", "No Analysis Requests; B answering unasked questions; maps with no citations",
-         "Request Log is empty by Wednesday"),
+        ("2", "Treating every source as equal; B not drafting Data Estate Brief",
+         "they want you to say which documents are 'safe' or to share the Excel"),
+        ("3", "No Estate/Demand/Plan trail; B dumping dictionary; A shopping for columns",
+         "Request Log milestones empty by Wednesday"),
         ("4", "Options that are not genuinely distinct; numbers without Request IDs",
          "all three options are really the same idea"),
         ("5", "Recommendations that ignore Findings or validation",
          "nothing changed after FM-01 or the transcripts"),
         ("6", "Weak handoff; unfinished final report draft",
-         "online ticks missing or A/B still arguing about the raw file"),
+         "Handoff Checklist PDF missing / Sections A-C incomplete, or A/B still arguing about the raw file"),
         ("7", "Data-dump slides; burying bad news; no named cost of the preferred path",
          "Dong Nai or the formal rate is missing; trade-off reflection is empty"),
         ("8", "Shallow reflection; blame in peer review",
@@ -534,6 +555,12 @@ def build_facilitator_docs():
     add_body(d, "Your job is to ask better questions, not to solve the case. Never name "
              "'efficiency versus ethics' or 'elitist outside-in' to participants. Use the "
              "three-level hint ladder. Only move to the next level if the team is genuinely stuck.")
+    add_heading(d, "Staff-only: the A↔B loop (Buddy + 5 only)", 1)
+    add_body(d, "Week 3 energy comes from inside the team room. Referee this sequence:")
+    add_number(d, "B presents Data Estate Brief (catalog) - stop them if they open the Excel for A.")
+    add_number(d, "A presents Demand Brief (ranked decision needs) - stop column shopping lists.")
+    add_number(d, "B owns Analysis Plan - A may clarify scope/timing, not rewrite joins.")
+    add_number(d, "Then formal R-xx → FM-xx as the assessment trail.")
     add_heading(d, "Staff-only: question themes (do not paste into participant packs)", 1)
     add_body(d, "Participants should invent asks from transcripts and their issue tree. If they "
              "only request vanity metrics from D-01, nudge - do not hand them a menu. Useful "
@@ -547,17 +574,21 @@ def build_facilitator_docs():
     add_heading(d, "The hint ladder", 1)
     for topic, l1, l2, l3 in [
         ("Problem framing",
-         "What exactly is the Board asking you to decide?",
-         "Is your problem statement about programmes, geography, funding, or all three?",
-         "Ask which voices in the data room pull hardest in opposite directions."),
+         "What exactly must the Board decide on 10 September - in one sentence of your own?",
+         "Which disagreements in the data room would change that sentence if resolved?",
+         "Ask which voices pull hardest in opposite directions, and whether your tree covers them."),
         ("Asking for evidence",
          "What would you need to know to choose between your options?",
-         "Have you filed an Analysis Request, or are you guessing from the annual report?",
-         "Ask A to turn one hypothesis into R-0x before inventing a number."),
+         "Have you read B's Data Estate Brief and filed a Demand Brief - or are you guessing from the annual report?",
+         "Ask A to turn one Demand item into R-0x after B's Analysis Plan exists."),
+        ("Data Estate / Demand / Plan hygiene",
+         "Where is the Data Estate Brief PDF?",
+         "Is Demand ranked by decision impact, or is it a list of columns?",
+         "Refuse raw-file sharing; require DEB → DMD → AP → R/FM PDFs in A_B_Exchange/."),
         ("Drivers of placement / attendance",
          "Staff and young people talk about what helps someone get a job - have you tested any of that?",
          "Would attendance or programme design change your recommendation if the data disagreed?",
-         "Nudge A toward a request on placement drivers; then coach B on joining tables without giving the steps."),
+         "Nudge A toward a Demand item on placement drivers; then coach B on the Analysis Plan without giving the steps."),
         ("Mentoring / completion / volunteers",
          "Transcripts mention mentoring and drop-out - is that a claim or an evidence gap?",
          "What would you ask B if mentoring intensity mattered for your option?",
@@ -566,6 +597,11 @@ def build_facilitator_docs():
          "Where is the PDF of that request?",
          "Is the Findings Memo in A_B_Exchange/ or only in a chat thread?",
          "Refuse to treat chat as the official record; require R-xx / FM-xx PDFs before handoff."),
+        ("Handoff confirmation",
+         "Where is the Cross-Workflow Handoff Checklist in the package?",
+         "Have A and B each completed their section with an online tick (name + date) - not a wet signature?",
+         "Point them to 4_Shared_Toolkit/Templates/Cross_Workflow_Handoff_Checklist.docx and "
+         "Guideline Section 8; Engagement Lead confirms Section C only if three R/FM pairs exist."),
         ("Placement rate",
          "What does 'placed' actually mean here?",
          "Whose definition are you using - D-01's or ST-02's?",
@@ -590,23 +626,28 @@ def build_facilitator_docs():
     add_number(d, "Ask which tables in the data dictionary look relevant - do not name the join path first.")
     add_number(d, "If still stuck, Level 2: 'How would you get one attendance rate per young person?' "
                "or 'What would you do with hours logged against inactive mentors?'")
-    add_number(d, "Level 3 (last resort): point them to Facilitators/05_Data_Task_Solutions for "
-               "method hints - do not read the expected findings aloud.")
+    add_number(d, "Level 3 (last resort): point them to Facilitators/PDF/05_Data_Task_Solutions.pdf "
+               "for method hints - do not read the expected findings aloud.")
     add_number(d, "Always push: association is not causation; name confounders in the Findings Memo.")
     add_heading(d, "Check-in schedule", 1)
-    add_body(d, "Fridays of Weeks 1-7. Fifteen minutes. Review Request Log health, Findings Memo "
+    add_body(d, "Fridays of Weeks 1-7. Fifteen minutes (longer in Week 3 if running the "
+             "Estate/Demand/Plan live brief). Review Request Log milestones, Findings Memo "
              "quality, and whether claims are cited. Do not review answers for correctness. "
-             "Do not give A the dataset. From Week 3, check whether A has asked at least one "
-             "driver/mentoring question if their options depend on it.")
+             "Do not give A the dataset. From Week 3, check Estate → Demand → Plan before R-01. "
+             "From Week 5, confirm the team knows where the Handoff Checklist lives and that "
+             "confirmation is online only (W6-02).")
     add_heading(d, "Common mistakes to expect", 1)
     add_bullet(d, "Accepting the 71% placement rate at face value.")
-    add_bullet(d, "A reverse-engineering strategy from D-01 without querying B.")
-    add_bullet(d, "B sharing the raw workbook or answering questions A never asked.")
+    add_bullet(d, "A reverse-engineering strategy from D-01 without Demand / querying B.")
+    add_bullet(d, "B sharing the raw workbook, dictionary, or a field dump labelled as Estate Brief.")
+    add_bullet(d, "A writing Demand as a column shopping list; B letting A co-edit the Analysis Plan.")
     add_bullet(d, "A never asking about attendance, mentoring or completion despite transcript clues.")
     add_bullet(d, "Recommending national scale without fixing Dong Nai.")
     add_bullet(d, "Treating the board email (D-08) as fact.")
     add_bullet(d, "Claiming attendance causes placement.")
     add_bullet(d, "Empty trade-off reflection; no named cost of the preferred path.")
+    add_bullet(d, "Leaving the Handoff Checklist to the night before the Board, or treating chat "
+               "'we agreed' as confirmation.")
     d.save(fac_word / "02_Buddy_Guide.docx")
 
     # Assessment Rubric
@@ -660,10 +701,10 @@ def build_facilitator_docs():
          "Patchy",
          "Absent"),
         ("Teamwork and cross-workflow exchange", 5,
-         "Genuine request/findings exchange; online handoff confirmed in good faith",
-         "Good collaboration",
-         "Uneven contribution or one-way dump",
-         "Free-riding or A/B bypass"),
+         "Estate→Demand→Plan→R/FM trail in A_B_Exchange/; Handoff online-confirmed (Sections A-C)",
+         "Good collaboration; loop mostly complete",
+         "Uneven contribution or skipped Estate/Demand/Plan; thin handoff ticks",
+         "Free-riding, A/B bypass, raw-file share, or missing handoff PDF"),
     ]:
         add_heading(d, f"{crit} ({pts} points)", 2)
         add_table(d, ["Excellent", "Good", "Satisfactory", "Poor"],
@@ -678,33 +719,48 @@ def build_facilitator_docs():
     d = newdoc("Solution Paths", "CONFIDENTIAL - there is no single correct answer")
     add_body(d, "Reward reasoning, not a particular destination. Strong teams name what their "
              "preferred path costs. Weak answers pick one slogan and ignore the evidence against it.")
-    for name, thesis, strengths, risks in [
+    for name, thesis, strengths, risks, left_behind in [
         ("Path A - Depth before scale",
          "Pause expansion, fix Dong Nai and employer quality, negotiate a smaller quality-focused VPBank grant.",
          "Honest about D-02; addresses EP-02 and ST-05; sustainable.",
-         "May leave money on the table; must convince VPBank (see DN-01)."),
+         "May leave money on the table; must convince VPBank (see DN-01).",
+         "The ~1,100 on the waitlist (esp. Binh Duong / BN-04, YouthWorks leakage); Long An ambition and the "
+         "Board growth faction; possibly part of the VPBank envelope if renegotiated down."),
         ("Path B - Conditional scale (most common strong answer)",
          "Accept VPBank but gate expansion behind quality milestones; fix Dong Nai first, then Long An.",
          "Balances DN-01 and BD-01; keeps the grant; stages risk.",
-         "Execution-heavy; needs credible M&E to hold the line."),
+         "Execution-heavy; needs credible M&E to hold the line.",
+         "Whoever sits behind the gates - waitlisted youth until milestones clear; Long An if gates stay closed; "
+         "young people who need help now while process/M&E work runs. Soft risk: staff burn if 'fix in parallel'."),
         ("Path C - Employer-led pivot",
          "Certify and audit employers; place only with vetted partners; make quality the brand.",
          "Directly answers EP-02, ST-05, BN-02; differentiates from YouthWorks.",
-         "Slower growth; needs employer buy-in."),
+         "Slower growth; needs employer buy-in.",
+         "Youth who would have taken weaker/exploitative placements; hubs dependent on volume employers (DN); "
+         "anyone facing fewer seats / longer waits; employers who fail audit and the youth they would have absorbed."),
         ("Path D - Digital hybrid",
          "Grow Pathway Digital for reach, keep Skills Forward for depth.",
          "Lower unit cost (D-12); serves waitlist faster.",
-         "Digital placement is weaker; equity risk (BN-01 has no laptop); only valid with caveats."),
+         "Digital placement is weaker; equity risk (BN-01 has no laptop); only valid with caveats.",
+         "Youth without devices/connectivity (BN-01); people who need in-person support (disability / weaker "
+         "digital skills - BN-03); anyone steered to Digital who would have done better on Skills Forward. "
+         "Waitlist may shrink on paper while equity worsens."),
     ]:
         add_heading(d, name, 2)
         add_body(d, "Thesis: " + thesis)
         add_body(d, "Strengths: " + strengths)
+        add_body(d, "Who is left behind: " + left_behind, bold=True)
         add_body(d, "Risks to probe: " + risks)
+    add_body(d, "Across all four (if unnamed): disability, Dong Nai youth in bad internships, and "
+             "anyone cherry-picked to protect 65% remain red-line 'left behind' groups.", italic=True)
     add_heading(d, "Red lines (mark down if crossed)", 1)
-    add_bullet(d, "Recommending 60-day reporting as the primary metric to look better.")
+    add_bullet(d, "Elevating a shorter-than-ninety-day placement window (e.g. 60-day) as the "
+               "primary metric to look better (watch for 'earlier visibility' language from Development).")
     add_bullet(d, "Replacing caseworkers with volunteers (contradicts VR-01).")
     add_bullet(d, "National scale with no fix for Dong Nai.")
     add_bullet(d, "Cherry-picking easier-to-place youth without acknowledging the cost.")
+    add_bullet(d, "Treating D-08 board emails as verified fact.")
+    add_bullet(d, "Claiming attendance causes placement without naming confounders.")
     add_bullet(d, "Workflow A citing 'the dataset' without Request / Findings IDs.")
     add_bullet(d, "Workflow B sharing the raw workbook with A.")
     d.save(fac_word / "04_Solution_Paths.docx")
@@ -712,19 +768,30 @@ def build_facilitator_docs():
     # Data Task Solutions
     d = newdoc("Data Task Solutions", "CONFIDENTIAL - expected findings and coaching methods")
     add_body(d, "Workflow B should find these. Workflow A should learn material issues only "
-             "through Findings Memos, not by opening the workbook. Participant packs no longer "
-             "include step-by-step DB-3/DB-4 recipes - Buddies coach method; this file holds the key.")
+             "through Findings Memos, not by opening the workbook. A receives a Data Estate Brief "
+             "(catalog) and Analysis Plans - never the dictionary or raw file. Participant packs "
+             "no longer include step-by-step DB-3/DB-4 recipes - Buddies coach method; this file "
+             "holds the key.")
     add_heading(d, "DB-1 Data quality - what B should find", 1)
-    add_bullet(d, "Duplicate beneficiary IDs (built in) - de-duplicate before counting.")
-    add_bullet(d, "placed_90d coded as Y/Yes/1/N/No/0/blank - normalise.")
+    add_bullet(d, "Duplicate beneficiary IDs (built in) - keep latest last_updated; log the conflict.")
+    add_bullet(d, "placed_90d coded as Y/Yes/1/N/No/0/blank - normalise; blank ≠ 'not placed'.")
     add_bullet(d, "Mixed date formats across tables.")
-    add_bullet(d, "A wage outlier (obvious typo) on one record.")
-    add_bullet(d, "Dong Nai Q3 costs double-entered in hub_costs_2025.")
-    add_bullet(d, "Hours logged against an inactive mentor in volunteer_hours.")
+    add_bullet(d, "Impossible age (~42) on GBF-2025-10417 - treat as entry error, not mass ineligibility.")
+    add_bullet(d, "A wage outlier (99,999,999) on the same record - exclude or cap for averages.")
+    add_bullet(d, "Roughly 18% ethnicity and ~5% disability_status blank - report missingness.")
+    add_bullet(d, "Dong Nai September 2025 costs double-entered in hub_costs_2025.")
+    add_bullet(d, "Hours logged against inactive mentor M-099 (status=Inactive) in volunteer_hours.")
     add_bullet(d, "'HCMC' vs 'Ho Chi Minh City' inconsistency.")
+    add_bullet(d, "UK aid / FCDO 2025-Q3 amount stored as text '1,250' - coerce before SUM.")
+    add_bullet(d, "BM attendance uses fewer mentor-circle sessions than SF/PD classroom sessions - caveat.")
+    add_bullet(d, "Registry ~802 rows / 800 unique IDs (matches guideline served); waitlist exactly "
+               "1,100; hub throughput caps sum to 800 - do not conflate with D-01's 592 completers.")
+    add_bullet(d, "hub_capacity_jan2026 shows DN/LA overloaded; active_mentors sum ~26 "
+               "(≠ D-01's ~95 org-wide figure) - state the grain.")
     add_heading(d, "DB-2 expected patterns (foundation dashboard)", 1)
-    add_bullet(d, "Dong Nai placement clearly below HCMC hubs.")
-    add_bullet(d, "Formal-only rate roughly 8 points below the broad rate (aligns with ST-02).")
+    add_bullet(d, "Among Completed records, HCMC hubs can clear ~65%+ broad; Dong Nai stays below, especially on Formal.")
+    add_bullet(d, "Including Dropped in the denominator pulls every hub under 65% - teach the definition choice.")
+    add_bullet(d, "Formal-only rate sits below the broad rate (aligns with ST-02).")
     add_bullet(d, "Disability placement materially below overall (aligns with ST-03).")
     add_heading(d, "When A asks about placement drivers / attendance / programme design", 1)
     add_body(d, "Coach B toward this path only if stuck (do not hand A the recipe):")
@@ -744,6 +811,9 @@ def build_facilitator_docs():
     add_heading(d, "Funding scenarios (B5)", 1)
     add_bullet(d, "Aggressive growth struggles to hold 65% honestly without selection pressure - "
                "the efficiency/ethics tension teams should discover.")
+    add_bullet(d, "Strong teams also fail Aggressive (and sometimes Moderate) on capacity: "
+               "staff FTE, mentor bench and monthly burn in hub_capacity_jan2026, not funding alone.")
+    add_bullet(d, "Scenario choice should reference mission + Board ambition, then capacity constraints.")
     d.save(fac_word / "05_Data_Task_Solutions.docx")
 
     # Debrief + FAQ
@@ -754,7 +824,10 @@ def build_facilitator_docs():
     add_bullet(d, "Submission: upload named file to Drive, then submit the link via the weekly "
                "Google Form (Buddy shares URL). Email is backup only.")
     add_bullet(d, "File naming: TeamShortName_Owner_DeliverableCode_Version.ext")
-    add_bullet(d, "Package download: GitHub repo -> Code -> Download ZIP.")
+    add_bullet(d, "Package issue: Core Team / Buddy shares Participants/ as Drive folder or ZIP at "
+               "kickoff - do not send teams to a public GitHub download.")
+    add_bullet(d, "Handoff gate: 4_Shared_Toolkit/Templates/Cross_Workflow_Handoff_Checklist.docx "
+               "- online ticks only (Guideline Section 8).")
     add_heading(d, "Debrief flow (90 minutes)", 1)
     add_number(d, "Team reflection (15 min): what surprised you?")
     add_number(d, "Evidence round (20 min): each team names the finding that changed their mind "
@@ -769,9 +842,13 @@ def build_facilitator_docs():
     add_body(d, "Can we collect more data or interview real NGO staff?", bold=True)
     add_body(d, "No. GBF and all named parties are fictional for this Impact Case. Everything "
              "required is in the pack. Managing incomplete information is part of the exercise.")
-    add_body(d, "How do we confirm the handoff online?", bold=True)
-    add_body(d, "Tick the checklist boxes, type full name and date. A Drive comment or sheet "
-             "tick is enough - no wet signature.")
+    add_body(d, "Where is the handoff checklist and how do we confirm online?", bold=True)
+    add_body(d, "Template: Participants/4_Shared_Toolkit/Templates/Cross_Workflow_Handoff_Checklist.docx. "
+             "Copy to team Drive. Sections A (Workflow A reviews B), B (Workflow B reviews A), "
+             "C (Engagement Lead). Each confirmer ticks [x], types full name + date, notes channel "
+             "(usually 'this Drive Doc'). Export PDF as Team_All_Handoff_vN.pdf and submit the "
+             "Drive link via the weekly Form. No wet signature, no printing. Full steps: "
+             "Guideline Section 8.")
     add_body(d, "Which placement rate is correct?", bold=True)
     add_body(d, "Both are 'correct' under their definitions. The learning point is to state the "
              "definition and report honestly (D-01 footnote vs ST-02).")
@@ -795,14 +872,15 @@ def build_facilitator_docs():
 
     add_heading(d, "2. Who judges the final report?", 1)
     add_bullet(d, "Primary: Core Team Impact Case using 03_Assessment_Rubric and Answer_Key.")
-    add_bullet(d, "Buddy: process and teamwork evidence (Request Log, handoff ticks, file naming).")
+    add_bullet(d, "Buddy: process and teamwork evidence (Request Log, A_B_Exchange PDFs, "
+               "Handoff Checklist online ticks, file naming).")
     add_bullet(d, "Guest Board: live pitch only, unless Core Team shares a one-page score sheet.")
 
     add_heading(d, "3. Briefing guest Board members", 1)
     add_body(d, "Yes - Core Team briefs guests before the session. Guests should not rely on "
              "teams to teach the whole case in the first two minutes.")
-    add_number(d, "Send a one-page case brief (Board question, workflows A/B, fictional disclaimer) "
-               "48 hours ahead.")
+    add_number(d, "Send a one-page case brief (engagement mandate, workflows A/B, fictional disclaimer) "
+               "48 hours ahead. Do not give guests a finished problem statement - teams frame that.")
     add_number(d, "15-minute live brief before pitches: what GBF is (fictional), what a strong "
                "ask looks like, red lines (raw data sharing, outside research).")
     add_number(d, "Optional role cards: guests may play ED / Development / Donor / Board hawk - "
@@ -868,11 +946,14 @@ def build_root_pdfs():
         "Fictional case only - no outside data in deliverables.",
         "Workflow A does not hold the operational datasets; use Analysis Requests.",
         "Workflow B does not share the raw workbook; return Findings Memos.",
-        "Official A-B exchange: save R-xx and FM-xx PDFs in team Drive folder A_B_Exchange/.",
-        "Use Analysis_Request and Findings_Memo templates - chat is not the assessment record.",
+        "A↔B loop: Data Estate Brief (B) → Demand Brief (A) → Analysis Plan (B) → R-xx → FM-xx.",
+        "Official exchange: save DEB/DMD/AP/R/FM PDFs in team Drive folder A_B_Exchange/.",
+        "Use the Shared Toolkit templates - chat is not the assessment record.",
         "Cite Ref + section (documents) or CODE (Speaker) for transcripts.",
         "Name files: Team_Owner_DeliverableCode_Version.ext and submit via the weekly Google Form.",
-        "Download the pack from GitHub: Code > Download ZIP.",
+        "Handoff gate: 4_Shared_Toolkit/Templates/Cross_Workflow_Handoff_Checklist.docx "
+        "(online tick + typed name/date - Guideline Section 8).",
+        "Your Buddy issues Participants/ at kickoff (Drive or ZIP) - no public download step.",
     ]:
         pdf.add_list_item(line)
     pdf.output(str(ROOT / "START_HERE.pdf"))
@@ -956,15 +1037,29 @@ def main():
         "================================================================\n\n"
         "Create this same folder in your TEAM Google Drive (or Microsoft 365).\n"
         "Markers and Buddies assess the cross-workflow exchange from that Drive folder.\n\n"
-        "Required contents (PDF exports of the Word templates):\n"
-        "  - Analysis Requests filed by Workflow A  (R-01, R-02, R-03...)\n"
-        "  - Findings Memos returned by Workflow B  (FM-01, FM-02, FM-03...)\n"
+        "Required sequence (PDF exports of the Word templates):\n"
+        "  1. Data Estate Brief (DEB) - Workflow B briefs what data exists (catalog only)\n"
+        "  2. Demand Brief (DMD) - Workflow A states ranked decision needs\n"
+        "  3. Analysis Plan (AP-xx) - Workflow B owns how to answer\n"
+        "  4. Analysis Requests (R-01, R-02, R-03...) - Workflow A formalises asks\n"
+        "  5. Findings Memos (FM-01, FM-02, FM-03...) - Workflow B returns answers\n"
         "  - Optional curated charts attached to memos\n\n"
-        "Templates:\n"
-        "  ../Templates/Analysis_Request.docx\n"
-        "  ../Templates/Findings_Memo.docx\n\n"
-        "Naming: TeamShortName_WSA_R01_Request_v1.pdf\n"
-        "        TeamShortName_WSB_FM01_Findings_v1.pdf\n\n"
+        "Templates (in ../Templates/):\n"
+        "  Data_Estate_Brief.docx\n"
+        "  Demand_Brief.docx\n"
+        "  Analysis_Plan.docx\n"
+        "  Analysis_Request.docx\n"
+        "  Findings_Memo.docx\n\n"
+        "Cross-Workflow Handoff Checklist (gate before submission):\n"
+        "  ../Templates/Cross_Workflow_Handoff_Checklist.docx\n"
+        "  Confirm online (tick + typed name/date) - see Programme Guideline Section 8.\n"
+        "  Export PDF as Team_All_Handoff_vN.pdf to your team Drive (not required inside this folder).\n\n"
+        "Naming examples:\n"
+        "  TeamShortName_WSB_DEB_v1.pdf\n"
+        "  TeamShortName_WSA_DMD_v1.pdf\n"
+        "  TeamShortName_WSB_AP01_Plan_v1.pdf\n"
+        "  TeamShortName_WSA_R01_Request_v1.pdf\n"
+        "  TeamShortName_WSB_FM01_Findings_v1.pdf\n\n"
         "Also update the Request Log tab in GBF_Consulting_Toolkit.xlsx.\n"
         "Chat / Zalo / Messenger is fine for logistics only - not the assessment record.\n"
         "Minimum three completed R/FM pairs before final strategic options.\n",

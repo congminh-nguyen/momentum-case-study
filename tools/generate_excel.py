@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate Excel workbooks: shared toolkit, dashboard (Workstream B), datasets."""
+"""Generate Excel workbooks: shared toolkit, dashboard (Workflow B), datasets."""
 
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -75,16 +75,18 @@ def build_master_timeline(wb):
         ("W2-01", 2, 2, "17:00", "Submit problem statement and issue tree", "A", "WF-A Lead", "A1 Issue tree", "Buddy + drive", "PDF", ""),
         ("W2-02", 2, 3, "17:00", "Submit stakeholder map", "A", "Research Lead", "A1b Stakeholder", "Buddy + drive", "PDF", ""),
         ("W2-03", 2, 3, "17:00", "Submit information credibility matrix", "All", "Research Lead", "Credibility matrix", "Buddy + drive", "PDF", ""),
-        ("W2-04", 2, 4, "17:00", "Buddy check-in: source interrogation habits", "All", "Engagement Lead", "-", "Buddy", "-", "Check-in 2"),
-        ("W3-01", 3, 0, "17:00", "File Analysis Request R-01", "A", "WF-A Lead", "Analysis_Request", "Team drive", "PDF", ""),
-        ("W3-02", 3, 0, "-", "Profile all eight dataset tables (DB-1)", "B", "WF-B Lead", "Profiling notes", "Team drive", "Excel", ""),
-        ("W3-03", 3, 1, "17:00", "Submit data quality report (B internal)", "B", "WF-B Lead", "B1 Data quality", "Buddy + drive", "PDF", ""),
-        ("W3-04", 3, 2, "17:00", "Submit interview synthesis", "A", "Research Lead", "A2 Synthesis", "Buddy + drive", "PDF", ""),
-        ("W3-05", 3, 2, "17:00", "Submit empathy and journey maps", "A", "WF-A Lead", "A3 Maps", "Buddy + drive", "PDF", ""),
-        ("W3-06", 3, 3, "17:00", "Return Findings Memo FM-01", "B", "WF-B Lead", "Findings_Memo", "Team drive", "PDF", ""),
-        ("W3-07", 3, 4, "17:00", "Submit dashboard version 1 (B working file)", "B", "WF-B Lead", "B2 Dashboard", "Buddy + drive", "Excel", "Check-in 3"),
-        ("W4-01", 4, 0, "17:00", "File Analysis Requests R-02 and R-03", "A", "WF-A Lead", "Analysis_Request", "Team drive", "PDF", ""),
-        ("W4-02", 4, 1, "17:00", "Return FM-02 and FM-03; analysis summary", "B", "WF-B Lead", "B3 + Findings", "Buddy + drive", "Excel+PDF", ""),
+        ("W2-04", 2, 4, "17:00", "Buddy check-in: source interrogation; B Data Estate Brief draft status", "All", "Engagement Lead", "-", "Buddy", "-", "Check-in 2"),
+        ("W3-01", 3, 0, "17:00", "Submit Data Estate Brief (catalog only - no raw file)", "B", "WF-B Lead", "Data_Estate_Brief", "Team drive", "PDF", ""),
+        ("W3-02", 3, 1, "12:00", "Submit Demand Brief (ranked decision needs after reading DEB)", "A", "WF-A Lead", "Demand_Brief", "Team drive", "PDF", ""),
+        ("W3-03", 3, 1, "17:00", "Submit Analysis Plan for priority Demand items", "B", "WF-B Lead", "Analysis_Plan", "Team drive", "PDF", ""),
+        ("W3-04", 3, 1, "17:00", "Submit data quality report (B internal)", "B", "WF-B Lead", "B1 Data quality", "Buddy + drive", "PDF", ""),
+        ("W3-05", 3, 2, "12:00", "File Analysis Request R-01 (aligned to Demand + Plan)", "A", "WF-A Lead", "Analysis_Request", "Team drive", "PDF", ""),
+        ("W3-06", 3, 2, "17:00", "Submit interview synthesis", "A", "Research Lead", "A2 Synthesis", "Buddy + drive", "PDF", ""),
+        ("W3-07", 3, 2, "17:00", "Submit empathy and journey maps", "A", "WF-A Lead", "A3 Maps", "Buddy + drive", "PDF", ""),
+        ("W3-08", 3, 3, "17:00", "Return Findings Memo FM-01", "B", "WF-B Lead", "Findings_Memo", "Team drive", "PDF", ""),
+        ("W3-09", 3, 4, "17:00", "Submit dashboard version 1 (B working file)", "B", "WF-B Lead", "B2 Dashboard", "Buddy + drive", "Excel", "Check-in 3"),
+        ("W4-01", 4, 0, "17:00", "File Analysis Requests R-02 and R-03 (with Plan updates)", "A", "WF-A Lead", "Analysis_Request", "Team drive", "PDF", ""),
+        ("W4-02", 4, 2, "17:00", "Return FM-02 and FM-03; submit B3 analysis summary", "B", "WF-B Lead", "B3 + Findings", "Buddy + drive", "Excel+PDF", ""),
         ("W4-03", 4, 3, "17:00", "Submit strategic options (cite Request IDs)", "A", "WF-A Lead", "A4 Options", "Buddy + drive", "PDF", ""),
         ("W4-04", 4, 4, "17:00", "Submit evidence-check memo on options", "B", "WF-B Lead", "B4 Evidence check", "Team drive", "PDF", "Check-in 4"),
         ("W5-01", 5, 2, "17:00", "Submit validation protocol and trade-off reflection", "A", "Research / WF-A", "A5 A6", "Buddy + drive", "PDF", ""),
@@ -92,7 +94,9 @@ def build_master_timeline(wb):
         ("W5-03", 5, 3, "17:00", "Submit recommendation revision log", "All", "Engagement Lead", "A7 Revision log", "Team drive", "PDF", ""),
         ("W5-04", 5, 4, "17:00", "Submit executive summary (draft)", "A", "Engagement Lead", "Executive summary", "Buddy + drive", "PDF", "Check-in 5"),
         ("W6-01", 6, 1, "17:00", "Submit final report (draft for handoff)", "All", "Engagement Lead", "Final report", "Buddy + drive", "PDF", ""),
-        ("W6-02", 6, 2, "12:00", "Confirm Cross-Workflow Handoff Checklist (online)", "All", "PM Lead", "Handoff checklist", "Buddy", "PDF", ""),
+        ("W6-02", 6, 2, "12:00",
+         "Confirm Cross-Workflow Handoff Checklist online (copy Templates/Cross_Workflow_Handoff_Checklist.docx; tick + typed name/date; export PDF)",
+         "All", "PM Lead", "Handoff checklist", "Buddy", "PDF", ""),
         ("W6-03", 6, 4, "17:00", "Buddy check-in: board rehearsal plan", "All", "Engagement Lead", "-", "Buddy", "-", "Check-in 6"),
         ("W7-01", 7, 3, "09:00", "BOARD PRESENTATION", "All", "All", "Board deck", "Present live", "PPTX", "Check-in 7"),
         ("W7-02", 7, 4, "17:00", "Submit all final deliverables", "All", "PM Lead", "All finals", "Programme portal", "PDF+PPTX+Excel", ""),
@@ -138,6 +142,9 @@ def build_raci(wb):
     tasks = [
         ("Project Charter", "A", "R", "R", "R", "R", "R"),
         ("Information credibility matrix", "A", "R", "C", "R", "R", "C"),
+        ("Data Estate Brief (B)", "C", "I", "A/R", "R", "R", "I"),
+        ("Demand Brief (A)", "C", "A/R", "C", "R", "I", "I"),
+        ("Analysis Plans (B)", "C", "C", "A/R", "R", "R", "I"),
         ("Analysis Requests (A)", "C", "A/R", "C", "R", "I", "I"),
         ("Findings Memos (B)", "C", "C", "A/R", "R", "R", "I"),
         ("Data quality report (B1)", "C", "C", "A/R", "R", "R", "I"),
@@ -179,8 +186,9 @@ def build_funding_scenarios(wb):
     ws = wb.create_sheet("Funding Scenarios")
     style_title(ws, "A1", "Funding Scenarios (Task B5 / DB-5)")
     ws["A2"] = (
-        "Use audited unit costs from D-12 and VPBank terms from D-03. "
-        "State every assumption. Workflow B owns this tab."
+        "Use audited unit costs from D-12, VPBank terms from D-03, and hub_capacity_jan2026. "
+        "Choose scenarios that fit GBF's mission and Board ambition without breaking staff, "
+        "mentor or finance capacity. State every assumption. Workflow B owns this tab."
     )
     ws["A2"].font = Font(italic=True, color="666666")
     ws["A4"] = "Reference inputs"
@@ -189,15 +197,19 @@ def build_funding_scenarios(wb):
         ("Skills Forward cost per completer (VND)", 12800000),
         ("Pathway Digital cost per completer (VND)", 6200000),
         ("VPBank grant per year (VND)", 2666666667),
-        ("Current annual completers (approx.)", 2104),
+        ("Youth served (guideline / registry)", 800),
+        ("D-01 2024 completers (public report)", 592),
         ("Broad placement rate (D-01 definition)", "71%"),
         ("Formal placement rate (ST-02)", "63%"),
+        ("Capacity check source", "hub_capacity_jan2026 + hub_costs_2025"),
     ], 5):
         ws.cell(row=i, column=1, value=label)
         ws.cell(row=i, column=2, value=val)
-    r = 12
-    headers = ["Scenario", "Growth in completers", "Est. total cost (VND)",
-               "Funding gap", "Can meet 65% honestly?", "Key risk"]
+    r = 14
+    headers = [
+        "Scenario", "Growth in completers", "Est. total cost (VND)", "Funding gap",
+        "Can meet 65% honestly?", "Staff/mentor headroom OK?", "Fits mission + Board?", "Key risk",
+    ]
     for i, h in enumerate(headers, 1):
         ws.cell(row=r, column=i, value=h)
     style_header(ws, r, len(headers))
@@ -220,6 +232,9 @@ def build_submissions(wb):
         ("Information credibility matrix", "All", "PDF", "2"), ("Issue tree (A1)", "A", "PDF", "2"),
         ("Stakeholder map (A1b)", "A", "PDF", "2"),
         ("Analysis Requests (min. 3)", "A", "PDF", "3-5"),
+        ("Data Estate Brief", "B", "PDF", "3"),
+        ("Demand Brief", "A", "PDF", "3"),
+        ("Analysis Plans", "B", "PDF", "3-5"),
         ("Data quality report (B1)", "B", "PDF", "3"), ("Findings Memos (min. 3)", "B", "PDF", "3-5"),
         ("Interview synthesis (A2)", "A", "PDF", "3"),
         ("Empathy and journey maps (A3)", "A", "PDF", "3"), ("Dashboard (B2)", "B", "Excel", "3-4"),
@@ -228,7 +243,8 @@ def build_submissions(wb):
         ("Validation protocol (A6)", "All", "PDF", "5"),
         ("Funding scenarios (B5)", "B", "Excel", "5"), ("Revision log (A7)", "All", "PDF", "5"),
         ("Executive summary", "All", "PDF", "5-6"), ("Final report", "All", "PDF", "6-7"),
-        ("Board deck", "All", "PPTX + PDF", "7"), ("Handoff checklist (confirmed)", "All", "PDF", "6"),
+        ("Board deck", "All", "PPTX + PDF", "7"),
+        ("Handoff checklist (confirmed online)", "All", "PDF from Templates/Cross_Workflow_Handoff_Checklist.docx", "6"),
         ("Peer evaluation", "Individual", "PDF", "8"), ("Reflection journal", "Individual", "PDF", "8"),
     ]
     for item in items:
@@ -238,23 +254,35 @@ def build_submissions(wb):
 
 def build_request_log(wb):
     ws = wb.create_sheet("Request Log")
-    style_title(ws, "A1", "Analysis Request Log - minimum three completed R/FM pairs before final options")
+    style_title(ws, "A1", "A↔B Evidence Log - Estate → Demand → Plan → R/FM (min. three R/FM before options)")
     ws["A2"] = (
-        "Workflow A files requests. Workflow B returns Findings Memos. "
-        "Engagement Lead reviews weekly. Do not share the raw dataset with A."
+        "Sequence: B files Data Estate Brief; A files Demand Brief; B files Analysis Plan; "
+        "A files R-xx; B returns FM-xx. Engagement Lead reviews weekly. "
+        "Do not share the raw dataset or data dictionary with A - catalog only in the Estate Brief."
     )
     ws["A2"].font = Font(italic=True, color="666666")
     headers = [
         "Request ID", "Date filed", "Filed by (A)", "Decision question (short)",
-        "Urgency", "Status", "Findings Memo ID", "Date returned", "Returned by (B)", "Notes",
+        "Linked Demand rank", "Analysis Plan ID", "Urgency", "Status",
+        "Findings Memo ID", "Date returned", "Returned by (B)", "Notes",
     ]
     for i, h in enumerate(headers, 1):
         ws.cell(row=4, column=i, value=h)
     style_header(ws, 4, len(headers))
     for i in range(1, 9):
         ws.cell(row=4 + i, column=1, value=f"R-{i:02d}")
-        ws.cell(row=4 + i, column=6, value="Open")
-        ws.cell(row=4 + i, column=7, value=f"FM-{i:02d}")
+        ws.cell(row=4 + i, column=6, value=f"AP-{i:02d}")
+        ws.cell(row=4 + i, column=8, value="Open")
+        ws.cell(row=4 + i, column=9, value=f"FM-{i:02d}")
+    # Estate / Demand tracker rows
+    ws["A14"] = "Loop milestones (tick when PDF is in A_B_Exchange/)"
+    ws["A14"].font = Font(bold=True, color=NAVY)
+    ws["A15"] = "Data Estate Brief (DEB-01) filed by B:"
+    ws["B15"] = ""
+    ws["A16"] = "Demand Brief (DMD-01) filed by A:"
+    ws["B16"] = ""
+    ws["A17"] = "First Analysis Plan (AP-01) filed by B:"
+    ws["B17"] = ""
     auto_width(ws, len(headers))
 
 
@@ -270,18 +298,21 @@ def build_dashboard_workbook(path: Path):
         "Do not share this raw workbook or the datasets file with Workflow A.",
         "Export curated charts into Findings Memos when answering Analysis Requests.",
         "",
-        "Task DB-2: Build pivot tables on the Dashboard tab.",
+        "Foundation (B2): Build pivot tables on the Dashboard tab.",
         "  - Placement rate by hub, programme and gender",
         "  - Conditional formatting where rate is below 65%",
         "  - Three charts with insight titles (not topic titles)",
         "",
-        "Task DB-3: Attendance vs outcomes on Analysis DB3 tab.",
-        "Task DB-4: Mentor hours vs completion on Analysis DB4 tab.",
+        "On-request deep dives (only if A's Demand / R-xx needs them):",
+        "  - Use scratch tabs 'On-request A' and 'On-request B' for working analysis",
+        "  - Design the method yourself from the data dictionary; Buddy coaches, does not prescribe",
+        "  - Return results via Findings Memos - not by sharing this workbook with A",
         "",
         "Rules:",
         "  - State your placement definition on the Dashboard tab",
         "  - Log cleaning decisions in the Shared Toolkit Assumption Log",
         "  - Never delete outliers without documenting why",
+        "  - Follow Estate → Demand → Plan → R/FM before pushing decision numbers to A",
     ]
     for i, line in enumerate(instructions, 3):
         ws.cell(row=i, column=1, value=line)
@@ -290,16 +321,30 @@ def build_dashboard_workbook(path: Path):
     dash = wb.create_sheet("Dashboard")
     style_title(dash, "A1", "Performance Dashboard")
     dash["A2"] = "Placement definition used: _______________________________________________"
-    dash["A3"] = "Sample note: export covers ~520 records; org total 2,847 per D-01."
+    dash["A3"] = (
+        "Definition note: primary 65% rate uses completion_status = Completed (completers). "
+        "Blank placed_90d = missing follow-up, not 'not placed'. Report Formal and Broad."
+    )
     dash["A5"] = "Build your pivot tables and charts below."
     dash["A5"].font = Font(bold=True, color=NAVY)
 
-    for name, title in [("Analysis DB3", "Attendance and placement (DB-3)"),
-                        ("Analysis DB4", "Mentor hours and completion (DB-4)"),
-                        ("Clean Data", "Paste cleaned tables here")]:
+    for name, title, hint in [
+        ("On-request A", "On-request analysis workspace A",
+         "Use only if a Demand / R-xx requires it (e.g. attendance vs placement). "
+         "Normalise codes; name confounders in the Findings Memo. You own the method."),
+        ("On-request B", "On-request analysis workspace B",
+         "Use only if a Demand / R-xx requires it (e.g. mentor hours vs completion). "
+         "Filter volunteer_hours.status = Active (or justify including Inactive / M-099). "
+         "You own the method - do not claim causation."),
+        ("Clean Data", "Paste cleaned tables here",
+         "Keep a copy of raw elsewhere. Log every cleaning rule in the Assumption Log."),
+    ]:
         sh = wb.create_sheet(name)
         style_title(sh, "A1", title)
-        sh["A3"] = "Your analysis goes here."
+        sh["A3"] = hint
+        sh["A3"].font = Font(italic=True, color="666666")
+        sh["A5"] = "Your analysis goes here."
+        sh["A6"] = "Linked Demand / R-xx / AP-xx: ________________________________"
 
     path.parent.mkdir(parents=True, exist_ok=True)
     wb.save(path)

@@ -244,7 +244,7 @@ def add_online_confirm(doc, role_label, hint="Tick [x] and type full name + date
     """Online-friendly confirmation instead of wet signature."""
     add_body(doc, f"[  ]  Confirmed by {role_label}", bold=True, size=10, space_after=2)
     add_body(doc, hint, italic=True, size=9, color=GREY, space_after=2)
-    add_body(doc, "Name: ____________________    Date: __________    Channel (Drive comment / sheet tick): __________",
+    add_body(doc, "Name: ____________________    Date (YYYY-MM-DD): __________    Channel (this Drive Doc / comment): __________",
              size=10)
 
 

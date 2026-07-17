@@ -30,20 +30,21 @@ WHITE = "FFFFFF"
 
 DATASET_ISSUES = [
     ("DC-01", "Duplicate beneficiary IDs", "beneficiary_registry",
-     "Two rows share an ID with different province values (one shows 'HCMC').",
-     "De-duplicate before any count; keep the most complete record and log the decision."),
+     "Two IDs appear twice with conflicting province values and different last_updated dates.",
+     "De-duplicate before any count; keep the latest last_updated and log the conflict."),
     ("DC-02", "Mixed date formats", "All tables with dates",
      "Same field uses dd/mm/yyyy, yyyy-mm-dd and dd-mm-yyyy interchangeably.",
      "Standardise to one format before joins; document the rule in the assumption log."),
     ("DC-03", "Inconsistent placement coding", "employment_outcomes",
-     "placed_90d uses Y, Yes, 1, N, No, 0 and blank for the same meaning.",
-     "Map to a single binary flag; treat blank as missing, not 'not placed'."),
+     "placed_90d uses Y, Yes, 1, N, No, 0 and blank.",
+     "Map to a single binary flag; blank = missing follow-up, not 'not placed'. "
+     "Primary VPBank rate uses completion_status = Completed only."),
     ("DC-04", "Inconsistent attendance coding", "programme_attendance",
-     "attended uses Y, N, 1 and 0.",
-     "Normalise to 1/0 before calculating attendance rates."),
+     "attended uses Y, N, 1 and 0. BM uses fewer mentor-circle sessions than SF/PD classroom sessions.",
+     "Normalise to 1/0; analyse BM separately or with a session-count caveat."),
     ("DC-05", "Impossible age", "beneficiary_registry",
-     "Record GBF-2025-10417 has a date of birth implying age ~42.",
-     "Flag as data error; exclude from age analysis or correct with documented assumption."),
+     "Record GBF-2025-10417 has a date of birth implying age ~42 (one intentional error).",
+     "Flag as data entry error; exclude from age analysis; do not treat the whole file as out-of-eligibility."),
     ("DC-06", "Wage typo", "employment_outcomes",
      "Record GBF-2025-10417 shows wage_vnd_monthly = 99,999,999 (notes field flags error).",
      "Investigate; exclude or cap for wage averages; never report uncorrected."),
@@ -54,20 +55,25 @@ DATASET_ISSUES = [
      "Roughly 5% of disability_status fields are blank.",
      "Treat as unknown; compare Y-only rate with and without unknowns."),
     ("DC-09", "Province label mismatch", "beneficiary_registry",
-     "Same hub appears as 'Ho Chi Minh City' and 'HCMC'.",
+     "Same geography appears as 'Ho Chi Minh City' and 'HCMC'.",
      "Create a lookup table; never double-count provinces."),
     ("DC-10", "Dong Nai cost double-entry", "hub_costs_2025",
      "September 2025 for hub DN appears twice with identical totals.",
      "Remove duplicate row before summing hub costs."),
     ("DC-11", "Hours on inactive mentor", "volunteer_hours",
-     "Mentor M-099 is marked Inactive but has logged hours.",
-     "Exclude inactive-mentor hours from DB-4 or justify inclusion."),
+     "Mentor M-099 has status=Inactive but still has hours_logged.",
+     "Filter status=Active for mentor-hour averages, or justify including Inactive hours."),
     ("DC-12", "Text-formatted funding amount", "funding_by_source",
-     "UK aid / FCDO 2025-Q3 amount_vnd_m stored as text with a thousands comma.",
+     "UK aid / FCDO 2025-Q3 amount_vnd_m is stored as text with a thousands comma (e.g. '1,250').",
      "Convert to number before SUM; note in data quality report."),
-    ("DC-13", "Sample vs organisation totals", "All tables",
-     "Export covers ~520 beneficiaries; handbook cites 2,847 served in 2025.",
-     "State sample limitation in every analysis; do not extrapolate to org totals."),
+    ("DC-13", "Export aligns with programme headcount", "beneficiary_registry",
+     "Registry is sized to ~800 (programme guideline: served in 2025). Waitlist (~1,100) is a separate snapshot. "
+     "D-01 reports 2024 completers (592) and public 71% placement - a different grain.",
+     "Do not add waitlist to served totals. Do not equate D-01 completers with registry rows. "
+     "State placement definition whenever reporting rates."),
+    ("DC-14", "Capacity headroom for scale", "hub_capacity_jan2026",
+     "DN/LA show overloaded caseloads and thin staff/mentor benches relative to throughput caps.",
+     "Funding scenarios and growth options must stress-test staff, mentor and finance capacity - not cost alone."),
 ]
 
 DOCUMENT_ISSUES = [
@@ -82,7 +88,7 @@ DOCUMENT_ISSUES = [
      "Internship drop-out 38% vs org average 22%; transport and employer quality cited.",
      "Dashboard should show DN below 65%; recommendations must address DN if scaling."),
     ("DC-D04", "Disability gap", "ST-03 vs D-01",
-     "Reported disability share ~6%; population nearer 9%. Placement ~49% vs 71% overall.",
+     "Reported disability share ~6-7%; population nearer 9%. Placement ~45-50% vs ~70% on the public broad definition.",
      "Mark down if disability breakdown is missing from analysis or recommendations."),
     ("DC-D05", "Board email thread", "D-08",
      "Forwarded anonymously; unverified; politically motivated opinions.",
@@ -93,9 +99,12 @@ DOCUMENT_ISSUES = [
     ("DC-D07", "VPBank conditions", "D-03 vs DN-01",
      "65% at 90 days required; DN-01 open to quality-focused alternative but not open-ended delay.",
      "Funding scenarios must stress-test the 65% condition honestly."),
-    ("DC-D08", "60-day reporting proposal", "ST-04 vs D-03 vs DN-01",
-     "Anh Duc suggests early measurement; contract and donor say 90 days is primary.",
-     "Recommending 60-day reporting as primary metric is a red line."),
+    ("DC-D08", "Shortening the placement window", "ST-04 vs D-03 vs DN-01",
+     "Anh Duc pushes 'earlier management visibility' / leading indicators without naming a "
+     "new primary metric. D-03 Clause 3-4 and DN-01 lock 65% at ninety days; earlier indicators "
+     "may be internal only and do not replace disbursement measurement.",
+     "Red line if a team elevates a shorter window (e.g. 60-day) as the primary Board/donor "
+     "metric to look better. Strong teams catch this by reading the grant, not by being told."),
     ("DC-D09", "Long An pilot", "D-02, ST-01, BD-01",
      "~60% drop-out; board member T.N. pushes expansion for political reasons.",
      "Scaling to Long An without fixing the model is a common weak answer."),
@@ -106,32 +115,44 @@ DOCUMENT_ISSUES = [
 
 DELIVERABLES = [
     ("Project Charter", "All", "Wed 29 Jul", "PDF + Excel RACI",
-     "Team names, roles, scope, request protocol agreed, online confirm by deadline.",
-     "Charter confirmed; RACI has one accountable owner; A/B data rule stated.",
+     "Team names, roles, scope, A↔B evidence loop agreed, online confirm by deadline.",
+     "Charter confirmed; RACI has one accountable owner; Estate→Demand→Plan→R/FM rule stated.",
      "Missing confirmations; vague scope; no named WF-A/WF-B leads."),
     ("A1 - Problem statement and issue tree", "A", "Wed 5 Aug", "PDF",
-     "One precise problem sentence; MECE branches; 4+ hypotheses that imply asks for B.",
-     "Hypotheses map to Analysis Requests; no overlap between branches.",
-     "Restates handbook verbatim; generic tree; no implied asks."),
+     "One precise decision sentence in the team's own words; MECE branches they invent; 4+ hypotheses that imply asks for B.",
+     "Hypotheses map to Analysis Requests; branches emerge from evidence; statement sharpens the engagement letter.",
+     "Copies engagement-letter wording; generic or pre-labelled tree; no implied asks."),
     ("A1b - Stakeholder map", "A", "Thu 6 Aug", "PDF",
      "Power/interest grid; five starred stakeholders with cited sources.",
      "Stars match interview priority (VPBank, field staff, beneficiaries, board faction, employers).",
      "Generic list; no sources; treats D-08 as verified fact."),
     ("Credibility matrix", "All", "Thu 6 Aug", "PDF",
-     "Every shared D-01 to D-12 source rated H/M/L with justification; Findings Memos rated once received.",
+     "Every shared client document (D-01, D-02, D-03, D-08, D-10, D-11, D-12) rated H/M/L with justification; Findings Memos rated once received.",
      "Ratings differ by source type; justifications cite audience/incentive/definitions; contradictions noted.",
      "All sources rated 'high' with no justification; copied from a facilitator hint."),
+    ("Data Estate Brief", "B", "Mon Week 3", "PDF",
+     "Catalog of tables, grain, coverage and limits in plain language. No workbook, dictionary or field dump.",
+     "A can aim Demand without seeing raw data; limits are honest; catalog not a spoiler of findings.",
+     "Raw file shared; schema dump that lets A prescribe joins; empty or late brief."),
+    ("Demand Brief", "A", "Mon-Tue Week 3", "PDF",
+     "Ranked decision needs from A1 hypotheses after reading DEB; useful answer shapes; not column shopping.",
+     "Top demands map to R-01+; each would change the recommendation if answered.",
+     "Vague 'send us the data'; field names invented; filed before reading Estate Brief."),
+    ("Analysis Plans", "B", "From Week 3", "PDF",
+     "B-owned approach for each priority Demand / R-xx: method, definitions, risks, ETA.",
+     "Plan answers A's decision question; A acknowledges without co-editing pivots.",
+     "No plan; plan is a field list for A to run; interim raw extracts shared."),
     ("Analysis Requests (min. 3)", "A", "Weeks 3-5", "PDF",
-     "Each request states decision, hypothesis, useful answer shape, urgency; logged on Request Log.",
-     "Asks are specific enough for B to answer; emerge from transcripts/hypotheses.",
-     "Fewer than three; vague 'send us the data'; field names invented from nowhere."),
+     "Each request states decision, hypothesis, useful answer shape, urgency; linked to Demand/Plan; logged on Request Log.",
+     "Asks are specific enough for B to answer; emerge from Demand + transcripts/hypotheses.",
+     "Fewer than three; vague 'send us the data'; field names invented from nowhere; no Demand/Plan trail."),
     ("B1 - Data quality report", "B", "Tue 11 Aug", "PDF",
-     "DC-01 to DC-13 found or consciously checked; cleaning logged; A gets only material issues via FM.",
-     "Duplicates, coding, typo wage, DN double-entry, text funding row all addressed.",
+     "DC-01 to DC-14 found or consciously checked; cleaning logged; A gets only material issues via FM.",
+     "Duplicates (via last_updated), coding, typo wage, DN double-entry, inactive mentor, text funding row addressed.",
      "Silent cleaning; raw file shared with A; claims 100% clean data."),
     ("Findings Memos (min. 3)", "B", "Weeks 3-5", "PDF",
      "Plain-language answers to R-xx; definitions and caveats; curated charts only.",
-     "Restates question; translates honestly; notes sample limitation.",
+     "Restates question; translates honestly; states placement definition and capacity caveats.",
      "Pivot dump; no caveats; raw workbook attached."),
     ("A2 - Interview synthesis", "A", "Wed 12 Aug", "PDF",
      "Thematic summary with transcript refs; contradictions flagged; questions for B listed.",
@@ -166,9 +187,9 @@ DELIVERABLES = [
      "Dong Nai recommendation cites ST-05, BN-02, EP-02 and FM findings.",
      "Validation after the fact; fewer than six citations."),
     ("B5 - Funding scenarios", "B", "Thu 27 Aug", "Excel",
-     "Hold / +30% / +80% using D-12 and D-03.",
-     "Aggressive scenario shows staffing gap and 65% at risk.",
-     "Assumes 65% holds automatically."),
+     "Hold / +30% / +80% using D-12, D-03 and hub_capacity_jan2026.",
+     "Aggressive scenario shows staffing/mentor gap and 65% at risk; ties choice to mission + Board ambition.",
+     "Assumes 65% holds automatically; ignores staff/mentor/finance capacity."),
     ("A7 - Revision log", "All", "Thu 27 Aug", "PDF",
      "At least one substantive change after a B challenge or Findings Memo.",
      "Example: dropped Long An expansion after FM on DN placement.",
@@ -178,7 +199,7 @@ DELIVERABLES = [
      "Board-ready; cites strongest evidence including Request IDs.",
      "Buries recommendation; no limitations."),
     ("Final report", "All", "Fri 11 Sep", "PDF",
-     "15-25 pages; request protocol described; every claim sourced.",
+     "15-25 pages; A↔B evidence loop described; every claim sourced.",
      "Integrates A narrative and B findings; trade-offs and risks included.",
      "A and B contradict; unsourced numbers; raw data pasted."),
     ("Board presentation", "All", "Thu 10 Sep", "PowerPoint",
@@ -186,9 +207,22 @@ DELIVERABLES = [
      "Opens with decision needed; ends with specific Board asks.",
      "Data dump; no clear ask; A cites 'the dataset' without FM IDs."),
     ("Handoff checklist", "All", "Wed 2 Sep", "PDF",
-     "Both sections online-confirmed; Request Log shows min. three completed pairs.",
-     "Genuine exchange evidenced; Engagement Lead confirms in good faith.",
-     "One dump at the end; raw file shared; unchecked."),
+     "Copy 4_Shared_Toolkit/Templates/Cross_Workflow_Handoff_Checklist.docx to team Drive. "
+     "Section A (A reviews B), Section B (B reviews A), Section C (Engagement Lead). "
+     "Online ticks only: [x] + typed name + YYYY-MM-DD + channel. Export Team_All_Handoff_vN.pdf; "
+     "Request Log shows min. three completed R/FM pairs. See Guideline Section 8.",
+     "All three sections confirmed; Drive links to A_B_Exchange/ and Handoff PDF present; "
+     "genuine exchange (not a last-minute dump).",
+     "Missing PDF; wet-signature / print culture; unchecked boxes; fewer than three R/FM pairs; "
+     "raw file shared with A."),
+    ("Peer evaluation", "Individual", "Mon 14 Sep", "PDF",
+     "Confidential peer ratings for each teammate; submitted individually via portal.",
+     "Honest differentiation; comments specific to contribution.",
+     "Identical scores for everyone; blank comments; late or missing."),
+    ("Reflection journal", "Individual", "Tue 15 Sep", "PDF",
+     "Personal learning reflection on the engagement and cross-workflow practice.",
+     "Names a concrete skill and a cost of the team's recommendation.",
+     "Generic essay; no link to the case evidence or teamwork."),
 ]
 
 
@@ -212,16 +246,17 @@ def build_index(docx_to_pdf):
         doc,
         "This folder is for facilitators, buddies and assessors only. Do not distribute "
         "to participants. It consolidates the case key: data inconsistencies (Workflow B), "
-        "document contradictions, expected deliverables under the asymmetric request protocol, "
-        "and solution paths.",
+        "document contradictions, expected deliverables under the A↔B evidence loop "
+        "(Estate → Demand → Plan → R/FM), and solution paths.",
     )
     add_heading(doc, "Lenses we are testing (never tell participants)", 1)
     add_bullet(doc, "Efficiency versus ethics: growth, targets and placement metrics against "
                "dignity, quality and who gets left behind.")
     add_bullet(doc, "Empathy versus outside-in: recommendations grounded in beneficiary voices "
                "versus solving for people whose context the team has not taken seriously.")
-    add_bullet(doc, "Active querying: A must invent the ask; B must translate. A learning "
-               "material inconsistencies only through Findings Memos is correct by design.")
+    add_bullet(doc, "Active querying: B briefs the data estate; A states demand; B owns the "
+               "analysis plan; A learns material inconsistencies only through Findings Memos "
+               "(correct by design).")
     add_heading(doc, "Files in this folder", 1)
     add_table(
         doc, ["File", "Purpose"],
@@ -235,9 +270,12 @@ def build_index(docx_to_pdf):
     )
     add_heading(doc, "How to use this pack", 1)
     add_number(doc, "Before Week 1: read the data inconsistencies register so you know what teams should find.")
-    add_number(doc, "During marking: use Expected Deliverables for criterion-level judgement.")
+    add_number(doc, "During marking: use Expected Deliverables for criterion-level judgement "
+               "(including the online Handoff Checklist standard).")
     add_number(doc, "In debrief: reveal that multiple solution paths were valid (see document 03).")
-    add_number(doc, "Operational facilitation remains in Facilitators/ (buddy hints, rubric, debrief flow).")
+    add_number(doc, "Operational facilitation remains in Facilitators/ (buddy hints, rubric, "
+               "kickoff logistics, debrief flow). Do not distribute Answer_Key or Facilitators "
+               "to participants.")
 
     path = KEY / "Word" / "00_Answer_Key_Index.docx"
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -274,13 +312,17 @@ def build_inconsistencies_register(docx_to_pdf):
     )
 
     add_heading(doc, "Part 3 - Expected quantitative patterns (after cleaning)", 1)
-    add_bullet(doc, "Dong Nai hub placement rate clearly below HCMC hubs (target: flag below 65%).")
+    add_bullet(doc, "Among Completed records, HCMC hubs can clear ~65%+ broad; Dong Nai stays below (especially Formal).")
+    add_bullet(doc, "Including Dropped in the denominator pulls most hubs under 65% - definition choice matters.")
     add_bullet(doc, "Long An and Pathway Digital underperform Skills Forward on placement.")
-    add_bullet(doc, "Broad placement rate roughly 8 points above formal-only rate (aligns with ST-02).")
+    add_bullet(doc, "Broad placement rate sits above formal-only rate (aligns with ST-02 ~63% formal narrative; 2025 export may differ slightly).")
     add_bullet(doc, "Disability placement gap of ~20+ points vs overall (aligns with ST-03).")
     add_bullet(doc, "Higher attendance associated with placement, but confounded by transport and motivation.")
     add_bullet(doc, "Aggressive growth scenario struggles to meet 65% without selection bias "
-               "(efficiency vs ethics tension).")
+               "(efficiency vs ethics tension) and fails capacity headroom at DN/LA.")
+    add_bullet(doc, "Mentor counts differ by source (D-01 ~95 org-wide active mentors; "
+               "hub_capacity_jan2026 active_mentors sum ~26; volunteer_hours has ~44 active IDs "
+               "plus Inactive M-099) - strong teams state the grain.")
 
     path = KEY / "Word" / "01_Data_Inconsistencies_Register.docx"
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -343,35 +385,56 @@ def build_solution_paths(docx_to_pdf):
             "Pause expansion; fix Dong Nai and employer quality; negotiate a smaller quality-focused VPBank grant.",
             "Honest about D-02; addresses EP-02, ST-05, BN-02; sustainable operations.",
             "May leave funding on the table; must convince VPBank with a credible theory of change (DN-01).",
+            "The ~1,100 on the waitlist (esp. Binh Duong / BN-04, YouthWorks leakage); Long An ambition and the "
+            "Board growth faction; possibly part of the VPBank envelope if the grant is renegotiated down.",
         ),
         (
             "Path B - Conditional scale (most common strong answer)",
             "Accept VPBank but gate expansion behind quality milestones; fix Dong Nai first, then Long An.",
             "Balances donor pressure and field reality; stages risk; keeps the grant.",
             "Execution-heavy; requires M&E discipline teams must propose credibly.",
+            "Whoever sits behind the gates - waitlisted youth until milestones clear; Long An if gates stay closed; "
+            "young people who need help now while process/M&E work runs. Soft risk: staff burn if 'fix in parallel' "
+            "becomes two full jobs.",
         ),
         (
             "Path C - Employer-led pivot",
             "Audit and certify employers; place only with vetted partners; make quality the brand.",
             "Answers EP-02 and ST-05 directly; differentiates from YouthWorks on outcomes not speed.",
             "Slower growth; depends on employer cooperation.",
+            "Youth who would have taken weaker/exploitative placements for a short-term job; hubs that depend on "
+            "volume employers (Dong Nai under pressure); anyone for whom fewer seats means a longer wait. Employers "
+            "who fail the audit - and the young people those firms would have absorbed.",
         ),
         (
             "Path D - Digital hybrid",
             "Grow Pathway Digital for reach; keep Skills Forward for depth and placement quality.",
             "Lower unit cost (D-12); addresses waitlist pressure.",
             "Digital placement weaker; equity risk (BN-01); only strong with explicit caveats.",
+            "Youth without devices/connectivity (BN-01); people who need in-person support (disability pathway, "
+            "weaker digital skills - BN-03 risk); anyone steered into Digital who would have done better on Skills "
+            "Forward's stronger placement quality. Waitlist may shrink on paper while equity quietly worsens.",
         ),
     ]
-    for name, thesis, strengths, risks in paths:
+    for name, thesis, strengths, risks, left_behind in paths:
         add_heading(doc, name, 2)
         add_body(doc, "Thesis: " + thesis)
         add_body(doc, "Strengths: " + strengths)
+        add_body(doc, "Who is left behind: " + left_behind, bold=True)
         add_body(doc, "Risks to probe in Q&A: " + risks)
+
+    add_body(
+        doc,
+        "Across all four paths (if teams do not name it): young people with disability, Dong Nai participants "
+        "stuck in bad internships, and anyone cherry-picked out to protect the 65% remain the red-line "
+        "'left behind' groups - not a free pass for any path.",
+        italic=True,
+    )
 
     add_heading(doc, "Red lines - mark down if recommended", 1)
     for line in [
-        "Reporting placement at 60 days as the primary metric (contradicts D-03, DN-01).",
+        "Reporting a shorter window than ninety days as the primary placement metric "
+        "(contradicts D-03 Clauses 3-4 and DN-01; often floated as 'earlier visibility').",
         "Replacing paid caseworkers with volunteers (contradicts VR-01).",
         "National or provincial scale with no plan to fix Dong Nai.",
         "Cherry-picking easier-to-place youth to hit 65% without acknowledging the cost.",
