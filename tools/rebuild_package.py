@@ -318,7 +318,7 @@ def csv_to_excel(raw_dir: Path, out_xlsx: Path):
         ("age", "At least one impossible value - investigate, do not delete silently"),
         ("wage_vnd_monthly", "At least one obvious typo/outlier"),
         ("hub = DN (Dong Nai)", "Underperforms; Q3 costs appear double-entered in hub_costs_2025"),
-        ("volunteer_hours", "Hours logged against an inactive mentor - exclude for DB-4"),
+        ("volunteer_hours", "Hours may be logged against mentors marked inactive - decide how to handle"),
         ("employment_type", "Formal vs Gig - the placement rate depends on which you count"),
         ("sample size", "This export (~520) is smaller than the 2,847 in D-01; state this limitation"),
     ]
@@ -529,6 +529,14 @@ def build_facilitator_docs():
          "What would you need to know to choose between your options?",
          "Have you filed an Analysis Request, or are you guessing from the annual report?",
          "Ask A to turn one hypothesis into R-0x before inventing a number."),
+        ("Drivers of placement / attendance",
+         "Staff and young people talk about what helps someone get a job - have you tested any of that?",
+         "Would attendance or programme design change your recommendation if the data disagreed?",
+         "Nudge A toward a request on placement drivers; then coach B on joining tables without giving the steps."),
+        ("Mentoring / completion / volunteers",
+         "Transcripts mention mentoring and drop-out - is that a claim or an evidence gap?",
+         "What would you ask B if mentoring intensity mattered for your option?",
+         "If B is stuck: which tables mention mentors or completion? What would you exclude before averaging?"),
         ("Placement rate",
          "What does 'placed' actually mean here?",
          "Whose definition are you using - D-01's or ST-02's?",
@@ -546,14 +554,26 @@ def build_facilitator_docs():
         add_number(d, "Level 1: " + l1)
         add_number(d, "Level 2: " + l2)
         add_number(d, "Level 3: " + l3)
+    add_heading(d, "Coaching B on deep-dive requests (staff only)", 1)
+    add_body(d, "Participant packs no longer prescribe DB-3/DB-4 methods. When B receives a "
+             "request about attendance, placement drivers, mentoring or completion:")
+    add_number(d, "Ask them to restate A's decision question in one sentence.")
+    add_number(d, "Ask which tables in the data dictionary look relevant - do not name the join path first.")
+    add_number(d, "If still stuck, Level 2: 'How would you get one attendance rate per young person?' "
+               "or 'What would you do with hours logged against inactive mentors?'")
+    add_number(d, "Level 3 (last resort): point them to Facilitators/05_Data_Task_Solutions for "
+               "method hints - do not read the expected findings aloud.")
+    add_number(d, "Always push: association is not causation; name confounders in the Findings Memo.")
     add_heading(d, "Check-in schedule", 1)
-    add_body(d, "Fridays of Weeks 1-5. Fifteen minutes. Review Request Log health, Findings Memo "
+    add_body(d, "Fridays of Weeks 1-7. Fifteen minutes. Review Request Log health, Findings Memo "
              "quality, and whether claims are cited. Do not review answers for correctness. "
-             "Do not give A the dataset.")
+             "Do not give A the dataset. From Week 3, check whether A has asked at least one "
+             "driver/mentoring question if their options depend on it.")
     add_heading(d, "Common mistakes to expect", 1)
     add_bullet(d, "Accepting the 71% placement rate at face value.")
     add_bullet(d, "A reverse-engineering strategy from D-01 without querying B.")
     add_bullet(d, "B sharing the raw workbook or answering questions A never asked.")
+    add_bullet(d, "A never asking about attendance, mentoring or completion despite transcript clues.")
     add_bullet(d, "Recommending national scale without fixing Dong Nai.")
     add_bullet(d, "Treating the board email (D-08) as fact.")
     add_bullet(d, "Claiming attendance causes placement.")
@@ -661,9 +681,10 @@ def build_facilitator_docs():
     d.save(fac_word / "04_Solution_Paths.docx")
 
     # Data Task Solutions
-    d = newdoc("Data Task Solutions", "CONFIDENTIAL - expected findings and pitfalls")
+    d = newdoc("Data Task Solutions", "CONFIDENTIAL - expected findings and coaching methods")
     add_body(d, "Workflow B should find these. Workflow A should learn material issues only "
-             "through Findings Memos, not by opening the workbook.")
+             "through Findings Memos, not by opening the workbook. Participant packs no longer "
+             "include step-by-step DB-3/DB-4 recipes - Buddies coach method; this file holds the key.")
     add_heading(d, "DB-1 Data quality - what B should find", 1)
     add_bullet(d, "Duplicate beneficiary IDs (built in) - de-duplicate before counting.")
     add_bullet(d, "placed_90d coded as Y/Yes/1/N/No/0/blank - normalise.")
@@ -672,13 +693,26 @@ def build_facilitator_docs():
     add_bullet(d, "Dong Nai Q3 costs double-entered in hub_costs_2025.")
     add_bullet(d, "Hours logged against an inactive mentor in volunteer_hours.")
     add_bullet(d, "'HCMC' vs 'Ho Chi Minh City' inconsistency.")
-    add_heading(d, "DB-2/DB-3 expected patterns", 1)
+    add_heading(d, "DB-2 expected patterns (foundation dashboard)", 1)
     add_bullet(d, "Dong Nai placement clearly below HCMC hubs.")
     add_bullet(d, "Formal-only rate roughly 8 points below the broad rate (aligns with ST-02).")
-    add_bullet(d, "Higher attendance associates with placement - but confounded by transport/motivation.")
     add_bullet(d, "Disability placement materially below overall (aligns with ST-03).")
-    add_heading(d, "DB-4 / DB-5", 1)
-    add_bullet(d, "Mentor hours weakly associate with completion; do not overclaim causation.")
+    add_heading(d, "When A asks about placement drivers / attendance / programme design", 1)
+    add_body(d, "Coach B toward this path only if stuck (do not hand A the recipe):")
+    add_number(d, "Normalise attendance coding in programme_attendance (Y/N/1/0).")
+    add_number(d, "Pivot to one attendance rate per beneficiary_id.")
+    add_number(d, "XLOOKUP (or join) placement from employment_outcomes.")
+    add_number(d, "Compare average attendance for placed vs not placed.")
+    add_number(d, "Findings Memo must name confounders (e.g. transport, motivation) - "
+               "association is not causation.")
+    add_bullet(d, "Expected pattern: higher attendance associates with placement, but confounded.")
+    add_heading(d, "When A asks about mentoring / completion / volunteer capacity", 1)
+    add_body(d, "Coach B toward:")
+    add_number(d, "Total mentor hours per young person from volunteer_hours.")
+    add_number(d, "Exclude or flag hours logged against inactive mentors before averaging.")
+    add_number(d, "Compare completers vs those who withdrew; do not overclaim.")
+    add_bullet(d, "Expected pattern: mentor hours weakly associate with completion.")
+    add_heading(d, "Funding scenarios (B5)", 1)
     add_bullet(d, "Aggressive growth struggles to hold 65% honestly without selection pressure - "
                "the efficiency/ethics tension teams should discover.")
     d.save(fac_word / "05_Data_Task_Solutions.docx")

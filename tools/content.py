@@ -906,6 +906,17 @@ def build_wsa_brief():
                "answer would look like, and urgency. Do not prescribe field names you have not been given.")
     add_bullet(doc, "Cite Request IDs (R-01, R-02...) on every quantitative claim in A4 and later.")
 
+    add_body(doc, "Question themes worth pressing (use transcripts to decide which).", bold=True)
+    add_body(doc, "You choose what to ask. The themes below often matter for youth-employment "
+             "strategy - check whether your interviews and issue tree make them relevant:")
+    add_bullet(doc, "What actually moves placement - attendance patterns, programme design, "
+               "or something else the operational record can test?")
+    add_bullet(doc, "Does mentoring intensity, completion, or volunteer capacity show up in the "
+               "numbers the way staff and young people describe it?")
+    add_bullet(doc, "Turn at least one of these into a real Analysis Request if your "
+               "recommendation would change depending on the answer. Do not ask everything; "
+               "ask what would change your mind.")
+
     add_body(doc, "A2 - Interview synthesis.", bold=True)
     add_bullet(doc, "Summarise by theme, not by person. Flag contradictions between sources.")
     add_bullet(doc, "Every insight cites at least one transcript reference.")
@@ -953,6 +964,8 @@ def build_wsa_playbook():
          "A problem statement, issue tree and hypotheses (deliverable A1)."),
         ("First Analysis Request", "Week 3", "45 minutes",
          ["Pick the hypothesis that would most change your recommendation if false.",
+          "Scan transcripts for claims about what drives placement, attendance, mentoring "
+          "or completion - which of those would you need B to test?",
           "Write R-01: decision question, hypothesis, what a useful answer looks like.",
           "Hand it to Workflow B and log it on the Request Log."],
          "R-01 filed; waiting for Findings Memo FM-01."),
@@ -1039,10 +1052,11 @@ def build_wsb_brief():
         ("B5", "Funding scenarios", "Toolkit workbook, 'Funding Scenarios' tab", "Thu 27 Aug"),
     ], widths=[0.5, 2.5, 2.7, 0.9])
 
-    add_heading(doc, "Analysis backlog - foundation vs on-request", 1)
-    add_body(doc, "Treat DB-1 and DB-2 as mandatory foundation. Treat DB-3 to DB-5 as techniques "
-             "you prepare for and run when a request (or A's draft options) makes them necessary. "
-             "Do not burn Weeks 3-4 on analyses nobody asked for while R-01 sits unanswered.")
+    add_heading(doc, "Analysis backlog", 1)
+    add_body(doc, "DB-1 and DB-2 are mandatory foundation. Everything else follows the request: "
+             "when A asks a decision question, decide which tables answer it, analyse, and return "
+             "a Findings Memo. If you are unsure how to approach a request, ask your Buddy for "
+             "coaching questions - not for the answer.")
 
     add_body(doc, "DB-1 - Data quality audit (foundation).", bold=True)
     add_bullet(doc, "Profile every table for missing values, duplicates and format problems.")
@@ -1057,20 +1071,17 @@ def build_wsb_brief():
     add_bullet(doc, "Keep this as a B working file. Export only curated views into Findings Memos "
                "when A asks.")
 
-    add_body(doc, "DB-3 - Attendance and outcomes (on request).", bold=True)
-    add_bullet(doc, "Run when A asks about drivers of placement, attendance, or programme design.")
-    add_bullet(doc, "Join attendance to outcomes; compare means for placed vs not placed.")
-    add_bullet(doc, "State that association is not causation; name at least two confounders.")
+    add_body(doc, "On-request analysis (no fixed recipe).", bold=True)
+    add_bullet(doc, "A may ask about drivers of placement, attendance, programme design, mentoring "
+               "intensity, completion, volunteer capacity, or funding feasibility.")
+    add_bullet(doc, "Your job: restate their decision question, choose tables from the dictionary, "
+               "compute carefully, state definitions and caveats, return a Findings Memo.")
+    add_bullet(doc, "Do not invent a full analysis plan before a request arrives. Do not share "
+               "raw tables. If stuck on method, ask Buddy - they will nudge, not solve.")
 
-    add_body(doc, "DB-4 - Mentoring and completion (on request).", bold=True)
-    add_bullet(doc, "Run when A asks about mentoring intensity, completion, or volunteer capacity.")
-    add_bullet(doc, "Total mentor hours per young person with inactive mentors handled carefully.")
-    add_bullet(doc, "Compare completers with those who withdrew. Do not overclaim.")
-
-    add_body(doc, "DB-5 - Funding scenarios (after draft options).", bold=True)
-    add_bullet(doc, "Run once A has sketched options or asks what growth costs.")
-    add_bullet(doc, "Model hold steady, moderate growth (+30%), aggressive growth (+80%).")
-    add_bullet(doc, "Use D-12 unit costs and D-03 VPBank terms.")
+    add_body(doc, "Funding scenarios (after draft options).", bold=True)
+    add_bullet(doc, "Run once A has sketched options or asks what growth costs (deliverable B5).")
+    add_bullet(doc, "Use audited costs (D-12) and funder terms (D-03); state every assumption.")
     add_bullet(doc, "Judge whether each scenario can meet placement conditions under an honest "
                "definition you state.")
 
@@ -1128,18 +1139,18 @@ def build_wsb_data_dictionary():
 
 
 def build_wsb_workbook():
-    doc = _doc("Data Analysis Workbook", "Step-by-step guidance for Workflow B",
+    doc = _doc("Data Analysis Workbook", "Foundation methods and request handling for Workflow B",
                classification="Participant material - Workflow B", ref="MOM-2026-WSB-02")
-    add_body(doc, "This workbook explains how to complete analysis work in Excel. Do foundation "
-             "work (quality + dashboard) before the first request arrives. Package later results "
-             "as Findings Memos when answering Workflow A's requests. You do not need to write "
-             "code. If you use Python or R, the same documentation standards apply.")
+    add_body(doc, "This workbook covers foundation work (quality + dashboard) and how to turn an "
+             "Analysis Request into a Findings Memo. It does not prescribe every deep-dive method. "
+             "When A asks something new, design the analysis yourself; ask your Buddy for coaching "
+             "questions if you are stuck. You do not need to write code.")
 
     add_heading(doc, "Suggested order", 1)
     add_number(doc, "Weeks 1-3: dictionary, profile, clean (DB-1 / B1), then dashboard pivots (DB-2 / B2).")
     add_number(doc, "From Week 3: answer each Analysis Request with a Findings Memo before starting "
                "optional deep-dives.")
-    add_number(doc, "Run DB-3 or DB-4 only when a request needs them; run DB-5 once A has draft options.")
+    add_number(doc, "Funding scenarios (B5) once A has draft options or asks what growth costs.")
 
     add_heading(doc, "Concepts in plain English", 1)
     add_table(doc, ["Term", "What it means"], [
@@ -1157,21 +1168,21 @@ def build_wsb_workbook():
     add_number(doc, "Compute the result. Note definitions and sample limitations.")
     add_number(doc, "Write the Findings Memo in plain language. Attach at most two curated charts.")
     add_number(doc, "Update the Request Log status to 'Returned'.")
+    add_body(doc, "If the request is vague ('send us everything on mentoring'), send it back for a "
+             "decision question. If the method is unclear, ask Buddy: 'Which tables would you look "
+             "at first?' - not 'What is the answer?'")
 
-    add_heading(doc, "Worked approach to DB-3 (attendance and outcomes)", 1)
-    add_number(doc, "In programme_attendance, create a helper column that is 1 when attended "
-               "and 0 when not, normalising mixed Y/N/1/0 coding.")
-    add_number(doc, "Build a pivot for each young person's attendance rate.")
-    add_number(doc, "Use XLOOKUP to bring in placement from employment_outcomes.")
-    add_number(doc, "Compare average attendance of those placed with those not placed.")
-    add_number(doc, "Interpret the gap in two or three sentences and name confounders "
-               "(for example transport and motivation).")
+    add_heading(doc, "Foundation: dashboard pivots (DB-2)", 1)
+    add_number(doc, "After cleaning, build placement rates by hub, programme and gender.")
+    add_number(doc, "State the placement definition on every chart.")
+    add_number(doc, "Keep the workbook internal; only curated views leave via Findings Memos.")
 
     add_heading(doc, "Reporting standards", 1)
     add_bullet(doc, "State the placement definition you used and why.")
     add_bullet(doc, "Never delete an outlier silently - investigate and record the decision.")
     add_bullet(doc, "Give every chart a title that states the finding.")
-    add_bullet(doc, "Note the sample-size limitation versus the 2,847 in D-01.")
+    add_bullet(doc, "Note sample-size limitations versus organisation-wide totals in public materials.")
+    add_bullet(doc, "Never claim causation from a simple association.")
     add_bullet(doc, "Never attach the raw workbook to a Findings Memo.")
     _save(doc, "WSB_Data_Analysis_Workbook", "3_Workflow_B_Operations_and_Analytics", "pdf")
 
@@ -1595,9 +1606,12 @@ def build_templates():
         add_heading(doc, "Headline findings", 2)
         add_table(doc, ["Finding", "Linked Request / FM", "Caveat"], [("", "", "")] * 4,
                   widths=[2.4, 1.8, 2.2])
-        add_heading(doc, "Attendance and outcomes (DB-3)", 2)
-        add_body(doc, "State the association and at least two confounders. Correlation is not causation.")
-        add_heading(doc, "Mentoring and completion (DB-4)", 2)
+        add_heading(doc, "Deep-dives completed (only if A requested them)", 2)
+        add_body(doc, "Summarise any on-request analyses (e.g. placement drivers, attendance, "
+                 "mentoring, completion). For each: what A asked, what you found, definitions used, "
+                 "and whether you are claiming association or causation.")
+        add_body(doc, "________________________________________________________________")
+        add_heading(doc, "Open questions for further requests", 2)
         add_body(doc, "________________________________________________________________")
     _template("Analysis_Summary", "3_Workflow_B_Operations_and_Analytics",
               "Analysis Summary", analysis)
