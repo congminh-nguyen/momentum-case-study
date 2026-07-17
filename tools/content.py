@@ -48,13 +48,14 @@ def build_programme_handbook():
     doc = _doc(
         "Programme Guideline",
         "Handbook, weekly deliverables, roles, submission rules and ground rules in one place",
-        ref="MOM-2026-GL-01", issued="Monday 13 July 2026",
+        ref="MOM-2026-GL-01", issued="Sunday 26 July 2026",
     )
 
     add_heading(doc, "1. Welcome to the engagement", 1)
     add_body(doc, "Your team has been retained as external strategy consultants by the Board "
              "of Generation Bridge Foundation (GBF), a Vietnamese non-profit working on youth "
-             "unemployment. Over the next six weeks you will diagnose a genuine strategic "
+             "unemployment. The engagement runs from Sunday 26 July to Sunday 20 September 2026 "
+             "(eight working weeks, Monday to Friday). You will diagnose a genuine strategic "
              "problem, test your thinking against incomplete evidence, and present a "
              "recommendation to the Board.")
     add_body(doc, "This is a simulated but realistic engagement. There is no single correct "
@@ -124,28 +125,31 @@ def build_programme_handbook():
              bold=True)
 
     add_heading(doc, "5. What you will produce - by week", 1)
-    add_body(doc, "All weekly submissions are due Friday 17:00 ICT unless a Board or handoff "
-             "time is stated. Day-by-day detail lives only in GBF_Consulting_Toolkit.xlsx "
-             "(Master Timeline). Use this weekly view to track what must be handed in.")
+    add_body(doc, "Programme opens Sunday 26 July 2026 and closes Sunday 20 September 2026. "
+             "Working weeks run Monday to Friday. Weekly submissions are due Friday 17:00 ICT "
+             "unless a Board or handoff time is stated. Day-by-day detail lives only in "
+             "GBF_Consulting_Toolkit.xlsx (Master Timeline).")
     add_table(doc, ["Week", "Dates (2026)", "Submit by end of week"], [
-        ("1", "13-17 July",
-         "Project Charter & RACI; A1 issue tree; A1b stakeholder map; credibility matrix; "
-         "roles confirmed; Request Log set up"),
-        ("2", "20-24 July",
+        ("1", "27-31 July",
+         "Kickoff; roles confirmed; Project Charter & RACI; Request Log set up; start data-room reading"),
+        ("2", "3-7 August",
+         "A1 issue tree; A1b stakeholder map; information credibility matrix"),
+        ("3", "10-14 August",
          "R-01 filed + FM-01 returned; B1 data quality (B internal); A2 interview synthesis; "
          "A3 empathy & journey maps; B2 dashboard v1"),
-        ("3", "27-31 July",
+        ("4", "17-21 August",
          "R-02 and R-03 + FM-02/FM-03; B3 analysis summary; A4 strategic options (cite R/FM IDs); "
          "B4 evidence-check memo"),
-        ("4", "3-7 August",
+        ("5", "24-28 August",
          "A5 trade-off reflection; A6 validation; B5 funding scenarios; A7 revision log; "
          "executive summary draft"),
-        ("5", "10-14 August",
-         "Final report draft for handoff (Tue); signed handoff checklist (Wed 12:00); "
-         "BOARD PRESENTATION Thu 13 Aug 09:00; all finals Fri 14 Aug 17:00"),
-        ("6", "17-21 August",
-         "Peer evaluation (Mon); reflection journal (Tue); lessons-learned retrospective"),
-    ], widths=[0.7, 1.4, 4.3])
+        ("6", "31 Aug-4 Sep",
+         "Final report draft for handoff; online handoff checklist confirmed"),
+        ("7", "7-11 September",
+         "BOARD PRESENTATION Thu 10 Sep 09:00; all final deliverables Fri 11 Sep 17:00"),
+        ("8", "14-18 September",
+         "Peer evaluation (Mon); reflection journal (Tue); lessons-learned; programme closes Sun 20 Sep"),
+    ], widths=[0.7, 1.5, 4.2])
     add_body(doc, "Track Analysis Requests on the Request Log tab. Minimum three completed "
              "R/FM pairs before final options.")
 
@@ -228,11 +232,24 @@ def build_programme_handbook():
 
 def build_data_room_index():
     doc = _doc("Data Room Index", "A guide to documents and transcripts in the shared client room",
-               ref="MOM-2026-DRI-01", issued="Monday 13 July 2026")
-    add_body(doc, "This index lists everything in the shared client data room. The reliability "
-             "column is our honest assessment; form your own view in the information credibility "
-             "matrix. Operational datasets are not in this folder. They are held by Workflow B "
-             "under the analysis request protocol.")
+               ref="MOM-2026-DRI-01", issued="Sunday 26 July 2026")
+    add_body(doc, "This index lists what is in the shared client data room. In a real engagement, "
+             "clients hand you mixed-quality material and expect you to decide what to trust. "
+             "We do not pre-rate reliability for you. That is your job in the Information "
+             "Credibility Matrix (Week 2). Operational datasets are not in this folder; they "
+             "are held by Workflow B under the analysis request protocol.")
+
+    add_heading(doc, "How to question what you read", 1)
+    add_body(doc, "Before you lean on any claim, ask:")
+    add_number(doc, "Who produced this, for whom, and with what incentive to look good or look candid?")
+    add_number(doc, "Are headline metrics defined? Would another definition change the story?")
+    add_number(doc, "Does another document or interview say something different about the same topic?")
+    add_number(doc, "Is this a measured fact, a management opinion, or a stakeholder preference?")
+    add_number(doc, "What would you need Workflow B to check in the operational record before you "
+               "treat a number as settled?")
+    add_body(doc, "Capture your judgements in the credibility matrix. Public reports, internal "
+             "memos, emails, surveys, audited accounts and interviews are not automatically "
+             "equal. Disagreement between sources is normal; resolving it is part of the work.")
 
     add_heading(doc, "How to cite these sources", 1)
     add_body(doc, "Markers will not hunt through an entire PDF for your claim. Cite document "
@@ -241,27 +258,21 @@ def build_data_room_index():
              "(BN-02, Tuan).")
 
     add_heading(doc, "Client documents", 1)
-    add_table(doc, ["Ref", "Document", "Reliability", "Watch for"], [
-        ("D-01", "Annual Report 2024 (public)", "Medium",
-         "Placement rate uses a generous definition"),
-        ("D-02", "Programme Review 2025 (internal memo)", "High",
-         "Candid; contradicts parts of D-01"),
-        ("D-03", "VPBank Foundation grant agreement (excerpt)", "Medium",
-         "Conditions are demanding; targets are ambitious"),
-        ("D-08", "Board email thread", "Low to medium",
-         "Strong opinions; politically motivated"),
-        ("D-10", "Competitor brief: YouthWorks", "Medium",
-         "May overstate or understate the threat"),
-        ("D-11", "Staff engagement survey 2025", "High",
-         "Reliable on staff sentiment and workload"),
-        ("D-12", "Financial statements 2023-2025 (audited)", "High",
-         "Trustworthy; use for all cost figures"),
-    ], widths=[0.6, 3.0, 1.2, 1.9])
+    add_table(doc, ["Ref", "Document", "Type / audience"], [
+        ("D-01", "Annual Report 2024", "Public report (donors, partners, public)"),
+        ("D-02", "Programme Review 2025", "Internal memo (senior staff)"),
+        ("D-03", "VPBank Foundation grant agreement (excerpt)", "Funder contract excerpt"),
+        ("D-08", "Board email thread", "Informal Board correspondence"),
+        ("D-10", "Competitor brief: YouthWorks", "Internal competitive note"),
+        ("D-11", "Staff engagement survey 2025", "Anonymous staff survey summary"),
+        ("D-12", "Financial statements 2023-2025", "Audited accounts"),
+    ], widths=[0.6, 3.2, 2.8])
 
     add_heading(doc, "Interview transcripts", 1)
     add_body(doc, "The full transcripts are in '20_Interview_Transcripts'. Fourteen "
              "conversations were recorded in January 2026 by the engagement team. Cite as "
-             "CODE (Speaker), e.g. ST-01 (Hung).")
+             "CODE (Speaker), e.g. ST-01 (Hung). Treat each voice as one perspective, not "
+             "as organisational truth.")
     add_table(doc, ["Ref", "Interviewee", "Role"], [
         ("ST-01", "Hung Vo", "Programmes Director"),
         ("ST-02", "Thao Le", "Operations Director"),
@@ -274,7 +285,7 @@ def build_data_room_index():
         ("BN-04", "Hang", "On the waitlist, Binh Duong"),
         ("DN-01", "Ms. Huong", "Programme Officer, VPBank Foundation"),
         ("EP-01", "Mr. Khang", "HR Manager, gold-tier employer partner"),
-        ("EP-02", "Ms. Trang", "Employer partner (rated poorly by youth)"),
+        ("EP-02", "Ms. Trang", "Employer partner"),
         ("VR-01", "Chi Hoa", "Volunteer mentor, three years' service"),
         ("BD-01", "Mr. T.N.", "Member of the GBF Board"),
     ], widths=[0.7, 2.0, 3.9])
@@ -282,8 +293,9 @@ def build_data_room_index():
     add_heading(doc, "Operational datasets (Workflow B only)", 1)
     add_body(doc, "The monitoring export and data dictionary sit in Workflow B's folder. "
              "Workflow A does not receive these files. If you need a number, a comparison, or a "
-             "test of a hypothesis, file an Analysis Request. Headline figures in D-01 and D-12 "
-             "are public context; they are not a substitute for querying the operational record.")
+             "test of a hypothesis, file an Analysis Request. Figures that appear in shared "
+             "documents are starting points for questions, not a substitute for querying the "
+             "operational record.")
 
     _save(doc, "01_Data_Room_Index", "0_Start_Here", "pdf")
 
@@ -303,7 +315,7 @@ def build_wsa_start():
         "Impact Strategy: what is in this folder and what you must deliver",
         classification="Workflow A",
         ref="MOM-2026-WSA-00",
-        issued="Monday 13 July 2026",
+        issued="Sunday 26 July 2026",
     )
     add_body(doc, "You are on Workflow A (Impact Strategy). Read this page first, then the "
              "engagement brief and design-thinking playbook. You set direction and frame the "
@@ -320,14 +332,14 @@ def build_wsa_start():
              "Log every request on the Request Log tab of GBF_Consulting_Toolkit.xlsx.")
     add_heading(doc, "Your deliverables", 1)
     add_table(doc, ["Ref", "Deliverable", "Template", "Due (17:00 ICT)"], [
-        ("A1", "Problem statement and issue tree", "Problem_Statement_and_Issue_Tree.docx", "Wed 15 Jul"),
-        ("A1b", "Stakeholder map", "Stakeholder_Map.docx", "Thu 16 Jul"),
-        ("A2", "Interview synthesis", "Interview_Synthesis.docx", "Wed 22 Jul"),
-        ("A3", "Empathy and journey maps", "Empathy_and_Journey_Map.docx", "Wed 22 Jul"),
-        ("A4", "Strategic options and recommendation", "Strategic_Options.docx", "Thu 30 Jul"),
-        ("A5", "Trade-off reflection", "Tradeoff_Reflection.docx", "Wed 5 Aug"),
-        ("A6", "Validation protocol", "Validation_Protocol.docx", "Wed 5 Aug"),
-        ("A7", "Recommendation revision log", "Recommendation_Revision_Log.docx", "Thu 6 Aug"),
+        ("A1", "Problem statement and issue tree", "Problem_Statement_and_Issue_Tree.docx", "Wed 5 Aug"),
+        ("A1b", "Stakeholder map", "Stakeholder_Map.docx", "Thu 6 Aug"),
+        ("A2", "Interview synthesis", "Interview_Synthesis.docx", "Wed 12 Aug"),
+        ("A3", "Empathy and journey maps", "Empathy_and_Journey_Map.docx", "Wed 12 Aug"),
+        ("A4", "Strategic options and recommendation", "Strategic_Options.docx", "Thu 20 Aug"),
+        ("A5", "Trade-off reflection", "Tradeoff_Reflection.docx", "Wed 26 Aug"),
+        ("A6", "Validation protocol", "Validation_Protocol.docx", "Wed 26 Aug"),
+        ("A7", "Recommendation revision log", "Recommendation_Revision_Log.docx", "Thu 27 Aug"),
     ], widths=[0.5, 2.4, 2.6, 1.1])
     add_heading(doc, "Before you submit anything", 1)
     add_number(doc, "Every insight from transcripts cites CODE (Speaker), e.g. BN-02 (Tuan).")
@@ -345,7 +357,7 @@ def build_wsb_start():
         "Operations and Analytics: what is in this folder and what you must deliver",
         classification="Workflow B",
         ref="MOM-2026-WSB-00",
-        issued="Monday 13 July 2026",
+        issued="Sunday 26 July 2026",
     )
     add_body(doc, "You are on Workflow B (Operations and Analytics). You alone hold the "
              "operational datasets and the data dictionary. Your job is to clean, analyse, and "
@@ -362,11 +374,11 @@ def build_wsb_start():
     ], widths=[2.8, 3.6])
     add_heading(doc, "Your deliverables", 1)
     add_table(doc, ["Ref", "Deliverable", "Where", "Due (17:00 ICT)"], [
-        ("B1", "Data quality report (internal)", "Templates/Data_Quality_Report.docx", "Tue 21 Jul"),
-        ("B2", "Performance dashboard (working file)", "GBF_Performance_Dashboard.xlsx", "Fri 24 Jul"),
-        ("B3", "Analysis summary + Findings Memos", "Templates/Analysis_Summary.docx + Findings_Memo", "Wed 29 Jul"),
-        ("B4", "Evidence-check memo on A's options", "Templates/Evidence_Check_Memo.docx", "Fri 31 Jul"),
-        ("B5", "Funding scenarios", "Shared Toolkit / Funding Scenarios tab", "Thu 6 Aug"),
+        ("B1", "Data quality report (internal)", "Templates/Data_Quality_Report.docx", "Tue 11 Aug"),
+        ("B2", "Performance dashboard (working file)", "GBF_Performance_Dashboard.xlsx", "Fri 14 Aug"),
+        ("B3", "Analysis summary + Findings Memos", "Templates/Analysis_Summary.docx + Findings_Memo", "Wed 19 Aug"),
+        ("B4", "Evidence-check memo on A's options", "Templates/Evidence_Check_Memo.docx", "Fri 21 Aug"),
+        ("B5", "Funding scenarios", "Shared Toolkit / Funding Scenarios tab", "Thu 27 Aug"),
     ], widths=[0.5, 2.2, 2.4, 1.3])
     add_heading(doc, "Before you submit anything", 1)
     add_number(doc, "State the placement definition you used and why.")
@@ -922,37 +934,37 @@ def build_wsa_playbook():
              "not replace it. When you need a number, write an Analysis Request rather than guessing.")
 
     for title, when, dur, steps, output in [
-        ("Stakeholder mapping", "Week 1", "90 minutes",
+        ("Stakeholder mapping", "Week 2", "90 minutes",
          ["Brainstorm every party affected by the decision, one per sticky note.",
           "Cluster them, then plot on a power/interest grid.",
           "Star the five you most need to understand and record why."],
          "A stakeholder map and a shortlist for deeper study."),
-        ("Problem framing", "Week 1", "120 minutes",
+        ("Problem framing", "Week 2", "120 minutes",
          ["Each member writes 'the real problem is...' independently.",
           "Share, cluster, and agree a single problem statement.",
           "Build the issue tree and generate hypotheses that imply asks for Workflow B."],
          "A problem statement, issue tree and hypotheses (deliverable A1)."),
-        ("First Analysis Request", "Week 2", "45 minutes",
+        ("First Analysis Request", "Week 3", "45 minutes",
          ["Pick the hypothesis that would most change your recommendation if false.",
           "Write R-01: decision question, hypothesis, what a useful answer looks like.",
           "Hand it to Workflow B and log it on the Request Log."],
          "R-01 filed; waiting for Findings Memo FM-01."),
-        ("Empathy mapping", "Week 2", "90 minutes",
+        ("Empathy mapping", "Week 3", "90 minutes",
          ["Choose one beneficiary archetype grounded in BN-01 to BN-04.",
           "Fill the four quadrants - says, thinks, does, feels - using cited quotes only.",
           "List what you still do not know, and which of those gaps need a request to B."],
          "An evidence-based empathy map (part of deliverable A3)."),
-        ("Journey mapping", "Week 2", "120 minutes",
+        ("Journey mapping", "Week 3", "120 minutes",
          ["Map the stages from awareness to ninety-day employment.",
           "Mark the emotional highs and lows and the pain points.",
           "Attach a quote or a Findings Memo cite to each pain point."],
          "A current-state journey map with prioritised pain points."),
-        ("Ideation - How Might We and Crazy Eights", "Week 3", "120 minutes",
+        ("Ideation - How Might We and Crazy Eights", "Week 4", "120 minutes",
          ["Turn each priority pain point into a 'How might we...' question.",
           "Generate ideas quickly and without judgement, then sketch eight variations of the best.",
           "Dot-vote; check surviving ideas against what the transcripts actually say."],
          "A shortlist of concepts to develop into options."),
-        ("Prioritisation with Findings", "Week 3", "60 minutes",
+        ("Prioritisation with Findings", "Week 4", "60 minutes",
          ["Plot options on an impact-versus-feasibility grid.",
           "Ask Workflow B to challenge placements using Findings Memos, not raw tables.",
           "Record the assumptions behind every placement."],
@@ -1064,25 +1076,27 @@ def build_wsb_data_dictionary():
 
     add_heading(doc, "Key fields", 1)
     add_table(doc, ["Field", "Notes"], [
-        ("beneficiary_id", "Primary join key across tables; check for duplicates"),
-        ("placed_90d", "Placement flag; coding may be inconsistent across rows"),
-        ("employment_type", "Formal vs Gig - definition choice changes the rate"),
-        ("province / hub", "Geography labels may not be standardised"),
-        ("date fields", "Expect mixed formats"),
-        ("wage_vnd_monthly", "Investigate outliers before averaging"),
-        ("disability_status", "Missing values exist; treat carefully"),
-        ("amount_vnd_m", "Funding amounts; watch for non-numeric cells"),
+        ("beneficiary_id", "Primary join key across tables"),
+        ("placed_90d", "Placement flag used in outcome reporting"),
+        ("employment_type", "Categories of employment recorded at follow-up"),
+        ("province / hub", "Geography of delivery or residence"),
+        ("date fields", "Enrolment, completion and outcome dates"),
+        ("wage_vnd_monthly", "Self-reported or recorded monthly wage"),
+        ("disability_status", "Disability flag where captured"),
+        ("amount_vnd_m", "Funding amounts (often in millions VND)"),
     ], widths=[2.0, 4.4])
 
-    add_heading(doc, "Known data-quality risks", 1)
-    add_body(doc, "The export contains genuine quality problems. Expect duplicates, mixed "
-             "coding, format issues, at least one impossible age, at least one wage typo, "
-             "possible double-entered costs, and mentor hours logged against inactive status. "
-             "Find them, document your handling, and decide what Workflow A needs to know.")
+    add_heading(doc, "Treat the export like a real monitoring dump", 1)
+    add_body(doc, "Operational exports are rarely clean. Profile every table before you analyse. "
+             "Document what you find, how you handled it, and what Workflow A needs to know "
+             "before relying on a rate. Do not assume definitions match the language in public "
+             "reports. If a figure in a shared document and a figure you calculate disagree, "
+             "investigate - do not silently pick the nicer one.")
 
     add_heading(doc, "Sample vs organisation totals", 1)
-    add_body(doc, "This export (~520 beneficiaries) is smaller than the 2,847 figure in D-01. "
-             "State that limitation whenever you report rates. Do not silently extrapolate.")
+    add_body(doc, "This export covers a subset of people served, not necessarily the full "
+             "organisation total quoted in public materials. State that limitation whenever "
+             "you report rates. Do not silently extrapolate.")
     _save(doc, "WSB_Data_Dictionary", "3_Workflow_B_Operations_and_Analytics", "pdf")
 
 
@@ -1214,7 +1228,7 @@ def build_templates():
             ("Team name", "________________________________"),
             ("Client", "Generation Bridge Foundation"),
             ("Board question", "What should GBF's strategy be for 2026-2028?"),
-            ("Board presentation", "Thursday 13 August 2026, 09:00 ICT"),
+            ("Board presentation", "Thursday 10 September 2026, 09:00 ICT"),
         ])
         add_heading(doc, "2. Team members and roles", 2)
         add_table(doc, ["Name", "Role", "Workflow"],
@@ -1380,7 +1394,7 @@ def build_templates():
     _template("Final_Report", "4_Shared_Toolkit", "Final Report", finalrep)
 
     def peer(doc):
-        add_body(doc, "Confidential. Submit individually by Monday 17 August 2026, 17:00 ICT. "
+        add_body(doc, "Confidential. Submit individually by Monday 14 September 2026, 17:00 ICT. "
                  "Facilitators use aggregate results; individual ratings remain confidential.")
         add_body(doc, "Rate each teammate from 1 (poor) to 5 (excellent).")
         add_table(doc, ["Team member", "Contribution", "Quality", "Communication",
@@ -1395,7 +1409,7 @@ def build_templates():
     _template("Peer_Evaluation", "4_Shared_Toolkit", "Peer Evaluation (Confidential)", peer)
 
     def reflect(doc):
-        add_body(doc, "Individual and private. Submit by Tuesday 18 August 2026, 17:00 ICT.")
+        add_body(doc, "Individual and private. Submit by Tuesday 15 September 2026, 17:00 ICT.")
         for q in ["What did you learn about asking for evidence rather than assuming it?",
                   "What was hardest about working across two workflows with incomplete information?",
                   "Describe one trade-off your team faced and what you decided.",
@@ -1436,8 +1450,10 @@ def build_templates():
     _template("Stakeholder_Map", "2_Workflow_A_Impact_Strategy", "Stakeholder Map", stakeholder)
 
     def credibility(doc):
-        add_body(doc, "Rate each shared source. Justify your rating in one sentence. "
-                 "Operational datasets are held by Workflow B; rate Findings Memos once received.")
+        add_body(doc, "You rate each shared source - the data room does not do it for you. "
+                 "For each row, write why you trust or doubt it (author, audience, incentive, "
+                 "definitions, contradictions with other sources). Operational datasets are held "
+                 "by Workflow B; rate Findings Memos once received.")
         add_table(doc, ["Source", "Reliability (H/M/L)", "Why", "Key fact you trust or doubt"],
                   [("D-01 Annual Report", "", "", ""), ("D-02 Internal memo", "", "", ""),
                    ("D-03 VPBank agreement", "", "", ""), ("D-08 Board emails", "", "", ""),
@@ -1445,6 +1461,8 @@ def build_templates():
                    ("D-12 Financials", "", "", ""), ("Interview transcripts", "", "", ""),
                    ("Findings Memos (from B)", "", "", "")],
                   widths=[1.6, 1.2, 2.0, 2.6])
+        add_body(doc, "Prompt questions (optional): Who benefits if this source is believed? "
+                 "What definition sits behind any rate? What would change your rating?")
     _template("Information_Credibility_Matrix", "4_Shared_Toolkit",
               "Information Credibility Matrix", credibility)
 

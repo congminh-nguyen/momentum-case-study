@@ -24,7 +24,7 @@ FONT_FALLBACK = "Calibri"
 PROGRAMME = "Momentum Programme"
 CASE_TITLE = "Scaling with Integrity"
 CLIENT = "Generation Bridge Foundation"
-VERSION = "3.0 | July 2026"
+VERSION = "3.1 | July-September 2026"
 
 
 def _set_run_font(run, name=FONT, east_asia=None):

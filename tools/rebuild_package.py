@@ -376,7 +376,7 @@ def build_ppt(out_path: Path):
         p2.font.size = Pt(20); p2.font.color.rgb = TEAL
         p2.font.name = "Nunito"
         p3 = tf.add_paragraph()
-        p3.text = "Momentum Programme  |  Generation Bridge Foundation  |  13 August 2026"
+        p3.text = "Momentum Programme  |  Generation Bridge Foundation  |  10 September 2026"
         p3.font.size = Pt(13); p3.font.color.rgb = GREY
         p3.font.name = "Nunito"
 
@@ -466,11 +466,12 @@ def build_facilitator_docs():
         return d
 
     # Facilitator Guide
-    d = newdoc("Facilitator Guide", "How to run the six-week Momentum engagement")
+    d = newdoc("Facilitator Guide", "How to run the eight-week Momentum engagement")
     add_heading(d, "Before you start", 1)
     add_body(d, "Distribute only the Participants/ folder. Never share Facilitators/ or "
              "Answer_Key/. Confirm each team has five or six members and assign one Buddy per team. "
-             "Operational datasets live only in Workflow B's folder - do not hand A the Excel.")
+             "Operational datasets live only in Workflow B's folder - do not hand A the Excel. "
+             "Programme window: 26 July to 20 September 2026.")
     add_heading(d, "What this case is testing (staff only)", 1)
     add_body(d, "Do not state these lenses to participants.")
     add_bullet(d, "Efficiency versus ethics: growth/targets/placement metrics against dignity, "
@@ -486,19 +487,25 @@ def build_facilitator_docs():
     add_bullet(d, "Everything you need is in the pack. Do not go looking outside it.")
     add_bullet(d, "Two workflows hold incomplete information. A frames questions; B owns the data "
                "and translates findings. You must talk to each other.")
+    add_bullet(d, "We will not tell you which sources to trust. Interrogate definitions, "
+               "audiences and contradictions - then record your ratings in the credibility matrix.")
     add_heading(d, "Week-by-week facilitation", 1)
     add_table(d, ["Week", "Watch for", "Nudge if..."], [
-        ("1", "Vague problem statements; skipping credibility check; A asking for 'the data file'",
-         "they treat every source as equally reliable, or A tries to bypass B"),
-        ("2", "No Analysis Requests; B answering unasked questions; empathy maps with no citations",
+        ("1", "Rushing past the data room; A asking for 'the data file'; roles unassigned",
+         "they skip Charter / Request Log setup"),
+        ("2", "Treating every source as equal; credibility matrix empty or copy-paste ratings",
+         "they want you to say which documents are 'safe'"),
+        ("3", "No Analysis Requests; B answering unasked questions; maps with no citations",
          "Request Log is empty by Wednesday"),
-        ("3", "Options that are not genuinely distinct; numbers without Request IDs",
+        ("4", "Options that are not genuinely distinct; numbers without Request IDs",
          "all three options are really the same idea"),
-        ("4", "Recommendations that ignore Findings or validation",
+        ("5", "Recommendations that ignore Findings or validation",
          "nothing changed after FM-01 or the transcripts"),
-        ("5", "Data-dump slides; burying bad news; no named cost of the preferred path",
+        ("6", "Weak handoff; unfinished final report draft",
+         "online ticks missing or A/B still arguing about the raw file"),
+        ("7", "Data-dump slides; burying bad news; no named cost of the preferred path",
          "Dong Nai or the formal rate is missing; trade-off reflection is empty"),
-        ("6", "Shallow reflection; blame in peer review",
+        ("8", "Shallow reflection; blame in peer review",
          "the debrief avoids the costs of their recommendation"),
     ], widths=[0.6, 3.0, 3.0])
     add_heading(d, "Escalation triggers", 1)
@@ -747,7 +754,7 @@ def build_facilitator_docs():
                "to invent the Board characters themselves.")
     add_bullet(d, "Teams open with their one-sentence recommendation; they do not re-read the "
                "entire data room as 'context'.")
-    add_body(d, "Announce the chosen format at Week 4 Buddy check-in so teams can rehearse.")
+    add_body(d, "Announce the chosen format at Week 6 Buddy check-in so teams can rehearse.")
 
     add_heading(d, "5. Run-of-show (example)", 1)
     add_table(d, ["Time", "Activity"], [
@@ -755,7 +762,7 @@ def build_facilitator_docs():
         ("09:00", "Team 1 pitch + Q&A"),
         ("09:25", "Team 2 ..."),
         ("After last team", "Panel scores submitted; short private calibration"),
-        ("Closing", "Thank teams; remind Week 6 peer eval and reflection"),
+        ("Closing", "Thank teams; remind Week 8 peer eval and reflection"),
     ], widths=[1.4, 5.0])
     d.save(fac_word / "07_Presentation_Day_Plan.docx")
 
@@ -777,9 +784,10 @@ def build_root_pdfs():
     pdf.add_title("START HERE")
     pdf.add_band("Momentum Programme  |  Generation Bridge Foundation engagement")
     for line in [
-        "Programme runs Monday 13 July to Friday 21 August 2026.",
-        "Board presentation: Thursday 13 August 2026, 09:00 ICT.",
-        "All final deliverables: Friday 14 August 2026, 17:00 ICT.",
+        "Programme opens Sunday 26 July 2026 and closes Sunday 20 September 2026.",
+        "Working weeks: Monday to Friday (eight weeks from 27 July).",
+        "Board presentation: Thursday 10 September 2026, 09:00 ICT.",
+        "All final deliverables: Friday 11 September 2026, 17:00 ICT.",
         "",
     ]:
         pdf.add_para(line)
