@@ -382,9 +382,20 @@ def build_wsb_start():
         issued="Sunday 26 July 2026",
     )
     add_body(doc, "You are on Workflow B (Operations and Analytics). You alone hold the "
-             "operational datasets and the data dictionary. Your job is to clean, analyse, and "
-             "translate findings so Workflow A can decide. Do not share the raw workbook with A. "
-             "Answer their Analysis Requests with Findings Memos in plain language.")
+             "operational datasets and the data dictionary. You also have full access to the "
+             "shared client data room (1_Client_Data_Room/) and the Programme Guideline - read "
+             "those like any consultant would. Your job is to clean, analyse, and translate "
+             "findings so Workflow A can decide. Do not share the raw workbook with A. Answer "
+             "their Analysis Requests with Findings Memos in plain language.")
+    add_heading(doc, "What you can open", 1)
+    add_table(doc, ["Location", "Access"], [
+        ("0_Start_Here/", "Yes - Guideline and Data Room Index"),
+        ("1_Client_Data_Room/", "Yes - documents D-01 to D-12 and all interview transcripts"),
+        ("3_Workflow_B_.../ (this folder)", "Yes - datasets, dictionary, dashboard, B templates"),
+        ("4_Shared_Toolkit/", "Yes - Request Log, A_B_Exchange templates, board deck"),
+        ("2_Workflow_A_.../ Templates", "Read if useful; do not own A's narrative deliverables"),
+        ("GBF_Datasets.xlsx", "B only - never share the raw file with A"),
+    ], widths=[3.2, 3.2])
     add_heading(doc, "Files in this folder", 1)
     add_table(doc, ["File", "Purpose"], [
         ("WSB_Engagement_Brief.pdf", "Your mandate, deliverables and constraints"),
