@@ -19,7 +19,6 @@ Final structure:
 import shutil
 import subprocess
 import sys
-import unicodedata
 from pathlib import Path
 
 from docx import Document
