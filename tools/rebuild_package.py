@@ -44,10 +44,15 @@ sys.path.insert(0, str(TOOLS))
 
 
 # ---------------------------------------------------------------------------
-# Text sanitisation for the core PDF font (Helvetica is Latin-1 only)
+# Unicode PDF fonts (supports Vietnamese diacritics if present in content)
 # ---------------------------------------------------------------------------
 
+FONTS_DIR = TOOLS / "fonts"
+PDF_FONT = "DejaVu"
+
+
 def _sanitize(text: str) -> str:
+    """Normalise fancy punctuation; keep non-ASCII letters (e.g. Vietnamese)."""
     if not text:
         return ""
     repl = {
@@ -57,7 +62,14 @@ def _sanitize(text: str) -> str:
     }
     for k, v in repl.items():
         text = text.replace(k, v)
-    return unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode("ascii")
+    return text
+
+
+def _register_pdf_fonts(pdf: FPDF):
+    pdf.add_font(PDF_FONT, "", str(FONTS_DIR / "DejaVuSans.ttf"))
+    pdf.add_font(PDF_FONT, "B", str(FONTS_DIR / "DejaVuSans-Bold.ttf"))
+    pdf.add_font(PDF_FONT, "I", str(FONTS_DIR / "DejaVuSans-Oblique.ttf"))
+    pdf.add_font(PDF_FONT, "BI", str(FONTS_DIR / "DejaVuSans-BoldOblique.ttf"))
 
 
 # ---------------------------------------------------------------------------
@@ -65,16 +77,20 @@ def _sanitize(text: str) -> str:
 # ---------------------------------------------------------------------------
 
 class PdfExport(FPDF):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        _register_pdf_fonts(self)
+
     def footer(self):
         self.set_y(-12)
-        self.set_font("Helvetica", "I", 8)
+        self.set_font(PDF_FONT, "I", 8)
         self.set_text_color(120, 120, 120)
         self.cell(0, 8, "Momentum Programme  |  Scaling with Integrity  |  "
                   f"Page {self.page_no()}", align="C")
 
     def add_title(self, text):
         self.ln(1)
-        self.set_font("Helvetica", "B", 17)
+        self.set_font(PDF_FONT, "B", 17)
         self.set_text_color(27, 42, 74)
         self.multi_cell(0, 8, _sanitize(text))
         self.set_draw_color(0, 122, 135)
@@ -84,14 +100,14 @@ class PdfExport(FPDF):
         self.ln(4)
 
     def add_band(self, text):
-        self.set_font("Helvetica", "B", 10)
+        self.set_font(PDF_FONT, "B", 10)
         self.set_text_color(0, 122, 135)
         self.multi_cell(0, 5, _sanitize(text))
         self.ln(1)
 
     def add_heading(self, text):
         self.ln(1)
-        self.set_font("Helvetica", "B", 12)
+        self.set_font(PDF_FONT, "B", 12)
         self.set_text_color(27, 42, 74)
         self.multi_cell(0, 6, _sanitize(text))
         self.ln(0.5)
@@ -100,13 +116,13 @@ class PdfExport(FPDF):
         if not text.strip():
             self.ln(2)
             return
-        self.set_font("Helvetica", "I" if italic else "", 10)
+        self.set_font(PDF_FONT, "I" if italic else "", 10)
         self.set_text_color(45, 45, 45)
         self.multi_cell(0, 5, _sanitize(text))
         self.ln(1)
 
     def add_list_item(self, text, prefix="-  "):
-        self.set_font("Helvetica", "", 10)
+        self.set_font(PDF_FONT, "", 10)
         self.set_text_color(45, 45, 45)
         x = self.l_margin + 4
         self.set_x(x)
@@ -163,7 +179,7 @@ class PdfExport(FPDF):
         for ri, row in enumerate(rows):
             cells = [str(c) for c in row] + [""] * (cols - len(row))
             is_header = header and ri == 0
-            self.set_font("Helvetica", "B" if is_header else "", 8.5)
+            self.set_font(PDF_FONT, "B" if is_header else "", 8.5)
             wrapped = [self._wrap(cells[ci], col_w[ci]) for ci in range(cols)]
             nlines = max(len(w) for w in wrapped)
             row_h = line_h * nlines + 1.5
