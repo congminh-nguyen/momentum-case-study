@@ -95,89 +95,100 @@ DOCUMENT_ISSUES = [
      "Funding scenarios must stress-test the 65% condition honestly."),
     ("DC-D08", "60-day reporting proposal", "ST-04 vs D-03 vs DN-01",
      "Anh Duc suggests early measurement; contract and donor say 90 days is primary.",
-     "Recommending 60-day reporting as primary metric is a red line (ED-02)."),
+     "Recommending 60-day reporting as primary metric is a red line."),
     ("DC-D09", "Long An pilot", "D-02, ST-01, BD-01",
      "~60% drop-out; board member T.N. pushes expansion for political reasons.",
      "Scaling to Long An without fixing the model is a common weak answer."),
-    ("DC-D10", "Social enterprise conflict", "D-12, EP-01, ED-06",
+    ("DC-D10", "Social enterprise conflict", "D-12, EP-01",
      "GBF Staffing Solutions earns placement fees from same employers who take interns.",
-     "Ethical analysis should engage ED-06 explicitly."),
+     "Strong teams surface the conflict in trade-off reflection or options; it is not labelled for them."),
 ]
 
 DELIVERABLES = [
     ("Project Charter", "All", "Tue 14 Jul", "PDF + Excel RACI",
-     "Team names, roles, scope, ways of working, all signatures by deadline.",
-     "Charter signed; RACI has one accountable owner per deliverable; cross-audit process agreed.",
-     "Missing signatures; vague scope; no named WS-A/WS-B leads."),
+     "Team names, roles, scope, request protocol agreed, all signatures by deadline.",
+     "Charter signed; RACI has one accountable owner; A/B data rule stated.",
+     "Missing signatures; vague scope; no named WF-A/WF-B leads."),
     ("A1 - Problem statement and issue tree", "A", "Wed 15 Jul", "PDF",
-     "One precise problem sentence; MECE branches (programmes, geography, funding, operations, measurement); "
-     "4+ testable hypotheses with stated evidence sources.",
-     "Board question reframed clearly; hypotheses map to data room; no overlap between branches.",
-     "Restates handbook verbatim; generic tree; no hypotheses."),
+     "One precise problem sentence; MECE branches; 4+ hypotheses that imply asks for B.",
+     "Hypotheses map to Analysis Requests; no overlap between branches.",
+     "Restates handbook verbatim; generic tree; no implied asks."),
     ("A1b - Stakeholder map", "A", "Thu 16 Jul", "PDF",
      "Power/interest grid; five starred stakeholders with cited sources.",
      "Stars match interview priority (VPBank, field staff, beneficiaries, board faction, employers).",
-     "Generic list; no sources; ignores D-08 as low-trust source."),
+     "Generic list; no sources; treats D-08 as verified fact."),
     ("Credibility matrix", "All", "Thu 16 Jul", "PDF",
-     "Every D-01 to D-12 source rated H/M/L with one-sentence justification.",
+     "Every shared D-01 to D-12 source rated H/M/L; Findings Memos rated once received.",
      "D-02 and D-12 rated high; D-08 rated low; contradictions noted.",
      "All sources rated 'high'; no justification."),
+    ("Analysis Requests (min. 3)", "A", "Weeks 2-4", "PDF",
+     "Each request states decision, hypothesis, useful answer shape, urgency; logged on Request Log.",
+     "Asks are specific enough for B to answer; emerge from transcripts/hypotheses.",
+     "Fewer than three; vague 'send us the data'; field names invented from nowhere."),
     ("B1 - Data quality report", "B", "Tue 21 Jul", "PDF",
-     "All DC-01 to DC-13 issues found or consciously checked; cleaning decisions logged.",
+     "DC-01 to DC-13 found or consciously checked; cleaning logged; A gets only material issues via FM.",
      "Duplicates, coding, typo wage, DN double-entry, text funding row all addressed.",
-     "Silent cleaning; outliers deleted without note; claims 100% clean data."),
+     "Silent cleaning; raw file shared with A; claims 100% clean data."),
+    ("Findings Memos (min. 3)", "B", "Weeks 2-4", "PDF",
+     "Plain-language answers to R-xx; definitions and caveats; curated charts only.",
+     "Restates question; translates honestly; notes sample limitation.",
+     "Pivot dump; no caveats; raw workbook attached."),
     ("A2 - Interview synthesis", "A", "Wed 22 Jul", "PDF",
-     "Thematic summary with transcript refs; contradictions flagged (YouthWorks, placement definition).",
-     "Themes: transport, employer quality, metric integrity, scale vs quality; cites ST/BN/DN/EP codes.",
+     "Thematic summary with transcript refs; contradictions flagged; questions for B listed.",
+     "Themes: transport, employer quality, metric integrity, scale vs quality.",
      "Quote dump by person; no contradictions; no citations."),
     ("A3 - Empathy and journey maps", "A", "Wed 22 Jul", "PDF",
-     "One archetype (e.g. Dong Nai withdrawer); quotes from BN-02/Tuan; pain points quantified where possible.",
+     "One archetype grounded in BN-xx; pain points with quotes or FM cites.",
      "Internship stage shows transport cost and employer exploitation; links to ST-05 and EP-02.",
-     "Generic persona; no quotes; no data link."),
+     "Generic persona; no quotes; outside-in design with no lived detail."),
     ("B2 - Performance dashboard", "B", "Fri 24 Jul", "Excel",
-     "Placement by hub/programme/gender; conditional formatting below 65%; three insight-titled charts.",
-     "DN and Long An flagged red; disability gap visible; formal vs broad rate shown or footnoted.",
-     "Chart titled 'Dashboard'; DN hidden; single blended rate with no definition."),
+     "Placement by hub/programme/gender; flag below 65%; insight-titled charts; B working file only.",
+     "DN and Long An flagged; formal vs broad rate shown or footnoted.",
+     "Shared raw with A; DN hidden; single blended rate with no definition."),
     ("B3 - Analysis summary", "B", "Wed 29 Jul", "PDF",
-     "Headline findings with evidence and caveats; DB-3 confounders named; DB-4 no causation claim.",
-     "Attendance correlates with placement but transport/motivation confound; mentor hours weak association.",
+     "Headline findings linked to Request/FM IDs; confounders named.",
+     "Attendance correlates with placement but transport/motivation confound.",
      "Claims attendance causes placement; ignores confounders."),
     ("A4 - Strategic options", "A", "Thu 30 Jul", "PDF",
-     "2-3 genuinely distinct options with cost, risks, winners/losers; one recommendation + change-my-mind trigger.",
-     "Options differ on scale timing (pause vs conditional scale vs employer pivot vs digital hybrid).",
-     "Three variants of 'scale more'; no financial check; no ethics."),
+     "2-3 distinct options; every number cites R-/FM-; winners/losers named.",
+     "Options differ on scale timing; change-my-mind trigger stated.",
+     "Three variants of 'scale more'; numbers without Request IDs."),
     ("B4 - Evidence-check memo", "B", "Fri 31 Jul", "PDF",
-     "Each WS-A option tested against cleaned data and D-12/D-03 feasibility.",
-     "Flags if aggressive growth cannot hold 65% without cherry-picking (ED-01).",
-     "Rubber-stamps WS-A without data challenge."),
-    ("A5 - Ethical analysis", "A", "Wed 5 Aug", "PDF",
-     "Minimum three of ED-01 to ED-06 with tension, stakeholders, position, residual risk.",
-     "Engages metric integrity and easiest-to-place tension with numbers.",
-     "Generic ethics platitudes; fewer than three dilemmas."),
+     "Each A option tested against Findings and D-12/D-03 feasibility.",
+     "Flags if aggressive growth cannot hold 65% without selection pressure.",
+     "Rubber-stamps A without challenge."),
+    ("A5 - Trade-off reflection", "A", "Wed 5 Aug", "PDF",
+     "Open prompts answered; who gains/loses; cost of preferred path named.",
+     "Team names the operational cost of the ethical choice, or the moral cost of the efficient choice.",
+     "Empty platitudes; no named cost; checklist of invented ED codes."),
     ("A6 - Validation protocol", "All", "Wed 5 Aug", "PDF",
-     "6+ citations: 2+ BN, 2+ ST, 1 DN, 1 EP; maps recommendations to support/challenge.",
-     "Recommendation on Dong Nai cites ST-05, BN-02, EP-02 and dashboard DN rate.",
+     "6+ citations including BN/ST/DN/EP and at least two R-/FM-.",
+     "Dong Nai recommendation cites ST-05, BN-02, EP-02 and FM findings.",
      "Validation after the fact; fewer than six citations."),
     ("B5 - Funding scenarios", "B", "Thu 6 Aug", "Excel",
-     "Hold / +30% / +80% growth using D-12 unit costs and D-03 VPBank terms.",
-     "Aggressive scenario shows staffing gap and 65% at risk; hold scenario may forfeit scale target.",
-     "Scenarios ignore unit costs; assumes 65% holds automatically."),
+     "Hold / +30% / +80% using D-12 and D-03.",
+     "Aggressive scenario shows staffing gap and 65% at risk.",
+     "Assumes 65% holds automatically."),
     ("A7 - Revision log", "All", "Thu 6 Aug", "PDF",
-     "At least one substantive change after validation documented.",
-     "Example: dropped Long An expansion after BN-02 and DN dashboard review.",
+     "At least one substantive change after a B challenge or Findings Memo.",
+     "Example: dropped Long An expansion after FM on DN placement.",
      "Empty log or cosmetic edits only."),
     ("Executive summary", "All", "Fri 7 Aug", "PDF",
      "One-sentence key message; recommendation; 90-day roadmap; honest limitations.",
-     "Board-ready; cites strongest evidence; states what is still unknown.",
+     "Board-ready; cites strongest evidence including Request IDs.",
      "Buries recommendation; no limitations."),
     ("Final report", "All", "Fri 14 Aug", "PDF",
-     "15-25 pages; all sections; every claim sourced; placement definition stated.",
-     "Integrates WS-A narrative and WS-B evidence; ethics and risks included.",
-     "WS-A and WS-B contradict; unsourced claims."),
+     "15-25 pages; request protocol described; every claim sourced.",
+     "Integrates A narrative and B findings; trade-offs and risks included.",
+     "A and B contradict; unsourced numbers; raw data pasted."),
     ("Board presentation", "All", "Thu 13 Aug", "PowerPoint",
-     "Answer-first slide titles; recommendation upfront; Dong Nai and formal rate not hidden.",
-     "Opens with decision needed; one chart per insight; ends with specific Board asks.",
-     "Data dump; decorative slides; no clear ask."),
+     "Answer-first titles; Dong Nai and formal rate not hidden; cost of path named.",
+     "Opens with decision needed; ends with specific Board asks.",
+     "Data dump; no clear ask; A cites 'the dataset' without FM IDs."),
+    ("Handoff checklist", "All", "Wed 12 Aug", "PDF",
+     "Both sections signed; Request Log shows min. three completed pairs.",
+     "Genuine exchange evidenced; Engagement Lead signs in good faith.",
+     "One dump at the end; raw file shared; unsigned."),
 ]
 
 
@@ -200,9 +211,17 @@ def build_index(docx_to_pdf):
     add_body(
         doc,
         "This folder is for facilitators, buddies and assessors only. Do not distribute "
-        "to participants. It consolidates the case key: every built-in data inconsistency, "
-        "document-level contradiction, and what strong deliverables should contain.",
+        "to participants. It consolidates the case key: data inconsistencies (Workflow B), "
+        "document contradictions, expected deliverables under the asymmetric request protocol, "
+        "and solution paths.",
     )
+    add_heading(doc, "Lenses we are testing (never tell participants)", 1)
+    add_bullet(doc, "Efficiency versus ethics: growth, targets and placement metrics against "
+               "dignity, quality and who gets left behind.")
+    add_bullet(doc, "Empathy versus outside-in: recommendations grounded in beneficiary voices "
+               "versus solving for people whose context the team has not taken seriously.")
+    add_bullet(doc, "Active querying: A must invent the ask; B must translate. A learning "
+               "material inconsistencies only through Findings Memos is correct by design.")
     add_heading(doc, "Files in this folder", 1)
     add_table(
         doc, ["File", "Purpose"],
@@ -238,7 +257,9 @@ def build_inconsistencies_register(docx_to_pdf):
         "with client documents and transcripts. None should be ignored.",
     )
 
-    add_heading(doc, "Part 1 - Dataset inconsistencies (GBF_Datasets.xlsx)", 1)
+    add_heading(doc, "Part 1 - Dataset inconsistencies (GBF_Datasets.xlsx - Workflow B only)", 1)
+    add_body(doc, "A should only learn material issues through Findings Memos. Mark down if A "
+             "opens the raw file or if B dumps the cleaning log without translation.")
     add_table(
         doc, ["Ref", "Issue", "Table", "What teams should see", "Expected handling"],
         [(r[0], r[1], r[2], r[3], r[4]) for r in DATASET_ISSUES],
@@ -258,7 +279,8 @@ def build_inconsistencies_register(docx_to_pdf):
     add_bullet(doc, "Broad placement rate roughly 8 points above formal-only rate (aligns with ST-02).")
     add_bullet(doc, "Disability placement gap of ~20+ points vs overall (aligns with ST-03).")
     add_bullet(doc, "Higher attendance associated with placement, but confounded by transport and motivation.")
-    add_bullet(doc, "Aggressive growth scenario struggles to meet 65% without selection bias (ED-01).")
+    add_bullet(doc, "Aggressive growth scenario struggles to meet 65% without selection bias "
+               "(efficiency vs ethics tension).")
 
     path = KEY / "Word" / "01_Data_Inconsistencies_Register.docx"
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -349,12 +371,14 @@ def build_solution_paths(docx_to_pdf):
 
     add_heading(doc, "Red lines - mark down if recommended", 1)
     for line in [
-        "Reporting placement at 60 days as the primary metric (contradicts D-03, DN-01, ED-02).",
-        "Replacing paid caseworkers with volunteers (contradicts VR-01, ED-03).",
+        "Reporting placement at 60 days as the primary metric (contradicts D-03, DN-01).",
+        "Replacing paid caseworkers with volunteers (contradicts VR-01).",
         "National or provincial scale with no plan to fix Dong Nai.",
-        "Cherry-picking easier-to-place youth to hit 65% without acknowledging ED-01.",
+        "Cherry-picking easier-to-place youth to hit 65% without acknowledging the cost.",
         "Treating D-08 board emails as verified fact.",
         "Claiming attendance causes placement without naming confounders.",
+        "Workflow A citing operational numbers without Request / Findings IDs.",
+        "Workflow B sharing the raw workbook with A.",
     ]:
         add_bullet(doc, line)
 
@@ -408,7 +432,7 @@ def build_inconsistencies_excel():
     ws3 = wb.create_sheet("Deliverable Standards")
     ws3["A1"] = "Expected deliverables and outcomes"
     ws3["A1"].font = Font(name="Calibri", bold=True, size=14, color=NAVY)
-    headers3 = ["Deliverable", "Workstream", "Due", "Format", "Requirement", "Excellent", "Mark down if"]
+    headers3 = ["Deliverable", "Workflow", "Due", "Format", "Requirement", "Excellent", "Mark down if"]
     for i, h in enumerate(headers3, 1):
         c = ws3.cell(row=3, column=i, value=h)
         c.font = Font(bold=True, color=WHITE)

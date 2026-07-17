@@ -7,9 +7,9 @@ data and trackers as Excel, and the board deck as PowerPoint.
 Final structure:
   Participants/
     0_Start_Here/            (PDF)
-    1_Client_Data_Room/      (PDF + Excel datasets)
-    2_Workstream_A_Impact_Strategy/          (PDF + Word templates)
-    3_Workstream_B_Operations_and_Analytics/ (PDF + Word templates)
+    1_Client_Data_Room/      (PDF only - no datasets)
+    2_Workflow_A_Impact_Strategy/          (PDF + Word templates)
+    3_Workflow_B_Operations_and_Analytics/ (PDF + Word + Excel datasets + dashboard)
     4_Shared_Toolkit/        (PDF + Excel toolkit + PowerPoint + Word templates)
   Facilitators/
     PDF/  Word/              (staff only)
@@ -304,7 +304,7 @@ def csv_to_excel(raw_dir: Path, out_xlsx: Path):
     ws = wb.create_sheet("DATA_DICTIONARY")
     ws["A1"] = "GBF datasets - field notes and known data-quality issues"
     ws["A1"].font = Font(bold=True, size=13, color="1B2A4A")
-    ws["A2"] = "See the Workstream B brief (DB-1). These issues are intentional; find and handle them."
+    ws["A2"] = "See the Workflow B brief (DB-1) and WSB_Data_Dictionary.pdf. These issues are intentional; find and handle them."
     ws["A2"].font = Font(italic=True, color="666666")
     ws["A4"], ws["B4"] = "Field / area", "What to watch for"
     for c in ("A4", "B4"):
@@ -463,70 +463,88 @@ def build_facilitator_docs():
     d = newdoc("Facilitator Guide", "How to run the six-week Momentum engagement")
     add_heading(d, "Before you start", 1)
     add_body(d, "Distribute only the Participants/ folder. Never share Facilitators/ or "
-             "Answer_Key/. Confirm each team has five or six members and assign one Buddy per team.")
+             "Answer_Key/. Confirm each team has five or six members and assign one Buddy per team. "
+             "Operational datasets live only in Workflow B's folder - do not hand A the Excel.")
+    add_heading(d, "What this case is testing (staff only)", 1)
+    add_body(d, "Do not state these lenses to participants.")
+    add_bullet(d, "Efficiency versus ethics: growth/targets/placement metrics against dignity, "
+               "quality, and who gets left behind. Teams should discover and sit with the tension.")
+    add_bullet(d, "Empathy versus outside-in: whether recommendations are grounded in beneficiary "
+               "voices or designed for people whose context the team has not taken seriously.")
+    add_bullet(d, "Active querying: A must work out what to ask; B must translate. Penalise "
+               "teams that reverse-engineer from D-01 alone or share the raw file.")
     add_heading(d, "Kickoff (Day 1) - what to say", 1)
     add_body(d, "Set the tone in the first ten minutes:")
     add_bullet(d, "You are consultants, not students. The Board is paying for judgement.")
     add_bullet(d, "There is no single right answer. We assess your reasoning and evidence.")
     add_bullet(d, "Everything you need is in the pack. Do not go looking outside it.")
-    add_bullet(d, "The two workstreams must audit each other. That tension is deliberate.")
+    add_bullet(d, "Two workflows hold incomplete information. A frames questions; B owns the data "
+               "and translates findings. You must talk to each other.")
     add_heading(d, "Week-by-week facilitation", 1)
     add_table(d, ["Week", "Watch for", "Nudge if..."], [
-        ("1", "Vague problem statements; skipping the credibility check",
-         "they treat every source as equally reliable"),
-        ("2", "Data cleaning done silently; empathy maps with no citations",
-         "they delete outliers without recording why"),
-        ("3", "Options that are not genuinely distinct",
+        ("1", "Vague problem statements; skipping credibility check; A asking for 'the data file'",
+         "they treat every source as equally reliable, or A tries to bypass B"),
+        ("2", "No Analysis Requests; B answering unasked questions; empathy maps with no citations",
+         "Request Log is empty by Wednesday"),
+        ("3", "Options that are not genuinely distinct; numbers without Request IDs",
          "all three options are really the same idea"),
-        ("4", "Recommendations that ignore validation",
-         "nothing changed after they read the transcripts"),
-        ("5", "Data-dump slides; burying bad news",
-         "Dong Nai or the 63% formal rate is missing"),
+        ("4", "Recommendations that ignore Findings or validation",
+         "nothing changed after FM-01 or the transcripts"),
+        ("5", "Data-dump slides; burying bad news; no named cost of the preferred path",
+         "Dong Nai or the formal rate is missing; trade-off reflection is empty"),
         ("6", "Shallow reflection; blame in peer review",
-         "the debrief avoids the ethical trade-offs"),
+         "the debrief avoids the costs of their recommendation"),
     ], widths=[0.6, 3.0, 3.0])
     add_heading(d, "Escalation triggers", 1)
     add_bullet(d, "Team conflict unresolved for more than 48 hours.")
     add_bullet(d, "Any safeguarding or ethical red flag in how a team behaves.")
-    add_bullet(d, "A Buddy giving answers rather than asking questions.")
+    add_bullet(d, "A Buddy giving answers, the data file, or named 'efficiency vs ethics' framing.")
     d.save(fac_word / "01_Facilitator_Guide.docx")
 
     # Buddy Guide
     d = newdoc("Buddy Guide", "Progressive hints, not answers")
-    add_body(d, "Your job is to ask better questions, not to solve the case. Use the three-level "
-             "hint ladder below. Only move to the next level if the team is genuinely stuck.")
+    add_body(d, "Your job is to ask better questions, not to solve the case. Never name "
+             "'efficiency versus ethics' or 'elitist outside-in' to participants. Use the "
+             "three-level hint ladder. Only move to the next level if the team is genuinely stuck.")
     add_heading(d, "The hint ladder", 1)
     for topic, l1, l2, l3 in [
         ("Problem framing",
          "What exactly is the Board asking you to decide?",
          "Is your problem statement about programmes, geography, funding, or all three?",
-         "Point them to the four factions in the handbook and ask which trade-off matters most."),
-        ("Data credibility",
-         "Do all your sources deserve equal trust?",
-         "Compare what D-01 says with what D-02 says - which is candid?",
-         "Ask them to build the credibility matrix before believing any single number."),
+         "Ask which voices in the data room pull hardest in opposite directions."),
+        ("Asking for evidence",
+         "What would you need to know to choose between your options?",
+         "Have you filed an Analysis Request, or are you guessing from the annual report?",
+         "Ask A to turn one hypothesis into R-0x before inventing a number."),
         ("Placement rate",
          "What does 'placed' actually mean here?",
          "Whose definition are you using - D-01's or ST-02's?",
-         "Have them compute both the broad and the formal rate and report both."),
+         "Have B compute both the broad and the formal rate and return them via a Findings Memo."),
         ("Recommendations",
          "What is the evidence for that claim?",
-         "Which transcript or dataset backs this up?",
-         "Ask them to map every recommendation to a source in the validation protocol."),
+         "Which transcript or Findings Memo backs this up?",
+         "Ask them to map every recommendation to a source in the validation protocol, including R-/FM- IDs."),
+        ("Costs of the choice",
+         "Who gains under your recommendation?",
+         "Who waits longer, or is deprioritised, if you choose this path?",
+         "Point them to the trade-off reflection without naming the dilemma for them."),
     ]:
         add_heading(d, topic, 2)
         add_number(d, "Level 1: " + l1)
         add_number(d, "Level 2: " + l2)
         add_number(d, "Level 3: " + l3)
     add_heading(d, "Check-in schedule", 1)
-    add_body(d, "Fridays of Weeks 1-5. Fifteen minutes. Review project-management discipline "
-             "(logs, minutes, RACI) and whether claims are cited. Do not review answers for correctness.")
+    add_body(d, "Fridays of Weeks 1-5. Fifteen minutes. Review Request Log health, Findings Memo "
+             "quality, and whether claims are cited. Do not review answers for correctness. "
+             "Do not give A the dataset.")
     add_heading(d, "Common mistakes to expect", 1)
     add_bullet(d, "Accepting the 71% placement rate at face value.")
+    add_bullet(d, "A reverse-engineering strategy from D-01 without querying B.")
+    add_bullet(d, "B sharing the raw workbook or answering questions A never asked.")
     add_bullet(d, "Recommending national scale without fixing Dong Nai.")
     add_bullet(d, "Treating the board email (D-08) as fact.")
     add_bullet(d, "Claiming attendance causes placement.")
-    add_bullet(d, "Hiding the disability placement gap.")
+    add_bullet(d, "Empty trade-off reflection; no named cost of the preferred path.")
     d.save(fac_word / "02_Buddy_Guide.docx")
 
     # Assessment Rubric
@@ -534,7 +552,7 @@ def build_facilitator_docs():
     add_body(d, "Score each criterion against the descriptors. Weight as shown.")
     for crit, pts, exc, good, sat, poor in [
         ("Problem understanding", 15,
-         "Precise, MECE issue tree; clear trade-offs identified",
+         "Precise, MECE issue tree; hypotheses imply clear asks for B",
          "Solid framing; minor gaps",
          "Generic framing; some overlap",
          "Misreads the problem"),
@@ -544,17 +562,17 @@ def build_facilitator_docs():
          "Uses sources uncritically",
          "Ignores or misuses sources"),
         ("Design thinking", 15,
-         "Evidence-based empathy and journey maps; ideation tied to pain points",
+         "Evidence-based empathy and journey maps grounded in specific voices",
          "Competent maps and ideation",
          "Mechanical, thin on evidence",
          "Superficial or missing"),
-        ("Data analysis", 20,
-         "Clean data, honest definitions, correct interpretation, limitations stated",
+        ("Data analysis and translation", 20,
+         "Clean data; honest definitions; Findings Memos in plain language; limitations stated",
          "Mostly sound; small errors",
-         "Basic analysis; weak interpretation",
-         "Errors or misleading charts"),
+         "Basic analysis; weak translation to A",
+         "Errors, raw-file sharing, or misleading charts"),
         ("Recommendations", 20,
-         "Distinct options; clear, feasible, evidence-based choice; ethics engaged",
+         "Distinct options; Request IDs cited; costs of preferred path named",
          "Reasonable, mostly supported",
          "Vague or weakly supported",
          "Unsupported or infeasible"),
@@ -564,15 +582,15 @@ def build_facilitator_docs():
          "Some data-dumping",
          "Disorganised or decorative"),
         ("Project management", 5,
-         "Logs, RACI, version control all maintained",
+         "Request Log, RACI, version control all maintained",
          "Mostly maintained",
          "Patchy",
          "Absent"),
-        ("Teamwork", 5,
-         "Genuine cross-audit; shared ownership",
+        ("Teamwork and cross-workflow exchange", 5,
+         "Genuine request/findings exchange; handoff signed in good faith",
          "Good collaboration",
-         "Uneven contribution",
-         "Free-riding evident"),
+         "Uneven contribution or one-way dump",
+         "Free-riding or A/B bypass"),
     ]:
         add_heading(d, f"{crit} ({pts} points)", 2)
         add_table(d, ["Excellent", "Good", "Satisfactory", "Poor"],
@@ -581,8 +599,8 @@ def build_facilitator_docs():
 
     # Solution Paths
     d = newdoc("Solution Paths", "CONFIDENTIAL - there is no single correct answer")
-    add_body(d, "Reward reasoning, not a particular destination. The following are strong, "
-             "defensible paths. Weak answers pick one slogan and ignore the evidence against it.")
+    add_body(d, "Reward reasoning, not a particular destination. Strong teams name what their "
+             "preferred path costs. Weak answers pick one slogan and ignore the evidence against it.")
     for name, thesis, strengths, risks in [
         ("Path A - Depth before scale",
          "Pause expansion, fix Dong Nai and employer quality, negotiate a smaller quality-focused VPBank grant.",
@@ -606,14 +624,19 @@ def build_facilitator_docs():
         add_body(d, "Strengths: " + strengths)
         add_body(d, "Risks to probe: " + risks)
     add_heading(d, "Red lines (mark down if crossed)", 1)
-    add_bullet(d, "Recommending 60-day reporting to look better (fails ED-02).")
+    add_bullet(d, "Recommending 60-day reporting as the primary metric to look better.")
     add_bullet(d, "Replacing caseworkers with volunteers (contradicts VR-01).")
     add_bullet(d, "National scale with no fix for Dong Nai.")
+    add_bullet(d, "Cherry-picking easier-to-place youth without acknowledging the cost.")
+    add_bullet(d, "Workflow A citing 'the dataset' without Request / Findings IDs.")
+    add_bullet(d, "Workflow B sharing the raw workbook with A.")
     d.save(fac_word / "04_Solution_Paths.docx")
 
     # Data Task Solutions
     d = newdoc("Data Task Solutions", "CONFIDENTIAL - expected findings and pitfalls")
-    add_heading(d, "DB-1 Data quality - what they should find", 1)
+    add_body(d, "Workflow B should find these. Workflow A should learn material issues only "
+             "through Findings Memos, not by opening the workbook.")
+    add_heading(d, "DB-1 Data quality - what B should find", 1)
     add_bullet(d, "Duplicate beneficiary IDs (built in) - de-duplicate before counting.")
     add_bullet(d, "placed_90d coded as Y/Yes/1/N/No/0/blank - normalise.")
     add_bullet(d, "Mixed date formats across tables.")
@@ -628,18 +651,23 @@ def build_facilitator_docs():
     add_bullet(d, "Disability placement materially below overall (aligns with ST-03).")
     add_heading(d, "DB-4 / DB-5", 1)
     add_bullet(d, "Mentor hours weakly associate with completion; do not overclaim causation.")
-    add_bullet(d, "Aggressive growth struggles to hold 65% honestly without cherry-picking - the ED-01 tension.")
+    add_bullet(d, "Aggressive growth struggles to hold 65% honestly without selection pressure - "
+               "the efficiency/ethics tension teams should discover.")
     d.save(fac_word / "05_Data_Task_Solutions.docx")
 
     # Debrief + FAQ
     d = newdoc("Debrief Guide & FAQ", "Run a 90-minute debrief; answer common questions")
     add_heading(d, "Debrief flow (90 minutes)", 1)
     add_number(d, "Team reflection (15 min): what surprised you?")
-    add_number(d, "Evidence round (20 min): each team names the fact that changed their mind.")
-    add_number(d, "Ethics round (20 min): how did you resolve ED-01 and ED-02?")
+    add_number(d, "Evidence round (20 min): each team names the finding that changed their mind "
+               "(ideally via a Findings Memo, not a slide of pivots).")
+    add_number(d, "Trade-off round (20 min): what did your recommendation cost, and for whom? "
+               "(Only then may facilitators name efficiency versus ethics if it still has not surfaced.)")
     add_number(d, "Reveal (20 min): show the multiple valid paths; there was no single answer.")
     add_number(d, "Skills forward (15 min): one thing each person will practise next.")
     add_heading(d, "Frequently asked questions", 1)
+    add_body(d, "Can Workflow A have the Excel file?", bold=True)
+    add_body(d, "No. Asking what to request is part of the exercise. Buddies must not share it.")
     add_body(d, "Can we collect more data or interview real NGO staff?", bold=True)
     add_body(d, "No. Everything required is in the pack. Managing incomplete information is part "
              "of the exercise; state your assumptions instead.")
@@ -679,15 +707,17 @@ def build_root_pdfs():
         "0_Start_Here/00_Programme_Handbook.pdf",
         "0_Start_Here/01_Data_Room_Index.pdf",
         "0_Start_Here/02_Deadlines_and_Milestones.pdf",
-        "2_Workstream_A_Impact_Strategy/WSA_Start_Here.pdf",
-        "3_Workstream_B_Operations_and_Analytics/WSB_Start_Here.pdf",
-        "4_Shared_Toolkit/GBF_Consulting_Toolkit.xlsx (Master Timeline tab)",
+        "2_Workflow_A_Impact_Strategy/WSA_Start_Here.pdf",
+        "3_Workflow_B_Operations_and_Analytics/WSB_Start_Here.pdf",
+        "4_Shared_Toolkit/GBF_Consulting_Toolkit.xlsx (Master Timeline + Request Log)",
     ], 1):
         pdf.add_list_item(line, prefix=f"{i}.  ")
     pdf.add_heading("The rules")
     for line in [
         "Use only the materials in this package - no external research.",
-        "Cite every claim (document ref, transcript ref, or dataset).",
+        "Workflow A does not hold the operational datasets; route quantitative asks through Analysis Requests.",
+        "Workflow B does not share the raw workbook; return Findings Memos in plain language.",
+        "Cite every claim (document, transcript, or Request / Findings ID).",
         "Read as PDF, fill in as Word, analyse in Excel, present in PowerPoint.",
     ]:
         pdf.add_list_item(line)
@@ -702,10 +732,10 @@ def build_root_pdfs():
     pdf.add_grid([
         ["Folder", "Contents", "Formats"],
         ["0_Start_Here", "Handbook, data room index, deadlines", "PDF"],
-        ["1_Client_Data_Room", "GBF documents, interview transcripts, datasets", "PDF, Excel"],
-        ["2_Workstream_A_Impact_Strategy", "Start here, brief, playbook, templates A1-A7", "PDF, Word"],
-        ["3_Workstream_B_Operations_and_Analytics", "Start here, brief, dashboard, templates B1-B5", "PDF, Word, Excel"],
-        ["4_Shared_Toolkit", "Toolkit workbook, presentation guide, board deck, shared templates", "Excel, PDF, PowerPoint, Word"],
+        ["1_Client_Data_Room", "GBF documents and interview transcripts (no datasets)", "PDF"],
+        ["2_Workflow_A_Impact_Strategy", "Start here, brief, playbook, templates A1-A7", "PDF, Word"],
+        ["3_Workflow_B_Operations_and_Analytics", "Start here, brief, dictionary, datasets, dashboard, B templates", "PDF, Word, Excel"],
+        ["4_Shared_Toolkit", "Toolkit (Request Log), guides, board deck, shared templates", "Excel, PDF, PowerPoint, Word"],
     ], widths=[2.2, 3.4, 1.6])
     pdf.add_heading("Facilitators/  (staff only - do not share)")
     pdf.add_para("Facilitator guide, buddy guide, assessment rubric, debrief guide and FAQ - in PDF and Word.")
@@ -762,7 +792,7 @@ def main():
     ge.OUT = PART / "4_Shared_Toolkit"
     ge.OUT.mkdir(parents=True, exist_ok=True)
     ge.main()
-    csv_to_excel(CACHE / "raw", PART / "1_Client_Data_Room" / "GBF_Datasets.xlsx")
+    csv_to_excel(CACHE / "raw", PART / "3_Workflow_B_Operations_and_Analytics" / "GBF_Datasets.xlsx")
 
     print("=== Step 5: PowerPoint ===")
     build_ppt(PART / "4_Shared_Toolkit" / "GBF_Board_Deck_Template.pptx")

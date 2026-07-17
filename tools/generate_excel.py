@@ -57,7 +57,7 @@ def build_master_timeline(wb):
     ws["A2"].font = Font(italic=True, color="666666")
 
     headers = [
-        "ID", "Week", "Date", "Day", "Time", "Task", "Workstream",
+        "ID", "Week", "Date", "Day", "Time", "Task", "Workflow",
         "Owner", "Deliverable", "Submit to", "Format", "Buddy check-in",
     ]
     r = 4
@@ -67,28 +67,30 @@ def build_master_timeline(wb):
 
     tasks = [
         ("W1-01", 1, 0, "17:00", "Programme kickoff and data room access", "All", "Engagement Lead", "-", "Session", "-", ""),
-        ("W1-02", 1, 0, "EOD", "Read handbook, data room index and workstream briefs", "All", "All", "-", "Team drive", "Internal", ""),
+        ("W1-02", 1, 0, "EOD", "Read handbook, index and workflow briefs", "All", "All", "-", "Team drive", "Internal", ""),
         ("W1-03", 1, 1, "17:00", "Submit signed Project Charter", "All", "PM Lead", "Project_Charter", "Buddy + drive", "PDF", ""),
         ("W1-04", 1, 1, "17:00", "Submit populated RACI matrix", "All", "Engagement Lead", "RACI_Matrix", "Buddy + drive", "Excel", ""),
-        ("W1-05", 1, 2, "17:00", "Submit problem statement and issue tree", "A", "WS-A Lead", "A1 Issue tree", "Buddy + drive", "PDF", ""),
+        ("W1-05", 1, 2, "17:00", "Submit problem statement and issue tree", "A", "WF-A Lead", "A1 Issue tree", "Buddy + drive", "PDF", ""),
         ("W1-06", 1, 3, "17:00", "Submit information credibility matrix", "All", "Research Lead", "Credibility matrix", "Buddy + drive", "PDF", ""),
-        ("W1-07", 1, 4, "12:00", "Confirm WS-A / WS-B pairs and audit process", "All", "Engagement Lead", "-", "Buddy", "-", "Check-in 1"),
+        ("W1-07", 1, 4, "12:00", "Confirm A/B protocol and Request Log owners", "All", "Engagement Lead", "-", "Buddy", "-", "Check-in 1"),
         ("W1-08", 1, 4, "17:00", "Update Master Timeline with named owners", "All", "PM Lead", "This workbook", "Buddy + drive", "Excel", ""),
-        ("W2-01", 2, 0, "-", "Profile all eight dataset tables (DB-1)", "B", "WS-B Lead", "Profiling notes", "Team drive", "Excel", ""),
-        ("W2-02", 2, 1, "17:00", "Submit data quality report", "B", "WS-B Lead", "B1 Data quality", "Buddy + drive", "PDF", ""),
-        ("W2-03", 2, 2, "17:00", "Submit interview synthesis", "A", "Research Lead", "A2 Synthesis", "Buddy + drive", "PDF", ""),
-        ("W2-04", 2, 2, "17:00", "Submit empathy and journey maps", "A", "WS-A Lead", "A3 Maps", "Buddy + drive", "PDF", ""),
-        ("W2-05", 2, 3, "17:00", "WS-A audit of data quality report", "A", "WS-A auditor", "Audit memo", "Team drive", "PDF", ""),
-        ("W2-06", 2, 4, "17:00", "Submit dashboard version 1", "B", "WS-B Lead", "B2 Dashboard", "Buddy + drive", "Excel", "Check-in 2"),
-        ("W3-01", 3, 1, "17:00", "Submit dashboard v2 and analysis summary", "B", "WS-B Lead", "B3 Analysis", "Buddy + drive", "Excel+PDF", ""),
-        ("W3-02", 3, 3, "17:00", "Submit strategic options (draft)", "A", "WS-A Lead", "A4 Options", "Buddy + drive", "PDF", ""),
-        ("W3-03", 3, 4, "17:00", "Submit evidence-check memo on options", "B", "WS-B Lead", "B4 Evidence check", "Team drive", "PDF", "Check-in 3"),
-        ("W4-01", 4, 2, "17:00", "Submit completed validation protocol", "All", "Research Lead", "A6 Validation", "Buddy + drive", "PDF", ""),
+        ("W2-01", 2, 0, "17:00", "File Analysis Request R-01", "A", "WF-A Lead", "Analysis_Request", "Team drive", "PDF", ""),
+        ("W2-02", 2, 0, "-", "Profile all eight dataset tables (DB-1)", "B", "WF-B Lead", "Profiling notes", "Team drive", "Excel", ""),
+        ("W2-03", 2, 1, "17:00", "Submit data quality report (B internal)", "B", "WF-B Lead", "B1 Data quality", "Buddy + drive", "PDF", ""),
+        ("W2-04", 2, 2, "17:00", "Submit interview synthesis", "A", "Research Lead", "A2 Synthesis", "Buddy + drive", "PDF", ""),
+        ("W2-05", 2, 2, "17:00", "Submit empathy and journey maps", "A", "WF-A Lead", "A3 Maps", "Buddy + drive", "PDF", ""),
+        ("W2-06", 2, 3, "17:00", "Return Findings Memo FM-01", "B", "WF-B Lead", "Findings_Memo", "Team drive", "PDF", ""),
+        ("W2-07", 2, 4, "17:00", "Submit dashboard version 1 (B working file)", "B", "WF-B Lead", "B2 Dashboard", "Buddy + drive", "Excel", "Check-in 2"),
+        ("W3-01", 3, 0, "17:00", "File Analysis Requests R-02 and R-03", "A", "WF-A Lead", "Analysis_Request", "Team drive", "PDF", ""),
+        ("W3-02", 3, 1, "17:00", "Return FM-02 and FM-03; analysis summary", "B", "WF-B Lead", "B3 + Findings", "Buddy + drive", "Excel+PDF", ""),
+        ("W3-03", 3, 3, "17:00", "Submit strategic options (cite Request IDs)", "A", "WF-A Lead", "A4 Options", "Buddy + drive", "PDF", ""),
+        ("W3-04", 3, 4, "17:00", "Submit evidence-check memo on options", "B", "WF-B Lead", "B4 Evidence check", "Team drive", "PDF", "Check-in 3"),
+        ("W4-01", 4, 2, "17:00", "Submit validation protocol and trade-off reflection", "A", "Research / WF-A", "A5 A6", "Buddy + drive", "PDF", ""),
         ("W4-02", 4, 3, "17:00", "Submit funding scenarios (DB-5)", "B", "Ops Analyst", "B5 Funding", "Buddy + drive", "Excel", ""),
         ("W4-03", 4, 3, "17:00", "Submit recommendation revision log", "All", "Engagement Lead", "A7 Revision log", "Team drive", "PDF", ""),
         ("W4-04", 4, 4, "17:00", "Submit executive summary (draft)", "A", "Engagement Lead", "Executive summary", "Buddy + drive", "PDF", "Check-in 4"),
-        ("W5-01", 5, 1, "17:00", "Submit final report (draft for audit)", "All", "Engagement Lead", "Final report", "Buddy + drive", "PDF", ""),
-        ("W5-02", 5, 2, "12:00", "Submit signed cross-workstream audit checklist", "All", "PM Lead", "Audit checklist", "Buddy", "PDF", ""),
+        ("W5-01", 5, 1, "17:00", "Submit final report (draft for handoff)", "All", "Engagement Lead", "Final report", "Buddy + drive", "PDF", ""),
+        ("W5-02", 5, 2, "12:00", "Submit signed Cross-Workflow Handoff Checklist", "All", "PM Lead", "Handoff checklist", "Buddy", "PDF", ""),
         ("W5-03", 5, 3, "09:00", "BOARD PRESENTATION", "All", "All", "Board deck", "Present live", "PPTX", "Check-in 5"),
         ("W5-04", 5, 4, "17:00", "Submit all final deliverables", "All", "PM Lead", "All finals", "Programme portal", "PDF+PPTX+Excel", ""),
         ("W6-01", 6, 0, "17:00", "Submit peer evaluation (individual, confidential)", "Individual", "Each member", "Peer evaluation", "Portal", "PDF", ""),
@@ -116,7 +118,7 @@ def build_time_tracker(wb):
     ws = wb.create_sheet("Time Tracker")
     style_title(ws, "A1", "Weekly Time Tracker")
     ws["A2"] = "Log hours daily. Submit to your Buddy every Friday by 17:00 ICT."
-    headers = ["Date", "Team member", "Activity", "Workstream (A / B / All)", "Hours", "Deliverable"]
+    headers = ["Date", "Team member", "Activity", "Workflow (A / B / All)", "Hours", "Deliverable"]
     hr = 4
     for i, h in enumerate(headers, 1):
         ws.cell(row=hr, column=i, value=h)
@@ -129,19 +131,22 @@ def build_time_tracker(wb):
 def build_raci(wb):
     ws = wb.create_sheet("RACI Matrix")
     style_title(ws, "A1", "RACI Matrix (R = Responsible, A = Accountable, C = Consulted, I = Informed)")
-    headers = ["Task / deliverable", "Eng. Lead", "WS-A Lead", "WS-B Lead", "Member 4", "Member 5", "Member 6"]
+    headers = ["Task / deliverable", "Eng. Lead", "WF-A Lead", "WF-B Lead", "Member 4", "Member 5", "Member 6"]
     tasks = [
         ("Project Charter", "A", "R", "R", "R", "R", "R"),
         ("Information credibility matrix", "A", "R", "C", "R", "R", "C"),
+        ("Analysis Requests (A)", "C", "A/R", "C", "R", "I", "I"),
+        ("Findings Memos (B)", "C", "C", "A/R", "R", "R", "I"),
         ("Data quality report (B1)", "C", "C", "A/R", "R", "R", "I"),
         ("Dashboard (B2)", "I", "C", "A/R", "R", "R", "I"),
         ("Interview synthesis (A2)", "C", "A/R", "I", "R", "R", "I"),
         ("Strategic options (A4)", "A", "R", "C", "R", "R", "C"),
+        ("Trade-off reflection (A5)", "C", "A/R", "C", "R", "I", "I"),
         ("Validation protocol (A6)", "A", "R", "R", "R", "R", "R"),
         ("Funding scenarios (B5)", "C", "I", "A/R", "R", "R", "I"),
         ("Final report", "A", "R", "R", "R", "R", "R"),
         ("Board deck", "A", "R", "R", "R", "R", "R"),
-        ("Cross-workstream audit", "A", "R", "R", "R", "R", "R"),
+        ("Cross-workflow handoff", "A", "R", "R", "R", "R", "R"),
     ]
     r = 4
     for i, h in enumerate(headers, 1):
@@ -172,7 +177,7 @@ def build_funding_scenarios(wb):
     style_title(ws, "A1", "Funding Scenarios (Task B5 / DB-5)")
     ws["A2"] = (
         "Use audited unit costs from D-12 and VPBank terms from D-03. "
-        "State every assumption. Workstream B owns this tab."
+        "State every assumption. Workflow B owns this tab."
     )
     ws["A2"].font = Font(italic=True, color="666666")
     ws["A4"] = "Reference inputs"
@@ -203,7 +208,7 @@ def build_funding_scenarios(wb):
 def build_submissions(wb):
     ws = wb.create_sheet("Submission Checklist")
     style_title(ws, "A1", "Final Submission Checklist - due Friday 14 August 2026, 17:00 ICT")
-    headers = ["Deliverable", "Workstream", "Format", "Week", "Submitted?", "File name"]
+    headers = ["Deliverable", "Workflow", "Format", "Week", "Submitted?", "File name"]
     for i, h in enumerate(headers, 1):
         ws.cell(row=3, column=i, value=h)
     style_header(ws, 3, len(headers))
@@ -211,13 +216,16 @@ def build_submissions(wb):
         ("Project Charter", "All", "PDF", "1"), ("RACI matrix", "All", "Excel", "1"),
         ("Information credibility matrix", "All", "PDF", "1"), ("Issue tree (A1)", "A", "PDF", "1"),
         ("Stakeholder map (A1b)", "A", "PDF", "1"),
-        ("Data quality report (B1)", "B", "PDF", "2"), ("Interview synthesis (A2)", "A", "PDF", "2"),
+        ("Analysis Requests (min. 3)", "A", "PDF", "2-4"),
+        ("Data quality report (B1)", "B", "PDF", "2"), ("Findings Memos (min. 3)", "B", "PDF", "2-4"),
+        ("Interview synthesis (A2)", "A", "PDF", "2"),
         ("Empathy and journey maps (A3)", "A", "PDF", "2"), ("Dashboard (B2)", "B", "Excel", "2-3"),
         ("Analysis summary (B3)", "B", "PDF", "3"), ("Strategic options (A4)", "A", "PDF", "3"),
-        ("Evidence-check memo (B4)", "B", "PDF", "3"), ("Validation protocol (A6)", "All", "PDF", "4"),
+        ("Evidence-check memo (B4)", "B", "PDF", "3"), ("Trade-off reflection (A5)", "A", "PDF", "4"),
+        ("Validation protocol (A6)", "All", "PDF", "4"),
         ("Funding scenarios (B5)", "B", "Excel", "4"), ("Revision log (A7)", "All", "PDF", "4"),
         ("Executive summary", "All", "PDF", "4-5"), ("Final report", "All", "PDF", "5"),
-        ("Board deck", "All", "PPTX + PDF", "5"), ("Audit checklist (signed)", "All", "PDF", "5"),
+        ("Board deck", "All", "PPTX + PDF", "5"), ("Handoff checklist (signed)", "All", "PDF", "5"),
         ("Peer evaluation", "Individual", "PDF", "6"), ("Reflection journal", "Individual", "PDF", "6"),
     ]
     for item in items:
@@ -225,15 +233,39 @@ def build_submissions(wb):
     auto_width(ws, 6)
 
 
+def build_request_log(wb):
+    ws = wb.create_sheet("Request Log")
+    style_title(ws, "A1", "Analysis Request Log - minimum three completed R/FM pairs before final options")
+    ws["A2"] = (
+        "Workflow A files requests. Workflow B returns Findings Memos. "
+        "Engagement Lead reviews weekly. Do not share the raw dataset with A."
+    )
+    ws["A2"].font = Font(italic=True, color="666666")
+    headers = [
+        "Request ID", "Date filed", "Filed by (A)", "Decision question (short)",
+        "Urgency", "Status", "Findings Memo ID", "Date returned", "Returned by (B)", "Notes",
+    ]
+    for i, h in enumerate(headers, 1):
+        ws.cell(row=4, column=i, value=h)
+    style_header(ws, 4, len(headers))
+    for i in range(1, 9):
+        ws.cell(row=4 + i, column=1, value=f"R-{i:02d}")
+        ws.cell(row=4 + i, column=6, value="Open")
+        ws.cell(row=4 + i, column=7, value=f"FM-{i:02d}")
+    auto_width(ws, len(headers))
+
+
 def build_dashboard_workbook(path: Path):
-    """Workstream B dashboard and analysis workbook."""
+    """Workflow B dashboard and analysis workbook."""
     wb = Workbook()
     ws = wb.active
     ws.title = "Instructions"
-    style_title(ws, "A1", "GBF Performance Dashboard - Workstream B")
+    style_title(ws, "A1", "GBF Performance Dashboard - Workflow B")
     instructions = [
-        "This workbook is for Workstream B deliverables B2 and B3.",
-        "Source data: 1_Client_Data_Room/GBF_Datasets.xlsx (copy tables to Clean Data tab as needed).",
+        "This workbook is for Workflow B deliverables B2 and B3.",
+        "Source data: GBF_Datasets.xlsx in this same folder (Workflow B only).",
+        "Do not share this raw workbook or the datasets file with Workflow A.",
+        "Export curated charts into Findings Memos when answering Analysis Requests.",
         "",
         "Task DB-2: Build pivot tables on the Dashboard tab.",
         "  - Placement rate by hub, programme and gender",
@@ -278,12 +310,13 @@ def main():
     build_raci(wb)
     build_logs(wb)
     build_funding_scenarios(wb)
+    build_request_log(wb)
     build_submissions(wb)
     toolkit = OUT / "GBF_Consulting_Toolkit.xlsx"
     wb.save(toolkit)
     print(f"  Excel: {toolkit.relative_to(ROOT)}")
 
-    dash_path = ROOT / "Participants" / "3_Workstream_B_Operations_and_Analytics" / "GBF_Performance_Dashboard.xlsx"
+    dash_path = ROOT / "Participants" / "3_Workflow_B_Operations_and_Analytics" / "GBF_Performance_Dashboard.xlsx"
     build_dashboard_workbook(dash_path)
     print(f"  Excel: {dash_path.relative_to(ROOT)}")
 
