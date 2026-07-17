@@ -1,8 +1,7 @@
 """Shared Momentum Programme branding and document helpers.
 
-These helpers build professionally formatted Word documents that read like
-real organisational paperwork (letters, memos, grant agreements, statements,
-transcripts) rather than AI summaries.
+Templates use Nunito (body) and Lexend (headings) so Vietnamese text
+renders without broken fonts when Momentees type in Vietnamese.
 """
 
 from docx.shared import Pt, RGBColor, Inches, Cm
@@ -18,11 +17,29 @@ ORANGE = RGBColor(0xE8, 0x5D, 0x04)
 GREY = RGBColor(0x66, 0x66, 0x66)
 DARK = RGBColor(0x22, 0x22, 0x22)
 
-FONT = "Calibri"
+# Vietnamese-safe stack (install Nunito / Lexend / Lora if missing locally)
+FONT = "Nunito"
+FONT_HEADING = "Lexend"
+FONT_FALLBACK = "Calibri"
 PROGRAMME = "Momentum Programme"
 CASE_TITLE = "Scaling with Integrity"
 CLIENT = "Generation Bridge Foundation"
-VERSION = "2.0 | July 2026"
+VERSION = "3.0 | July 2026"
+
+
+def _set_run_font(run, name=FONT, east_asia=None):
+    run.font.name = name
+    r = run._element
+    rPr = r.get_or_add_rPr()
+    rFonts = rPr.find(qn("w:rFonts"))
+    if rFonts is None:
+        rFonts = OxmlElement("w:rFonts")
+        rPr.insert(0, rFonts)
+    ea = east_asia or name
+    rFonts.set(qn("w:ascii"), name)
+    rFonts.set(qn("w:hAnsi"), name)
+    rFonts.set(qn("w:eastAsia"), ea)
+    rFonts.set(qn("w:cs"), name)
 
 
 def set_doc_defaults(doc):
@@ -35,6 +52,16 @@ def set_doc_defaults(doc):
     style.font.name = FONT
     style.font.size = Pt(11)
     style.font.color.rgb = DARK
+    # Ensure eastAsia for Vietnamese in Normal style
+    rPr = style.element.get_or_add_rPr()
+    rFonts = rPr.find(qn("w:rFonts"))
+    if rFonts is None:
+        rFonts = OxmlElement("w:rFonts")
+        rPr.insert(0, rFonts)
+    rFonts.set(qn("w:ascii"), FONT)
+    rFonts.set(qn("w:hAnsi"), FONT)
+    rFonts.set(qn("w:eastAsia"), FONT)
+    rFonts.set(qn("w:cs"), FONT)
     pf = style.paragraph_format
     pf.space_after = Pt(6)
     pf.line_spacing = 1.15
@@ -49,10 +76,6 @@ def _shade_cell(cell, hex_color):
     tc_pr.append(shd)
 
 
-# ---------------------------------------------------------------------------
-# Cover / letterhead
-# ---------------------------------------------------------------------------
-
 def add_cover(doc, title, subtitle="", classification="Participant material",
               doc_ref="", issued=""):
     band = doc.add_paragraph()
@@ -60,6 +83,7 @@ def add_cover(doc, title, subtitle="", classification="Participant material",
     r.bold = True
     r.font.size = Pt(12)
     r.font.color.rgb = TEAL
+    _set_run_font(r, FONT_HEADING)
 
     p = doc.add_paragraph()
     p.paragraph_format.space_after = Pt(2)
@@ -67,6 +91,7 @@ def add_cover(doc, title, subtitle="", classification="Participant material",
     r.bold = True
     r.font.size = Pt(24)
     r.font.color.rgb = NAVY
+    _set_run_font(r, FONT_HEADING)
 
     if subtitle:
         p = doc.add_paragraph()
@@ -74,6 +99,7 @@ def add_cover(doc, title, subtitle="", classification="Participant material",
         r.italic = True
         r.font.size = Pt(12)
         r.font.color.rgb = GREY
+        _set_run_font(r, FONT)
 
     meta_rows = [("Client", CLIENT)]
     if doc_ref:
@@ -99,15 +125,11 @@ def _rule(doc):
     pPr.append(pbdr)
 
 
-# ---------------------------------------------------------------------------
-# Headings / body
-# ---------------------------------------------------------------------------
-
 def add_heading(doc, text, level=1):
     h = doc.add_heading(text, level=level)
     for run in h.runs:
         run.font.color.rgb = NAVY
-        run.font.name = FONT
+        _set_run_font(run, FONT_HEADING)
     return h
 
 
@@ -117,8 +139,8 @@ def add_body(doc, text, bold=False, italic=False, size=11, color=DARK, space_aft
     r.bold = bold
     r.italic = italic
     r.font.size = Pt(size)
-    r.font.name = FONT
     r.font.color.rgb = color
+    _set_run_font(r, FONT)
     p.paragraph_format.space_after = Pt(space_after)
     return p
 
@@ -127,7 +149,7 @@ def add_bullet(doc, text, level=0):
     p = doc.add_paragraph(style="List Bullet")
     p.paragraph_format.left_indent = Inches(0.25 + 0.25 * level)
     r = p.add_run(text)
-    r.font.name = FONT
+    _set_run_font(r, FONT)
     return p
 
 
@@ -135,7 +157,7 @@ def add_number(doc, text, level=0):
     p = doc.add_paragraph(style="List Number")
     p.paragraph_format.left_indent = Inches(0.25 + 0.25 * level)
     r = p.add_run(text)
-    r.font.name = FONT
+    _set_run_font(r, FONT)
     return p
 
 
@@ -147,21 +169,18 @@ def add_quote(doc, text, attribution=""):
     r.italic = True
     r.font.size = Pt(11)
     r.font.color.rgb = RGBColor(0x33, 0x3B, 0x4A)
+    _set_run_font(r, FONT)
     if attribution:
         a = doc.add_paragraph()
         a.paragraph_format.left_indent = Inches(0.4)
         ar = a.add_run("\u2014 " + attribution)
         ar.font.size = Pt(10)
         ar.font.color.rgb = GREY
+        _set_run_font(ar, FONT)
     return p
 
 
-# ---------------------------------------------------------------------------
-# Tables
-# ---------------------------------------------------------------------------
-
 def add_meta_table(doc, rows):
-    """Two-column label/value block used for letterheads, memo headers."""
     table = doc.add_table(rows=len(rows), cols=2)
     table.allow_autofit = True
     for ri, (label, value) in enumerate(rows):
@@ -173,9 +192,11 @@ def add_meta_table(doc, rows):
         r0.bold = True
         r0.font.size = Pt(10)
         r0.font.color.rgb = NAVY
+        _set_run_font(r0, FONT)
         r1 = c1.paragraphs[0].add_run(str(value))
         r1.font.size = Pt(10)
         r1.font.color.rgb = DARK
+        _set_run_font(r1, FONT)
     doc.add_paragraph()
     return table
 
@@ -192,12 +213,14 @@ def add_table(doc, headers, rows, widths=None):
         run.bold = True
         run.font.size = Pt(10)
         run.font.color.rgb = RGBColor(0xFF, 0xFF, 0xFF)
+        _set_run_font(run, FONT_HEADING)
     for ri, row in enumerate(rows):
         cells = table.rows[ri + 1].cells
         for ci, val in enumerate(row):
             para = cells[ci].paragraphs[0]
             run = para.add_run(str(val))
             run.font.size = Pt(10)
+            _set_run_font(run, FONT)
             if ri % 2 == 1:
                 _shade_cell(cells[ci], "F2F4F7")
     if widths:
@@ -209,11 +232,20 @@ def add_table(doc, headers, rows, widths=None):
 
 
 def add_signature_block(doc, name, role, date_label="Date"):
+    """Legacy wet-ink block - prefer add_online_confirm for remote teams."""
     doc.add_paragraph()
     add_body(doc, "Signed:  ______________________________________", size=10)
     add_body(doc, f"{name}", bold=True, size=10, space_after=0)
     add_body(doc, role, italic=True, size=10, color=GREY, space_after=0)
     add_body(doc, f"{date_label}:  ____________________", size=10)
+
+
+def add_online_confirm(doc, role_label, hint="Tick [x] and type full name + date (online confirmation)"):
+    """Online-friendly confirmation instead of wet signature."""
+    add_body(doc, f"[  ]  Confirmed by {role_label}", bold=True, size=10, space_after=2)
+    add_body(doc, hint, italic=True, size=9, color=GREY, space_after=2)
+    add_body(doc, "Name: ____________________    Date: __________    Channel (Drive comment / sheet tick): __________",
+             size=10)
 
 
 def add_page_break(doc):

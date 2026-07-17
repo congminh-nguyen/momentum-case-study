@@ -14,7 +14,8 @@ from docx.shared import Pt
 
 from brand import (
     set_doc_defaults, add_cover, add_heading, add_body, add_bullet, add_number,
-    add_table, add_meta_table, add_quote, add_signature_block, add_page_break,
+    add_table, add_meta_table, add_quote, add_signature_block, add_online_confirm,
+    add_page_break,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -45,9 +46,9 @@ def _save(doc, name, dest, fmt):
 
 def build_programme_handbook():
     doc = _doc(
-        "Programme Handbook & Engagement Brief",
-        "Everything your team needs to run the Generation Bridge Foundation engagement",
-        ref="MOM-2026-HB-01", issued="Monday 13 July 2026",
+        "Programme Guideline",
+        "Handbook, weekly deliverables, roles, submission rules and ground rules in one place",
+        ref="MOM-2026-GL-01", issued="Monday 13 July 2026",
     )
 
     add_heading(doc, "1. Welcome to the engagement", 1)
@@ -59,14 +60,15 @@ def build_programme_handbook():
     add_body(doc, "This is a simulated but realistic engagement. There is no single correct "
              "answer. You will be assessed on the quality of your thinking, the honesty of your "
              "evidence, the discipline of your teamwork, and the clarity of your communication.")
-    add_body(doc, "Everything you need is contained in this package. You must not use external "
-             "research, the internet, or any information beyond the materials provided. "
-             "Operational datasets are held by Workflow B only. Where evidence is incomplete, "
-             "say so; managing ambiguity is part of the exercise.", bold=True)
+    add_body(doc, "Generation Bridge Foundation, VPBank Foundation (as portrayed here), named "
+             "staff, beneficiaries and employers are fictional constructs created for the "
+             "Momentum Impact Case. They do not represent real organisations or people. Do not "
+             "import outside data, news or personal knowledge into deliverables or inferences.",
+             bold=True)
 
     add_heading(doc, "2. The client at a glance", 1)
     add_table(doc, ["Item", "Detail"], [
-        ("Organisation", "Generation Bridge Foundation (Cau Noi The He)"),
+        ("Organisation", "Generation Bridge Foundation (Cau Noi The He) - fictional case client"),
         ("Founded", "2014, Ho Chi Minh City"),
         ("Mission", "Connect 16-24 year-olds who are not in education, employment or training (NEET) to dignified work"),
         ("2025 budget", "VND 18.2 billion"),
@@ -97,6 +99,19 @@ def build_programme_handbook():
          "analysis, and plain-language translation of findings",
          "3_Workflow_B_Operations_and_Analytics"),
     ], widths=[1.7, 3.0, 2.0])
+    add_heading(doc, "Suggested roles (assign in Week 1)", 2)
+    add_table(doc, ["Role", "Count", "Owns"], [
+        ("Engagement Lead", "1", "Timeline, board narrative, final integration, Request Log health"),
+        ("Workflow A Lead", "1", "Issue tree, options, trade-off reflection, Analysis Requests"),
+        ("Research Lead", "1", "Interview synthesis, credibility matrix, validation"),
+        ("Workflow B Lead", "1", "Data dictionary, cleaning, Findings Memos, dashboard"),
+        ("Operations Analyst", "1", "Funding scenarios, cost analysis"),
+        ("Project & Quality Lead", "1", "Minutes, version control, handoff checklist, file naming"),
+    ], widths=[1.9, 0.7, 3.8])
+    add_body(doc, "In a team of five, combine Research Lead with Workflow A Lead. Full ways of "
+             "working (decision rules, free-riding prevention) are also in "
+             "4_Shared_Toolkit/Team_Roles_and_Ways_of_Working.pdf.")
+
     add_heading(doc, "The analysis request protocol", 2)
     add_body(doc, "Workflow A does not receive the operational datasets and must not ask "
              "facilitators for the file. When A needs numbers, A files an Analysis Request. "
@@ -104,79 +119,111 @@ def build_programme_handbook():
              "chooses to share. B must not hand over the raw workbook.")
     add_body(doc, "Before final options, the team must complete at least three Analysis Requests "
              "with Findings Memos returned. Every quantitative claim in A's deliverables must "
-             "cite a Request ID or Findings Memo. The Cross-Workflow Handoff Checklist in the "
-             "Shared Toolkit is the gate before submission.", bold=True)
+             "cite a Request ID or Findings Memo. The Cross-Workflow Handoff Checklist is the "
+             "gate before submission (online tick confirmation - no wet signature required).",
+             bold=True)
 
-    add_heading(doc, "5. What you will produce", 1)
-    add_table(doc, ["Deliverable", "Owner", "Format", "Due"], [
-        ("Project Charter & RACI", "Whole team", "Word -> PDF; Excel", "Tue 14 Jul"),
-        ("Problem statement & issue tree", "Workflow A", "Word -> PDF", "Wed 15 Jul"),
-        ("Stakeholder map", "Workflow A", "Word -> PDF", "Thu 16 Jul"),
-        ("Information credibility matrix", "Whole team", "Word -> PDF", "Thu 16 Jul"),
-        ("Analysis Requests (min. 3 across Weeks 2-4)", "Workflow A", "Word -> PDF", "Ongoing"),
-        ("Data quality report (internal to B)", "Workflow B", "Word -> PDF", "Tue 21 Jul"),
-        ("Findings Memos (responses to requests)", "Workflow B", "Word -> PDF", "Ongoing"),
-        ("Empathy & journey maps", "Workflow A", "Word -> PDF", "Wed 22 Jul"),
-        ("Performance dashboard (B working file)", "Workflow B", "Excel", "Fri 24 Jul"),
-        ("Strategic options (cite Request IDs)", "Workflow A", "Word -> PDF", "Thu 30 Jul"),
-        ("Evidence-check memo", "Workflow B", "Word -> PDF", "Fri 31 Jul"),
-        ("Trade-off reflection", "Workflow A", "Word -> PDF", "Wed 5 Aug"),
-        ("Funding scenarios", "Workflow B", "Excel", "Thu 6 Aug"),
-        ("Validation protocol & revision log", "Whole team", "Word -> PDF", "Thu 6 Aug"),
-        ("Final report", "Whole team", "Word -> PDF", "Fri 14 Aug"),
-        ("Board presentation", "Whole team", "PowerPoint", "Thu 13 Aug"),
-        ("Peer evaluation", "Individual", "Word -> PDF", "Mon 17 Aug"),
-        ("Reflection journal", "Individual", "Word -> PDF", "Tue 18 Aug"),
-    ], widths=[3.0, 1.4, 1.3, 1.0])
-    add_body(doc, "The complete task-by-task timeline is in GBF_Consulting_Toolkit.xlsx, "
-             "tab 'Master Timeline'. Track requests on the 'Request Log' tab.")
+    add_heading(doc, "5. What you will produce - by week", 1)
+    add_body(doc, "All weekly submissions are due Friday 17:00 ICT unless a Board or handoff "
+             "time is stated. Day-by-day detail lives only in GBF_Consulting_Toolkit.xlsx "
+             "(Master Timeline). Use this weekly view to track what must be handed in.")
+    add_table(doc, ["Week", "Dates (2026)", "Submit by end of week"], [
+        ("1", "13-17 July",
+         "Project Charter & RACI; A1 issue tree; A1b stakeholder map; credibility matrix; "
+         "roles confirmed; Request Log set up"),
+        ("2", "20-24 July",
+         "R-01 filed + FM-01 returned; B1 data quality (B internal); A2 interview synthesis; "
+         "A3 empathy & journey maps; B2 dashboard v1"),
+        ("3", "27-31 July",
+         "R-02 and R-03 + FM-02/FM-03; B3 analysis summary; A4 strategic options (cite R/FM IDs); "
+         "B4 evidence-check memo"),
+        ("4", "3-7 August",
+         "A5 trade-off reflection; A6 validation; B5 funding scenarios; A7 revision log; "
+         "executive summary draft"),
+        ("5", "10-14 August",
+         "Final report draft for handoff (Tue); signed handoff checklist (Wed 12:00); "
+         "BOARD PRESENTATION Thu 13 Aug 09:00; all finals Fri 14 Aug 17:00"),
+        ("6", "17-21 August",
+         "Peer evaluation (Mon); reflection journal (Tue); lessons-learned retrospective"),
+    ], widths=[0.7, 1.4, 4.3])
+    add_body(doc, "Track Analysis Requests on the Request Log tab. Minimum three completed "
+             "R/FM pairs before final options.")
 
-    add_heading(doc, "6. Programme calendar", 1)
-    add_table(doc, ["Week", "Dates (2026)", "Focus"], [
-        ("1", "13-17 July", "Frame the problem; set up the request protocol"),
-        ("2", "20-24 July", "B cleans data; A files first requests; map beneficiary voices"),
-        ("3", "27-31 July", "Findings exchange; options drafted; evidence-check"),
-        ("4", "3-7 August", "Validate against interviews; model funding; revise"),
-        ("5", "10-14 August", "Finalise report and deck; present to the Board"),
-        ("6", "17-21 August", "Peer evaluation, reflection, debrief"),
-    ], widths=[0.8, 1.8, 4.0])
-
-    add_heading(doc, "7. How you will be assessed", 1)
-    add_body(doc, "A 100-point rubric applies. The weighting tells you where to invest effort.")
-    add_table(doc, ["Criterion", "Points"], [
+    add_heading(doc, "6. How you will be assessed", 1)
+    add_body(doc, "A 100-point rubric applies. The table below is the expected scale for planning "
+             "your effort. Facilitators may refine descriptors or band cut-offs; any change will "
+             "be announced. Treat these weights as indicative, not a frozen contract.",
+             italic=True)
+    add_table(doc, ["Criterion", "Points (expected)"], [
         ("Problem understanding", "15"), ("Research quality", "10"),
         ("Design thinking", "15"), ("Data analysis and translation", "20"),
         ("Recommendations", "20"), ("Presentation", "10"),
         ("Project management", "5"), ("Teamwork and cross-workflow exchange", "5"),
-    ], widths=[3.6, 1.2])
-    add_body(doc, "Strong teams ask precise questions, translate findings honestly, and own the "
-             "costs of their preferred recommendation. Numbers without judgement, or judgement "
-             "without numbers, both fall short.")
+    ], widths=[3.6, 1.8])
+    add_body(doc, "Presentation Day also applies a panel split (Buddy / Core Team / Guest Board). "
+             "See Facilitators/Presentation Day Plan for weights. Strong teams ask precise "
+             "questions, translate findings honestly, and own the costs of their preferred "
+             "recommendation.")
 
-    add_heading(doc, "8. Ground rules", 1)
-    add_number(doc, "Use only the materials in this package. Do not invent facts or seek outside data.")
+    add_heading(doc, "7. Citation standard", 1)
+    add_body(doc, "Every claim must be trackable for markers. Do not cite a document code alone.")
+    add_table(doc, ["Source type", "Required citation form", "Example"], [
+        ("Client document", "Ref + section or page heading", "D-02 §1 Dong Nai; D-01 'Our year in numbers'"),
+        ("Interview transcript", "Transcript code + speaker", "BN-02 (Tuan); ST-05 (Minh)"),
+        ("Findings / requests", "Request or Findings ID", "R-02; FM-03"),
+        ("Dataset (B only, via memo)", "Table + field + definition used", "employment_outcomes.placed_90d (formal)"),
+    ], widths=[1.6, 2.4, 2.4])
+
+    add_heading(doc, "8. How to get the package and how to submit", 1)
+    add_heading(doc, "Download from GitHub", 2)
+    add_number(doc, "Open the programme repository (link from your Buddy).")
+    add_number(doc, "Click Code, then Download ZIP - one click downloads the full Participants pack "
+               "(and Facilitators only if you are staff).")
+    add_number(doc, "Or clone with git if your team prefers version control.")
+    add_heading(doc, "Shared workspace", 2)
+    add_body(doc, "Each team works in the Google Drive / Google Workspace folder created by the "
+             "programme (or Microsoft 365 if your cohort is assigned that stack). Buddies and "
+             "Core Team only review files in that folder and via the submission Form.")
+    add_heading(doc, "File naming (mandatory)", 2)
+    add_body(doc, "Use: TeamShortName_Owner_DeliverableCode_Version.ext")
+    add_table(doc, ["Example", "Meaning"], [
+        ("Tiger_All_Charter_v1.pdf", "Whole-team Project Charter, version 1"),
+        ("Tiger_WSA_A1_IssueTree_v2.pdf", "Workflow A deliverable A1"),
+        ("Tiger_WSB_FM03_Findings_v1.pdf", "Findings Memo FM-03"),
+        ("Tiger_All_BoardDeck_vFinal.pptx", "Final board deck"),
+    ], widths=[3.2, 3.2])
+    add_heading(doc, "Submission channel", 2)
+    add_number(doc, "Upload the named file to your team Drive folder.")
+    add_number(doc, "Submit the Drive link (or attach if under size limit) via the programme "
+               "Google Form for that week - your Buddy will share the Form URL at kickoff.")
+    add_number(doc, "Email is backup only if the Form is down; always CC your Buddy.")
+
+    add_heading(doc, "9. Ground rules", 1)
+    add_number(doc, "Fictional case only: do not treat GBF or named individuals as real; do not "
+               "bring outside data, news or personal research into deliverables or inferences.")
+    add_number(doc, "Use only the materials in this package.")
     add_number(doc, "Workflow A must not open or request the raw operational datasets. Route all "
                "quantitative needs through Analysis Requests to Workflow B.")
     add_number(doc, "Workflow B must not share the raw workbook with Workflow A. Share Findings "
                "Memos and curated charts only.")
-    add_number(doc, "Every claim must cite its source: a document (D-02), a transcript (ST-01), "
-               "or a Request / Findings ID (R-03 / FM-03).")
+    add_number(doc, "Cite every claim to the citation standard in Section 7.")
     add_number(doc, "State the definitions you use, especially for the placement rate.")
-    add_number(doc, "Deliverables are read as PDF, filled in as Word, analysed in Excel, and "
-               "presented in PowerPoint.")
-    add_number(doc, "Your Buddy is a facilitator, not a consultant. They will ask questions and "
-               "offer graduated hints, but they will not give you the answer or the data file.")
+    add_number(doc, "Fill templates in Word using Nunito or Lexend (Vietnamese-safe). Present in "
+               "PowerPoint with the same fonts. Export read-only finals as PDF.")
+    add_number(doc, "Handoff confirmation is an online tick + typed name/date - no wet signature.")
+    add_number(doc, "Your Buddy is a facilitator, not a consultant. They will not give you the "
+               "answer or the data file.")
 
-    add_heading(doc, "9. Package contents", 1)
+    add_heading(doc, "10. Package contents", 1)
     add_table(doc, ["Folder", "What is inside"], [
-        ("0_Start_Here", "This handbook, the data room index, the deadline summary"),
+        ("0_Start_Here", "This Programme Guideline; data room index"),
         ("1_Client_Data_Room", "GBF documents (D-01 to D-12) and interview transcripts (no datasets)"),
         ("2_Workflow_A_Impact_Strategy", "Workflow A brief, playbook, A templates"),
         ("3_Workflow_B_Operations_and_Analytics", "Workflow B brief, data dictionary, datasets, dashboard, B templates"),
-        ("4_Shared_Toolkit", "Toolkit workbook (incl. Request Log), guides, board deck, shared templates"),
+        ("4_Shared_Toolkit", "Toolkit workbook (Request Log), guides, board deck, shared templates"),
     ], widths=[2.9, 3.6])
 
-    _save(doc, "00_Programme_Handbook", "0_Start_Here", "pdf")
+    _save(doc, "00_Programme_Guideline", "0_Start_Here", "pdf")
 
 
 def build_data_room_index():
@@ -186,6 +233,12 @@ def build_data_room_index():
              "column is our honest assessment; form your own view in the information credibility "
              "matrix. Operational datasets are not in this folder. They are held by Workflow B "
              "under the analysis request protocol.")
+
+    add_heading(doc, "How to cite these sources", 1)
+    add_body(doc, "Markers will not hunt through an entire PDF for your claim. Cite document "
+             "reference plus section heading or page topic, not the code alone. Transcripts: cite "
+             "code and speaker. Examples: (D-02, §1 Dong Nai); (D-01, 'Our year in numbers'); "
+             "(BN-02, Tuan).")
 
     add_heading(doc, "Client documents", 1)
     add_table(doc, ["Ref", "Document", "Reliability", "Watch for"], [
@@ -207,7 +260,8 @@ def build_data_room_index():
 
     add_heading(doc, "Interview transcripts", 1)
     add_body(doc, "The full transcripts are in '20_Interview_Transcripts'. Fourteen "
-             "conversations were recorded in January 2026 by the engagement team.")
+             "conversations were recorded in January 2026 by the engagement team. Cite as "
+             "CODE (Speaker), e.g. ST-01 (Hung).")
     add_table(doc, ["Ref", "Interviewee", "Role"], [
         ("ST-01", "Hung Vo", "Programmes Director"),
         ("ST-02", "Thao Le", "Operations Director"),
@@ -235,54 +289,8 @@ def build_data_room_index():
 
 
 def build_deadlines():
-    doc = _doc("Deadlines & Milestones", "Every submission, with owner and time (Indochina Time)",
-               ref="MOM-2026-DL-01", issued="Monday 13 July 2026")
-    add_body(doc, "All times are 17:00 Indochina Time (ICT, UTC+7) unless stated otherwise. "
-             "Submit through the programme portal and to your Buddy. The authoritative, "
-             "task-level schedule is the 'Master Timeline' tab of the Shared Toolkit workbook.")
-
-    for week, dates, rows in [
-        ("Week 1", "13-17 July", [
-            ("Tue 14 Jul", "Project Charter and RACI", "Whole team"),
-            ("Wed 15 Jul", "Problem statement and issue tree", "Workflow A"),
-            ("Thu 16 Jul", "Stakeholder map", "Workflow A"),
-            ("Thu 16 Jul", "Information credibility matrix", "Whole team"),
-            ("Fri 17 Jul", "Agree request protocol; Buddy check-in 1", "Whole team"),
-        ]),
-        ("Week 2", "20-24 July", [
-            ("Mon 20 Jul", "First Analysis Request filed (R-01)", "Workflow A"),
-            ("Tue 21 Jul", "Data quality report (B internal)", "Workflow B"),
-            ("Wed 22 Jul", "Empathy and journey maps; interview synthesis", "Workflow A"),
-            ("Thu 23 Jul", "Findings Memo FM-01 returned", "Workflow B"),
-            ("Fri 24 Jul", "Dashboard v1; Buddy check-in 2", "Workflow B"),
-        ]),
-        ("Week 3", "27-31 July", [
-            ("Mon 27 Jul", "Analysis Requests R-02 and R-03 filed", "Workflow A"),
-            ("Wed 29 Jul", "Findings Memos FM-02/FM-03; analysis summary", "Workflow B"),
-            ("Thu 30 Jul", "Strategic options draft (cite Request IDs)", "Workflow A"),
-            ("Fri 31 Jul", "Evidence-check memo; Buddy check-in 3", "Workflow B"),
-        ]),
-        ("Week 4", "3-7 August", [
-            ("Wed 5 Aug", "Validation protocol; trade-off reflection", "Workflow A / All"),
-            ("Thu 6 Aug", "Funding scenarios; recommendation revision log", "B / All"),
-            ("Fri 7 Aug", "Executive summary (draft); Buddy check-in 4", "Workflow A"),
-        ]),
-        ("Week 5", "10-14 August", [
-            ("Tue 11 Aug", "Final report (draft for handoff)", "Whole team"),
-            ("Wed 12 Aug 12:00", "Signed Cross-Workflow Handoff Checklist", "Whole team"),
-            ("Thu 13 Aug 09:00", "BOARD PRESENTATION", "Whole team"),
-            ("Fri 14 Aug", "All final deliverables", "Whole team"),
-        ]),
-        ("Week 6", "17-21 August", [
-            ("Mon 17 Aug", "Peer evaluation (confidential)", "Individual"),
-            ("Tue 18 Aug", "Reflection journal", "Individual"),
-            ("Thu 20 Aug", "Lessons-learned retrospective", "Whole team"),
-        ]),
-    ]:
-        add_heading(doc, f"{week} ({dates})", 2)
-        add_table(doc, ["Due", "Deliverable", "Owner"], rows, widths=[1.7, 3.5, 1.3])
-
-    _save(doc, "02_Deadlines_and_Milestones", "0_Start_Here", "pdf")
+    """Deprecated: weekly deadlines live in 00_Programme_Guideline. Kept as no-op for safety."""
+    return
 
 
 # ===========================================================================
@@ -322,10 +330,12 @@ def build_wsa_start():
         ("A7", "Recommendation revision log", "Recommendation_Revision_Log.docx", "Thu 6 Aug"),
     ], widths=[0.5, 2.4, 2.6, 1.1])
     add_heading(doc, "Before you submit anything", 1)
-    add_number(doc, "Every insight from transcripts cites ST-, BN-, DN-, EP- or a client document.")
+    add_number(doc, "Every insight from transcripts cites CODE (Speaker), e.g. BN-02 (Tuan).")
+    add_number(doc, "Every document cite includes section/heading, e.g. D-02 §1 Dong Nai.")
     add_number(doc, "Every number cites a Findings Memo / Request ID from Workflow B.")
     add_number(doc, "At least three Analysis Requests have Findings Memos returned.")
-    add_number(doc, "Workflow B has signed Section B of the Cross-Workflow Handoff Checklist.")
+    add_number(doc, "Workflow B has completed the online tick on Section B of the "
+               "Cross-Workflow Handoff Checklist (typed name + date - no wet signature).")
     _save(doc, "WSA_Start_Here", "2_Workflow_A_Impact_Strategy", "pdf")
 
 
@@ -363,7 +373,8 @@ def build_wsb_start():
     add_number(doc, "Document every cleaning decision in the Assumption Log.")
     add_number(doc, "Findings Memos use plain language; charts are curated, not a dump of pivots.")
     add_number(doc, "Do not claim causation from correlation on attendance or mentoring.")
-    add_number(doc, "Workflow A has signed Section A of the Cross-Workflow Handoff Checklist.")
+    add_number(doc, "Workflow A has completed the online tick on Section A of the "
+               "Cross-Workflow Handoff Checklist (typed name + date - no wet signature).")
     _save(doc, "WSB_Start_Here", "3_Workflow_B_Operations_and_Analytics", "pdf")
 
 
@@ -1158,6 +1169,9 @@ def build_storytelling_guide():
 def build_roles_guide():
     doc = _doc("Team Roles & Ways of Working", "Shared reference for the whole team",
                classification="Participant material - shared", ref="MOM-2026-TR-01")
+    add_body(doc, "Role assignments also appear in 00_Programme_Guideline.pdf (Section 4) so "
+             "you can set them in Week 1 without opening this file. This page adds ways of "
+             "working and anti-free-riding rules.")
     add_heading(doc, "Suggested roles", 1)
     add_table(doc, ["Role", "Count", "Owns"], [
         ("Engagement Lead", "1", "Timeline, board narrative, final integration, Request Log health"),
@@ -1165,7 +1179,7 @@ def build_roles_guide():
         ("Research Lead", "1", "Interview synthesis, credibility matrix, validation"),
         ("Workflow B Lead", "1", "Data dictionary, cleaning, Findings Memos, dashboard"),
         ("Operations Analyst", "1", "Funding scenarios, cost analysis"),
-        ("Project & Quality Lead", "1", "Minutes, version control, handoff checklist"),
+        ("Project & Quality Lead", "1", "Minutes, version control, handoff checklist, file naming"),
     ], widths=[1.9, 0.7, 3.8])
     add_body(doc, "In a team of five, combine the Research Lead with the Workflow A Lead.")
     add_heading(doc, "Preventing free-riding", 1)
@@ -1176,7 +1190,10 @@ def build_roles_guide():
     add_heading(doc, "Decision-making", 1)
     add_body(doc, "Decide by consensus where you can. Where you cannot, the Engagement Lead "
              "decides and the disagreement is recorded in the decision log. Cross-workflow "
-             "handoff sign-off is required before anything leaves the team.")
+             "handoff confirmation (online tick) is required before anything leaves the team.")
+    add_heading(doc, "Fonts for Vietnamese", 1)
+    add_body(doc, "Use Nunito (body) or Lexend (headings) in Word and PowerPoint so Vietnamese "
+             "text does not break. Lora is acceptable for long-form narrative if preferred.")
     _save(doc, "Team_Roles_and_Ways_of_Working", "4_Shared_Toolkit", "pdf")
 
 
@@ -1217,15 +1234,17 @@ def build_templates():
             ("Analysis requests", "Minimum three with Findings Memos before final options"),
             ("Handoff deadline", "48 hours before any submission"),
         ], widths=[2.2, 4.2])
-        add_heading(doc, "5. Sign-off", 2)
-        add_body(doc, "All members sign before Tuesday 14 July 2026, 17:00 ICT.")
+        add_heading(doc, "5. Online confirmation", 2)
+        add_body(doc, "No wet signature required. Each member ticks and types name + date "
+                 "(Drive comment or sheet tick is fine).")
         for _ in range(3):
-            add_signature_block(doc, "________________________", "Team member")
+            add_online_confirm(doc, "Team member")
     _template("Project_Charter", "4_Shared_Toolkit", "Project Charter", charter)
 
     def handoff(doc):
         add_body(doc, "No deliverable may be submitted until both workflows have completed and "
-                 "signed their sections. The Engagement Lead signs only if the Request Log shows "
+                 "confirmed their sections. Use online ticks (typed name + date) - no wet "
+                 "signature. The Engagement Lead confirms only if the Request Log shows "
                  "genuine exchange (not a single dump at the end).")
         add_heading(doc, "Section A - Workflow A reviews Workflow B", 2)
         for item in [
@@ -1238,10 +1257,11 @@ def build_templates():
             "Charts attached to memos are curated, not a pivot dump.",
         ]:
             add_bullet(doc, "[  ]  " + item)
-        add_signature_block(doc, "________________________", "Workflow A reviewer")
+        add_online_confirm(doc, "Workflow A reviewer")
         add_heading(doc, "Section B - Workflow B reviews Workflow A", 2)
         for item in [
             "Every quantitative claim cites a Request ID or Findings Memo ID.",
+            "Document cites include section/heading (not code alone).",
             "At least three Analysis Requests have Findings Memos returned.",
             "Strategic options are financially feasible against D-12 and D-03.",
             "Options changed after at least one B challenge (see revision log).",
@@ -1250,10 +1270,10 @@ def build_templates():
             "Implementation roadmap has a realistic timeline and cost.",
         ]:
             add_bullet(doc, "[  ]  " + item)
-        add_signature_block(doc, "________________________", "Workflow B reviewer")
-        add_heading(doc, "Section C - Joint final sign-off", 2)
+        add_online_confirm(doc, "Workflow B reviewer")
+        add_heading(doc, "Section C - Joint final confirmation", 2)
         add_body(doc, "Request Log shows minimum three completed R/FM pairs: [  ] Yes")
-        add_signature_block(doc, "________________________", "Engagement Lead")
+        add_online_confirm(doc, "Engagement Lead")
     _template("Cross_Workflow_Handoff_Checklist", "4_Shared_Toolkit",
               "Cross-Workflow Handoff Checklist", handoff)
 
@@ -1394,12 +1414,16 @@ def build_templates():
         add_heading(doc, "Issue tree (MECE)", 2)
         add_body(doc, "Complete the branches below. Sub-questions at each level must be "
                  "mutually exclusive and collectively exhaustive.")
-        add_table(doc, ["Branch", "Sub-questions", "Testable hypothesis"], [
-            ("Programmes", "", ""), ("Geography", "", ""), ("Funding", "", ""),
-            ("Operations", "", ""), ("Measurement", "", "")], widths=[1.4, 2.6, 2.4])
+        add_table(doc, ["Branch", "Sub-questions", "Testable hypothesis", "Sources"], [
+            ("Programmes", "", "", ""), ("Geography", "", "", ""), ("Funding", "", "", ""),
+            ("Operations", "", "", ""), ("Measurement", "", "", "")], widths=[1.1, 1.8, 1.8, 1.7])
+        add_body(doc, "Sources column: cite transcript CODE (Speaker) and/or document Ref + "
+                 "section (e.g. D-02 §1; BN-02 Tuan). Do not leave Sources blank for any "
+                 "hypothesis you intend to test.", italic=True, size=10)
         add_heading(doc, "Hypotheses to test (each should imply an Analysis Request)", 2)
         for i in range(1, 5):
             add_body(doc, f"H{i}: ________________________________________________")
+            add_body(doc, f"    Sources: ________________________________________")
             add_body(doc, f"    Possible ask to Workflow B: ________________________")
     _template("Problem_Statement_and_Issue_Tree", "2_Workflow_A_Impact_Strategy",
               "Problem Statement and Issue Tree", issue_tree)

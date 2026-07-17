@@ -370,12 +370,15 @@ def build_ppt(out_path: Path):
         p = tf.paragraphs[0]
         p.text = "GBF Strategy 2026-2028"
         p.font.size = Pt(40); p.font.bold = True; p.font.color.rgb = NAVY
+        p.font.name = "Lexend"
         p2 = tf.add_paragraph()
         p2.text = "[Your one-sentence recommendation goes here]"
         p2.font.size = Pt(20); p2.font.color.rgb = TEAL
+        p2.font.name = "Nunito"
         p3 = tf.add_paragraph()
         p3.text = "Momentum Programme  |  Generation Bridge Foundation  |  13 August 2026"
         p3.font.size = Pt(13); p3.font.color.rgb = GREY
+        p3.font.name = "Nunito"
 
     def content_slide(headline, evidence, insight, ask, notes=""):
         s = prs.slides.add_slide(blank)
@@ -384,6 +387,7 @@ def build_ppt(out_path: Path):
         hp = htf.paragraphs[0]
         hp.text = headline
         hp.font.size = Pt(26); hp.font.bold = True; hp.font.color.rgb = NAVY
+        hp.font.name = "Lexend"
         bb = s.shapes.add_textbox(Inches(0.6), Inches(1.9), Inches(12.1), Inches(4.8))
         btf = bb.text_frame; btf.word_wrap = True
         for label, val in [("Evidence", evidence), ("Insight", insight),
@@ -391,9 +395,11 @@ def build_ppt(out_path: Path):
             lp = btf.add_paragraph()
             lr = lp.add_run(); lr.text = label; lr.font.bold = True
             lr.font.size = Pt(15); lr.font.color.rgb = TEAL
+            lr.font.name = "Lexend"
             vp = btf.add_paragraph()
             vr = vp.add_run(); vr.text = val
             vr.font.size = Pt(15); vr.font.color.rgb = RGBColor(0x30, 0x30, 0x30)
+            vr.font.name = "Nunito"
             btf.add_paragraph()
         if notes:
             s.notes_slide.notes_text_frame.text = notes
@@ -548,8 +554,19 @@ def build_facilitator_docs():
     d.save(fac_word / "02_Buddy_Guide.docx")
 
     # Assessment Rubric
-    d = newdoc("Assessment Rubric", "100 points - descriptors for each level")
-    add_body(d, "Score each criterion against the descriptors. Weight as shown.")
+    d = newdoc("Assessment Rubric", "100 points - descriptors and point bands per level")
+    add_body(d, "Score each criterion against the descriptors. Point bands below make Excellent / "
+             "Good / Satisfactory / Poor concrete. These bands are expected scales; Core Team may "
+             "announce refinements without changing the criterion weights without notice.")
+    add_heading(d, "How to convert a level to points", 2)
+    add_body(d, "For a criterion worth P points: Excellent = 85-100% of P; Good = 70-84%; "
+             "Satisfactory = 50-69%; Poor = 0-49%. Round to the nearest whole point.")
+    add_table(d, ["Criterion max (P)", "Excellent", "Good", "Satisfactory", "Poor"], [
+        ("15", "13-15", "11-12", "8-10", "0-7"),
+        ("20", "17-20", "14-16", "10-13", "0-9"),
+        ("10", "9-10", "7-8", "5-6", "0-4"),
+        ("5", "5", "4", "3", "0-2"),
+    ], widths=[1.4, 1.2, 1.2, 1.4, 1.2])
     for crit, pts, exc, good, sat, poor in [
         ("Problem understanding", 15,
          "Precise, MECE issue tree; hypotheses imply clear asks for B",
@@ -557,9 +574,9 @@ def build_facilitator_docs():
          "Generic framing; some overlap",
          "Misreads the problem"),
         ("Research quality", 10,
-         "Sources triangulated; credibility assessed; contradictions resolved",
+         "Sources triangulated; citations include section/speaker; contradictions resolved",
          "Most sources used well",
-         "Uses sources uncritically",
+         "Uses sources uncritically or cites code only",
          "Ignores or misuses sources"),
         ("Design thinking", 15,
          "Evidence-based empathy and journey maps grounded in specific voices",
@@ -582,12 +599,12 @@ def build_facilitator_docs():
          "Some data-dumping",
          "Disorganised or decorative"),
         ("Project management", 5,
-         "Request Log, RACI, version control all maintained",
+         "Request Log, RACI, file naming, version control all maintained",
          "Mostly maintained",
          "Patchy",
          "Absent"),
         ("Teamwork and cross-workflow exchange", 5,
-         "Genuine request/findings exchange; handoff signed in good faith",
+         "Genuine request/findings exchange; online handoff confirmed in good faith",
          "Good collaboration",
          "Uneven contribution or one-way dump",
          "Free-riding or A/B bypass"),
@@ -595,6 +612,10 @@ def build_facilitator_docs():
         add_heading(d, f"{crit} ({pts} points)", 2)
         add_table(d, ["Excellent", "Good", "Satisfactory", "Poor"],
                   [(exc, good, sat, poor)], widths=[1.7, 1.6, 1.6, 1.5])
+    add_heading(d, "Sample answers", 2)
+    add_body(d, "There is no single model answer. Use Answer_Key/ for expected findings, "
+             "solution paths, and deliverable standards. Reward reasoning that names costs, "
+             "not a particular destination.")
     d.save(fac_word / "03_Assessment_Rubric.docx")
 
     # Solution Paths
@@ -657,6 +678,13 @@ def build_facilitator_docs():
 
     # Debrief + FAQ
     d = newdoc("Debrief Guide & FAQ", "Run a 90-minute debrief; answer common questions")
+    add_heading(d, "Working space and submission (tell teams at kickoff)", 1)
+    add_bullet(d, "Shared workspace: Google Drive / Google Workspace folder per team "
+               "(or Microsoft 365 if the cohort is assigned that stack).")
+    add_bullet(d, "Submission: upload named file to Drive, then submit the link via the weekly "
+               "Google Form (Buddy shares URL). Email is backup only.")
+    add_bullet(d, "File naming: TeamShortName_Owner_DeliverableCode_Version.ext")
+    add_bullet(d, "Package download: GitHub repo -> Code -> Download ZIP.")
     add_heading(d, "Debrief flow (90 minutes)", 1)
     add_number(d, "Team reflection (15 min): what surprised you?")
     add_number(d, "Evidence round (20 min): each team names the finding that changed their mind "
@@ -669,14 +697,67 @@ def build_facilitator_docs():
     add_body(d, "Can Workflow A have the Excel file?", bold=True)
     add_body(d, "No. Asking what to request is part of the exercise. Buddies must not share it.")
     add_body(d, "Can we collect more data or interview real NGO staff?", bold=True)
-    add_body(d, "No. Everything required is in the pack. Managing incomplete information is part "
-             "of the exercise; state your assumptions instead.")
+    add_body(d, "No. GBF and all named parties are fictional for this Impact Case. Everything "
+             "required is in the pack. Managing incomplete information is part of the exercise.")
+    add_body(d, "How do we confirm the handoff online?", bold=True)
+    add_body(d, "Tick the checklist boxes, type full name and date. A Drive comment or sheet "
+             "tick is enough - no wet signature.")
     add_body(d, "Which placement rate is correct?", bold=True)
     add_body(d, "Both are 'correct' under their definitions. The learning point is to state the "
              "definition and report honestly (D-01 footnote vs ST-02).")
     add_body(d, "Is there a right recommendation?", bold=True)
     add_body(d, "No. Several paths are defensible (see Solution Paths). Judgement and evidence win.")
     d.save(fac_word / "06_Debrief_Guide_and_FAQ.docx")
+
+    # Presentation Day Plan
+    d = newdoc("Presentation Day Plan", "Panel weights, guest brief, and Board format")
+    add_heading(d, "1. Score weights on Presentation Day", 1)
+    add_body(d, "The 100-point engagement rubric still applies to written work. On Presentation "
+             "Day, the live pitch and Q&A are scored with this panel split:")
+    add_table(d, ["Panel", "Weight", "Focus"], [
+        ("Buddy", "35%", "Process, teamwork, citation discipline, request/findings exchange"),
+        ("Core Team (Impact Case / MMT)", "35%", "Substance of recommendation, evidence quality, feasibility"),
+        ("Guest Board (invited)", "30%", "Clarity of ask, persuasiveness, composure under challenge"),
+    ], widths=[2.2, 1.0, 3.2])
+    add_body(d, "Final written report quality is primarily owned by Core Team using the "
+             "Assessment Rubric and Answer_Key. Buddy scores inform process marks; guests do "
+             "not re-mark the full 100-point written rubric unless Core Team asks them to.")
+
+    add_heading(d, "2. Who judges the final report?", 1)
+    add_bullet(d, "Primary: Core Team Impact Case using 03_Assessment_Rubric and Answer_Key.")
+    add_bullet(d, "Buddy: process and teamwork evidence (Request Log, handoff ticks, file naming).")
+    add_bullet(d, "Guest Board: live pitch only, unless Core Team shares a one-page score sheet.")
+
+    add_heading(d, "3. Briefing guest Board members", 1)
+    add_body(d, "Yes - Core Team briefs guests before the session. Guests should not rely on "
+             "teams to teach the whole case in the first two minutes.")
+    add_number(d, "Send a one-page case brief (Board question, workflows A/B, fictional disclaimer) "
+               "48 hours ahead.")
+    add_number(d, "15-minute live brief before pitches: what GBF is (fictional), what a strong "
+               "ask looks like, red lines (raw data sharing, outside research).")
+    add_number(d, "Optional role cards: guests may play ED / Development / Donor / Board hawk - "
+               "or sit as a neutral Board. Tell teams which format applies that day.")
+
+    add_heading(d, "4. Format of the final presentation", 1)
+    add_body(d, "Default format (recommended):")
+    add_bullet(d, "Teams pitch to a simulated GBF Board (10-12 minutes + 8-10 minutes Q&A).")
+    add_bullet(d, "Core Team and Buddies sit on the panel; invited guests join as Board members.")
+    add_bullet(d, "Optional light role-play: assign 1-2 guests (or Core Team) to named stances "
+               "(e.g. growth-oriented Board member vs quality-first ED). Do not require teams "
+               "to invent the Board characters themselves.")
+    add_bullet(d, "Teams open with their one-sentence recommendation; they do not re-read the "
+               "entire data room as 'context'.")
+    add_body(d, "Announce the chosen format at Week 4 Buddy check-in so teams can rehearse.")
+
+    add_heading(d, "5. Run-of-show (example)", 1)
+    add_table(d, ["Time", "Activity"], [
+        ("08:30", "Guest brief (closed)"),
+        ("09:00", "Team 1 pitch + Q&A"),
+        ("09:25", "Team 2 ..."),
+        ("After last team", "Panel scores submitted; short private calibration"),
+        ("Closing", "Thank teams; remind Week 6 peer eval and reflection"),
+    ], widths=[1.4, 5.0])
+    d.save(fac_word / "07_Presentation_Day_Plan.docx")
 
     # Convert all facilitator docs to PDF
     fac_pdf = FAC / "PDF"
@@ -704,9 +785,8 @@ def build_root_pdfs():
         pdf.add_para(line)
     pdf.add_heading("Read in this order")
     for i, line in enumerate([
-        "0_Start_Here/00_Programme_Handbook.pdf",
+        "0_Start_Here/00_Programme_Guideline.pdf  (handbook + weekly deliverables + rules)",
         "0_Start_Here/01_Data_Room_Index.pdf",
-        "0_Start_Here/02_Deadlines_and_Milestones.pdf",
         "2_Workflow_A_Impact_Strategy/WSA_Start_Here.pdf",
         "3_Workflow_B_Operations_and_Analytics/WSB_Start_Here.pdf",
         "4_Shared_Toolkit/GBF_Consulting_Toolkit.xlsx (Master Timeline + Request Log)",
@@ -714,11 +794,12 @@ def build_root_pdfs():
         pdf.add_list_item(line, prefix=f"{i}.  ")
     pdf.add_heading("The rules")
     for line in [
-        "Use only the materials in this package - no external research.",
-        "Workflow A does not hold the operational datasets; route quantitative asks through Analysis Requests.",
-        "Workflow B does not share the raw workbook; return Findings Memos in plain language.",
-        "Cite every claim (document, transcript, or Request / Findings ID).",
-        "Read as PDF, fill in as Word, analyse in Excel, present in PowerPoint.",
+        "Fictional case only - no outside data in deliverables.",
+        "Workflow A does not hold the operational datasets; use Analysis Requests.",
+        "Workflow B does not share the raw workbook; return Findings Memos.",
+        "Cite Ref + section (documents) or CODE (Speaker) for transcripts.",
+        "Name files: Team_Owner_DeliverableCode_Version.ext and submit via the weekly Google Form.",
+        "Download the pack from GitHub: Code > Download ZIP.",
     ]:
         pdf.add_list_item(line)
     pdf.output(str(ROOT / "START_HERE.pdf"))
@@ -731,14 +812,15 @@ def build_root_pdfs():
     pdf.add_heading("Participants/  (distribute this folder)")
     pdf.add_grid([
         ["Folder", "Contents", "Formats"],
-        ["0_Start_Here", "Handbook, data room index, deadlines", "PDF"],
+        ["0_Start_Here", "Programme Guideline (merged handbook + weekly deadlines), data room index", "PDF"],
         ["1_Client_Data_Room", "GBF documents and interview transcripts (no datasets)", "PDF"],
         ["2_Workflow_A_Impact_Strategy", "Start here, brief, playbook, templates A1-A7", "PDF, Word"],
         ["3_Workflow_B_Operations_and_Analytics", "Start here, brief, dictionary, datasets, dashboard, B templates", "PDF, Word, Excel"],
         ["4_Shared_Toolkit", "Toolkit (Request Log), guides, board deck, shared templates", "Excel, PDF, PowerPoint, Word"],
     ], widths=[2.2, 3.4, 1.6])
     pdf.add_heading("Facilitators/  (staff only - do not share)")
-    pdf.add_para("Facilitator guide, buddy guide, assessment rubric, debrief guide and FAQ - in PDF and Word.")
+    pdf.add_para("Facilitator guide, buddy guide, assessment rubric (with point bands), "
+                 "presentation day plan, solution paths, debrief guide - in PDF and Word.")
     pdf.add_heading("Answer_Key/  (staff only - do not share)")
     pdf.add_para("Case key: data inconsistencies register, expected deliverables and outcomes, "
                  "strategic solution paths, and a searchable Excel register.")
