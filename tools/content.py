@@ -864,6 +864,12 @@ def build_wsa_brief():
              "Analysis Request (Shared Toolkit). Working out what to ask is part of the exercise. "
              "Vague requests get vague answers.", bold=True)
 
+    add_heading(doc, "How the exchange with B works", 1)
+    add_body(doc, "B is not idle while you frame. In Weeks 1-3 they profile and clean the export "
+             "and build a working dashboard so they can answer you quickly. Your job is to file "
+             "precise requests once hypotheses exist (from Week 3). Do not delay R-01 until "
+             "options are finished - B needs early asks to stress-test your thinking.")
+
     add_heading(doc, "Your responsibilities", 1)
     add_bullet(doc, "Synthesise interview transcripts into clear, cited insights.")
     add_bullet(doc, "Frame the problem with a MECE issue tree and testable hypotheses.")
@@ -875,15 +881,15 @@ def build_wsa_brief():
 
     add_heading(doc, "Deliverables, owners and deadlines", 1)
     add_table(doc, ["#", "Deliverable", "Template", "Due"], [
-        ("A1", "Problem statement and issue tree", "Templates/Problem_Statement_and_Issue_Tree.docx", "Wed 15 Jul"),
-        ("A1b", "Stakeholder map", "Templates/Stakeholder_Map.docx", "Thu 16 Jul"),
-        ("A2", "Interview synthesis", "Templates/Interview_Synthesis.docx", "Wed 22 Jul"),
-        ("A3", "Empathy and journey maps", "Templates/Empathy_and_Journey_Map.docx", "Wed 22 Jul"),
-        ("R", "Analysis Requests (minimum three)", "4_Shared_Toolkit/Templates/Analysis_Request.docx", "Weeks 2-4"),
-        ("A4", "Strategic options", "Templates/Strategic_Options.docx", "Thu 30 Jul"),
-        ("A5", "Trade-off reflection", "Templates/Tradeoff_Reflection.docx", "Wed 5 Aug"),
-        ("A6", "Validation protocol (with WF-B)", "Templates/Validation_Protocol.docx", "Wed 5 Aug"),
-        ("A7", "Recommendation revision log", "Templates/Recommendation_Revision_Log.docx", "Thu 6 Aug"),
+        ("A1", "Problem statement and issue tree", "Templates/Problem_Statement_and_Issue_Tree.docx", "Wed 5 Aug"),
+        ("A1b", "Stakeholder map", "Templates/Stakeholder_Map.docx", "Thu 6 Aug"),
+        ("A2", "Interview synthesis", "Templates/Interview_Synthesis.docx", "Wed 12 Aug"),
+        ("A3", "Empathy and journey maps", "Templates/Empathy_and_Journey_Map.docx", "Wed 12 Aug"),
+        ("R", "Analysis Requests (minimum three)", "4_Shared_Toolkit/Templates/Analysis_Request.docx", "Weeks 3-5"),
+        ("A4", "Strategic options", "Templates/Strategic_Options.docx", "Thu 20 Aug"),
+        ("A5", "Trade-off reflection", "Templates/Tradeoff_Reflection.docx", "Wed 26 Aug"),
+        ("A6", "Validation protocol (with WF-B)", "Templates/Validation_Protocol.docx", "Wed 26 Aug"),
+        ("A7", "Recommendation revision log", "Templates/Recommendation_Revision_Log.docx", "Thu 27 Aug"),
     ], widths=[0.5, 2.4, 2.8, 0.9])
 
     add_heading(doc, "Detailed requirements", 1)
@@ -895,6 +901,7 @@ def build_wsa_brief():
 
     add_body(doc, "Analysis Requests.", bold=True)
     add_bullet(doc, "Before final options, complete at least three requests with Findings Memos returned.")
+    add_bullet(doc, "File R-01 in Week 3 as soon as A1 hypotheses exist - do not wait for a polished deck.")
     add_bullet(doc, "Each request states: the decision it informs, the hypothesis, what a useful "
                "answer would look like, and urgency. Do not prescribe field names you have not been given.")
     add_bullet(doc, "Cite Request IDs (R-01, R-02...) on every quantitative claim in A4 and later.")
@@ -921,8 +928,8 @@ def build_wsa_brief():
     add_heading(doc, "How Workflow B will challenge you", 1)
     add_body(doc, "Before you submit, Workflow B will check that every number cites a Request or "
              "Findings ID, that options are financially realistic, and that you have not ignored "
-             "uncomfortable findings. You cannot submit without their signature on the handoff "
-             "checklist.")
+             "uncomfortable findings. You cannot submit without their online confirmation on the "
+             "handoff checklist.")
     _save(doc, "WSA_Engagement_Brief", "2_Workflow_A_Impact_Strategy", "pdf")
 
 
@@ -989,13 +996,29 @@ def build_wsb_brief():
     add_heading(doc, "Purpose of this workflow", 1)
     add_body(doc, "Workflow B owns the operational evidence. You hold the datasets and the data "
              "dictionary. You clean, analyse, and translate findings into language Workflow A can "
-             "use. Success is not a dump of pivots; it is a clear answer to a question A actually asked.")
+             "use. Success is not a dump of pivots; it is a clear answer to a question A actually asked "
+             "- delivered fast because you prepared the data before the ask arrived.")
 
     add_heading(doc, "Hard constraint on sharing", 1)
     add_body(doc, "Do not share GBF_Datasets.xlsx or the data dictionary with Workflow A. "
              "Respond to Analysis Requests with Findings Memos and curated charts or summary "
              "tables you choose to attach. If A asks for 'the file', refuse and ask what decision "
              "the number needs to support.", bold=True)
+
+    add_heading(doc, "Two modes of work (do not wait idle)", 1)
+    add_body(doc, "You do not need A's permission to understand the data. You do need a request "
+             "before you push decision numbers into A's narrative.")
+    add_table(doc, ["Mode", "When", "What you do"], [
+        ("Foundation (proactive)", "Weeks 1-3",
+         "Read the dictionary; profile and clean (B1 / DB-1); build a working dashboard (B2 / DB-2). "
+         "This is your readiness work while A frames the problem."),
+        ("Service (reactive)", "From Week 3",
+         "Answer Analysis Requests with Findings Memos. Package only what the request needs."),
+        ("Challenge (joint)", "Weeks 4-6",
+         "Evidence-check A's options (B4); run funding scenarios (B5) once options exist."),
+    ], widths=[1.6, 1.2, 3.6])
+    add_body(doc, "If no request has arrived by mid-Week 3, nudge A for R-01. Do not invent a "
+             "strategy for them - ask what decision is stuck.")
 
     add_heading(doc, "Your responsibilities", 1)
     add_bullet(doc, "Own and apply the data dictionary; profile and clean the export.")
@@ -1008,50 +1031,54 @@ def build_wsb_brief():
 
     add_heading(doc, "Deliverables, owners and deadlines", 1)
     add_table(doc, ["#", "Deliverable", "Format", "Due"], [
-        ("B1", "Data quality report (internal to B)", "Templates/Data_Quality_Report.docx -> PDF", "Tue 21 Jul"),
-        ("FM", "Findings Memos (responses to R-01+)", "4_Shared_Toolkit/Templates/Findings_Memo.docx", "Ongoing"),
-        ("B2", "Performance dashboard (working file)", "GBF_Performance_Dashboard.xlsx", "Fri 24 Jul"),
-        ("B3", "Analysis summary", "Templates/Analysis_Summary.docx -> PDF", "Wed 29 Jul"),
-        ("B4", "Evidence-check memo on A's options", "Templates/Evidence_Check_Memo.docx -> PDF", "Fri 31 Jul"),
-        ("B5", "Funding scenarios", "Toolkit workbook, 'Funding Scenarios' tab", "Thu 6 Aug"),
+        ("B1", "Data quality report (internal to B)", "Templates/Data_Quality_Report.docx -> PDF", "Tue 11 Aug"),
+        ("FM", "Findings Memos (responses to R-01+)", "4_Shared_Toolkit/Templates/Findings_Memo.docx", "From Week 3"),
+        ("B2", "Performance dashboard (working file)", "GBF_Performance_Dashboard.xlsx", "Fri 14 Aug"),
+        ("B3", "Analysis summary (tied to Requests answered)", "Templates/Analysis_Summary.docx -> PDF", "Wed 19 Aug"),
+        ("B4", "Evidence-check memo on A's options", "Templates/Evidence_Check_Memo.docx -> PDF", "Fri 21 Aug"),
+        ("B5", "Funding scenarios", "Toolkit workbook, 'Funding Scenarios' tab", "Thu 27 Aug"),
     ], widths=[0.5, 2.5, 2.7, 0.9])
 
-    add_heading(doc, "The five analysis tasks", 1)
-    add_body(doc, "Complete these as your technical backbone. Prefer to package results as "
-             "responses to A's requests where the ask fits. Interpretation matters more than "
-             "technical sophistication.")
+    add_heading(doc, "Analysis backlog - foundation vs on-request", 1)
+    add_body(doc, "Treat DB-1 and DB-2 as mandatory foundation. Treat DB-3 to DB-5 as techniques "
+             "you prepare for and run when a request (or A's draft options) makes them necessary. "
+             "Do not burn Weeks 3-4 on analyses nobody asked for while R-01 sits unanswered.")
 
-    add_body(doc, "DB-1 - Data quality audit.", bold=True)
+    add_body(doc, "DB-1 - Data quality audit (foundation).", bold=True)
     add_bullet(doc, "Profile every table for missing values, duplicates and format problems.")
     add_bullet(doc, "Use WSB_Data_Dictionary.pdf as your field guide. Investigate anomalies; "
                "do not delete silently.")
     add_bullet(doc, "Record every cleaning decision in the assumption log. Share with A only the "
                "material issues that affect a decision (via Findings Memo), not the full cleaning log.")
 
-    add_body(doc, "DB-2 - Performance dashboard.", bold=True)
+    add_body(doc, "DB-2 - Performance dashboard (foundation).", bold=True)
     add_bullet(doc, "Use pivot tables to show placement by hub, programme and gender.")
-    add_bullet(doc, "Flag any rate below 65 per cent. Title charts with the insight, not the topic.")
-    add_bullet(doc, "Export only curated views into Findings Memos when A asks.")
+    add_bullet(doc, "Flag any rate that looks material under the definition you state.")
+    add_bullet(doc, "Keep this as a B working file. Export only curated views into Findings Memos "
+               "when A asks.")
 
-    add_body(doc, "DB-3 - Attendance and outcomes.", bold=True)
+    add_body(doc, "DB-3 - Attendance and outcomes (on request).", bold=True)
+    add_bullet(doc, "Run when A asks about drivers of placement, attendance, or programme design.")
     add_bullet(doc, "Join attendance to outcomes; compare means for placed vs not placed.")
     add_bullet(doc, "State that association is not causation; name at least two confounders.")
 
-    add_body(doc, "DB-4 - Mentoring and completion.", bold=True)
-    add_bullet(doc, "Total mentor hours per young person, excluding inactive mentors.")
+    add_body(doc, "DB-4 - Mentoring and completion (on request).", bold=True)
+    add_bullet(doc, "Run when A asks about mentoring intensity, completion, or volunteer capacity.")
+    add_bullet(doc, "Total mentor hours per young person with inactive mentors handled carefully.")
     add_bullet(doc, "Compare completers with those who withdrew. Do not overclaim.")
 
-    add_body(doc, "DB-5 - Funding scenarios.", bold=True)
+    add_body(doc, "DB-5 - Funding scenarios (after draft options).", bold=True)
+    add_bullet(doc, "Run once A has sketched options or asks what growth costs.")
     add_bullet(doc, "Model hold steady, moderate growth (+30%), aggressive growth (+80%).")
     add_bullet(doc, "Use D-12 unit costs and D-03 VPBank terms.")
-    add_bullet(doc, "Judge whether each scenario can meet the 65% condition under an honest "
-               "placement definition.")
+    add_bullet(doc, "Judge whether each scenario can meet placement conditions under an honest "
+               "definition you state.")
 
     add_heading(doc, "How Workflow A will challenge you", 1)
     add_body(doc, "Before you submit, Workflow A will check that you answered their questions "
              "in plain language, that you did not share the raw file, that definitions and "
              "caveats are stated, and that unanswered requests are logged. You cannot submit "
-             "without their signature on the handoff checklist.")
+             "without their online confirmation on the handoff checklist.")
     _save(doc, "WSB_Engagement_Brief", "3_Workflow_B_Operations_and_Analytics", "pdf")
 
 
@@ -1103,9 +1130,16 @@ def build_wsb_data_dictionary():
 def build_wsb_workbook():
     doc = _doc("Data Analysis Workbook", "Step-by-step guidance for Workflow B",
                classification="Participant material - Workflow B", ref="MOM-2026-WSB-02")
-    add_body(doc, "This workbook explains how to complete each analysis task in Excel. Package "
-             "results as Findings Memos when answering Workflow A's requests. You do not need "
-             "to write code. If you use Python or R, the same documentation standards apply.")
+    add_body(doc, "This workbook explains how to complete analysis work in Excel. Do foundation "
+             "work (quality + dashboard) before the first request arrives. Package later results "
+             "as Findings Memos when answering Workflow A's requests. You do not need to write "
+             "code. If you use Python or R, the same documentation standards apply.")
+
+    add_heading(doc, "Suggested order", 1)
+    add_number(doc, "Weeks 1-3: dictionary, profile, clean (DB-1 / B1), then dashboard pivots (DB-2 / B2).")
+    add_number(doc, "From Week 3: answer each Analysis Request with a Findings Memo before starting "
+               "optional deep-dives.")
+    add_number(doc, "Run DB-3 or DB-4 only when a request needs them; run DB-5 once A has draft options.")
 
     add_heading(doc, "Concepts in plain English", 1)
     add_table(doc, ["Term", "What it means"], [
