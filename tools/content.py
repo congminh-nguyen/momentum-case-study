@@ -193,14 +193,31 @@ def build_programme_handbook():
     add_table(doc, ["Example", "Meaning"], [
         ("Tiger_All_Charter_v1.pdf", "Whole-team Project Charter, version 1"),
         ("Tiger_WSA_A1_IssueTree_v2.pdf", "Workflow A deliverable A1"),
-        ("Tiger_WSB_FM03_Findings_v1.pdf", "Findings Memo FM-03"),
+        ("Tiger_WSA_R01_Request_v1.pdf", "Analysis Request R-01 (filed by A)"),
+        ("Tiger_WSB_FM01_Findings_v1.pdf", "Findings Memo FM-01 (returned by B)"),
         ("Tiger_All_BoardDeck_vFinal.pptx", "Final board deck"),
     ], widths=[3.2, 3.2])
+    add_heading(doc, "A_B_Exchange folder (mandatory for assessment)", 2)
+    add_body(doc, "Create a folder in your team Drive named A_B_Exchange. Every official "
+             "cross-workflow communication must be saved there as PDF using the templates below. "
+             "Markers and Buddies assess teamwork from this folder - not from chat history.")
+    add_table(doc, ["What", "Template", "Who files"], [
+        ("Analysis Request (R-xx)", "4_Shared_Toolkit/Templates/Analysis_Request.docx", "Workflow A"),
+        ("Findings Memo (FM-xx)", "4_Shared_Toolkit/Templates/Findings_Memo.docx", "Workflow B"),
+    ], widths=[2.2, 3.0, 1.4])
+    add_number(doc, "Export each completed Word template to PDF before filing.")
+    add_number(doc, "Name files with R-xx / FM-xx codes (examples above).")
+    add_number(doc, "Update the Request Log tab whenever a file is added.")
+    add_number(doc, "Informal chat is fine for logistics only. Decisions, asks and answers that "
+               "affect the recommendation must appear in A_B_Exchange.")
+    add_number(doc, "Minimum three completed R/FM pairs in A_B_Exchange before final options.")
     add_heading(doc, "Submission channel", 2)
     add_number(doc, "Upload the named file to your team Drive folder.")
     add_number(doc, "Submit the Drive link (or attach if under size limit) via the programme "
                "Google Form for that week - your Buddy will share the Form URL at kickoff.")
     add_number(doc, "Email is backup only if the Form is down; always CC your Buddy.")
+    add_number(doc, "When submitting options or the final report, include the link to A_B_Exchange "
+               "so markers can see the request trail.")
 
     add_heading(doc, "9. Ground rules", 1)
     add_number(doc, "Fictional case only: do not treat GBF or named individuals as real; do not "
@@ -210,6 +227,8 @@ def build_programme_handbook():
                "quantitative needs through Analysis Requests to Workflow B.")
     add_number(doc, "Workflow B must not share the raw workbook with Workflow A. Share Findings "
                "Memos and curated charts only.")
+    add_number(doc, "Official A-B asks and answers live only in A_B_Exchange/ using the Request "
+               "and Findings Memo templates. Chat is not the assessment record.")
     add_number(doc, "Cite every claim to the citation standard in Section 7.")
     add_number(doc, "State the definitions you use, especially for the placement rate.")
     add_number(doc, "Fill templates in Word using Nunito or Lexend (Vietnamese-safe). Present in "
@@ -329,7 +348,9 @@ def build_wsa_start():
         ("Templates/", "Word files to complete and export to PDF before submission"),
     ], widths=[2.8, 3.6])
     add_body(doc, "Analysis Request and Findings Memo templates live in 4_Shared_Toolkit/Templates/. "
-             "Log every request on the Request Log tab of GBF_Consulting_Toolkit.xlsx.")
+             "Log every request on the Request Log tab of GBF_Consulting_Toolkit.xlsx. Save every "
+             "R-xx and FM-xx PDF in your team Drive folder A_B_Exchange/ - that folder is what "
+             "markers assess for cross-workflow exchange.")
     add_heading(doc, "Your deliverables", 1)
     add_table(doc, ["Ref", "Deliverable", "Template", "Due (17:00 ICT)"], [
         ("A1", "Problem statement and issue tree", "Problem_Statement_and_Issue_Tree.docx", "Wed 5 Aug"),
@@ -345,7 +366,8 @@ def build_wsa_start():
     add_number(doc, "Every insight from transcripts cites CODE (Speaker), e.g. BN-02 (Tuan).")
     add_number(doc, "Every document cite includes section/heading, e.g. D-02 §1 Dong Nai.")
     add_number(doc, "Every number cites a Findings Memo / Request ID from Workflow B.")
-    add_number(doc, "At least three Analysis Requests have Findings Memos returned.")
+    add_number(doc, "At least three Analysis Requests have Findings Memos returned "
+               "(PDFs in A_B_Exchange/).")
     add_number(doc, "Workflow B has completed the online tick on Section B of the "
                "Cross-Workflow Handoff Checklist (typed name + date - no wet signature).")
     _save(doc, "WSA_Start_Here", "2_Workflow_A_Impact_Strategy", "pdf")
@@ -384,6 +406,7 @@ def build_wsb_start():
     add_number(doc, "State the placement definition you used and why.")
     add_number(doc, "Document every cleaning decision in the Assumption Log.")
     add_number(doc, "Findings Memos use plain language; charts are curated, not a dump of pivots.")
+    add_number(doc, "Every Findings Memo PDF is saved in A_B_Exchange/ and logged on the Request Log.")
     add_number(doc, "Do not claim causation from correlation on attendance or mentoring.")
     add_number(doc, "Workflow A has completed the online tick on Section A of the "
                "Cross-Workflow Handoff Checklist (typed name + date - no wet signature).")
@@ -904,18 +927,11 @@ def build_wsa_brief():
     add_bullet(doc, "File R-01 in Week 3 as soon as A1 hypotheses exist - do not wait for a polished deck.")
     add_bullet(doc, "Each request states: the decision it informs, the hypothesis, what a useful "
                "answer would look like, and urgency. Do not prescribe field names you have not been given.")
+    add_bullet(doc, "Ask what would change your mind - not everything that looks interesting. "
+               "Use the official Analysis Request template; chat messages are not the record.")
     add_bullet(doc, "Cite Request IDs (R-01, R-02...) on every quantitative claim in A4 and later.")
-
-    add_body(doc, "Question themes worth pressing (use transcripts to decide which).", bold=True)
-    add_body(doc, "You choose what to ask. The themes below often matter for youth-employment "
-             "strategy - check whether your interviews and issue tree make them relevant:")
-    add_bullet(doc, "What actually moves placement - attendance patterns, programme design, "
-               "or something else the operational record can test?")
-    add_bullet(doc, "Does mentoring intensity, completion, or volunteer capacity show up in the "
-               "numbers the way staff and young people describe it?")
-    add_bullet(doc, "Turn at least one of these into a real Analysis Request if your "
-               "recommendation would change depending on the answer. Do not ask everything; "
-               "ask what would change your mind.")
+    add_bullet(doc, "Save every filed request and returned memo as PDF in your team Drive folder "
+               "A_B_Exchange/ (see Programme Guideline). Markers assess the exchange from that folder.")
 
     add_body(doc, "A2 - Interview synthesis.", bold=True)
     add_bullet(doc, "Summarise by theme, not by person. Flag contradictions between sources.")
@@ -964,11 +980,10 @@ def build_wsa_playbook():
          "A problem statement, issue tree and hypotheses (deliverable A1)."),
         ("First Analysis Request", "Week 3", "45 minutes",
          ["Pick the hypothesis that would most change your recommendation if false.",
-          "Scan transcripts for claims about what drives placement, attendance, mentoring "
-          "or completion - which of those would you need B to test?",
-          "Write R-01: decision question, hypothesis, what a useful answer looks like.",
-          "Hand it to Workflow B and log it on the Request Log."],
-         "R-01 filed; waiting for Findings Memo FM-01."),
+          "Look back at interviews: which claims about how the programme works still lack numbers?",
+          "Complete the official Analysis Request template (R-01) and save the PDF to A_B_Exchange/.",
+          "Log it on the Request Log and hand it to Workflow B."],
+         "R-01 filed in A_B_Exchange/; waiting for Findings Memo FM-01."),
         ("Empathy mapping", "Week 3", "90 minutes",
          ["Choose one beneficiary archetype grounded in BN-01 to BN-04.",
           "Fill the four quadrants - says, thinks, does, feels - using cited quotes only.",
@@ -1072,12 +1087,13 @@ def build_wsb_brief():
                "when A asks.")
 
     add_body(doc, "On-request analysis (no fixed recipe).", bold=True)
-    add_bullet(doc, "A may ask about drivers of placement, attendance, programme design, mentoring "
-               "intensity, completion, volunteer capacity, or funding feasibility.")
+    add_bullet(doc, "When A files an Analysis Request in A_B_Exchange/, respond with a Findings Memo "
+               "in the same folder using the official template.")
     add_bullet(doc, "Your job: restate their decision question, choose tables from the dictionary, "
-               "compute carefully, state definitions and caveats, return a Findings Memo.")
+               "compute carefully, state definitions and caveats.")
     add_bullet(doc, "Do not invent a full analysis plan before a request arrives. Do not share "
                "raw tables. If stuck on method, ask Buddy - they will nudge, not solve.")
+    add_bullet(doc, "Chat acknowledgements are fine; the assessable answer is the FM-xx PDF.")
 
     add_body(doc, "Funding scenarios (after draft options).", bold=True)
     add_bullet(doc, "Run once A has sketched options or asks what growth costs (deliverable B5).")
@@ -1303,11 +1319,12 @@ def build_templates():
     def handoff(doc):
         add_body(doc, "No deliverable may be submitted until both workflows have completed and "
                  "confirmed their sections. Use online ticks (typed name + date) - no wet "
-                 "signature. The Engagement Lead confirms only if the Request Log shows "
-                 "genuine exchange (not a single dump at the end).")
+                 "signature. The Engagement Lead confirms only if A_B_Exchange/ and the Request "
+                 "Log show genuine exchange (not a single dump at the end).")
         add_heading(doc, "Section A - Workflow A reviews Workflow B", 2)
         for item in [
             "Findings Memos answer the question asked, in plain language.",
+            "Each FM-xx PDF is saved in A_B_Exchange/ and logged on the Request Log.",
             "The raw workbook and data dictionary were not shared with A.",
             "Placement definition and sample limitations are stated.",
             "Caveats are honest; uncomfortable findings are not hidden.",
@@ -1321,7 +1338,7 @@ def build_templates():
         for item in [
             "Every quantitative claim cites a Request ID or Findings Memo ID.",
             "Document cites include section/heading (not code alone).",
-            "At least three Analysis Requests have Findings Memos returned.",
+            "At least three Analysis Request PDFs are in A_B_Exchange/ with matching Findings Memos.",
             "Strategic options are financially feasible against D-12 and D-03.",
             "Options changed after at least one B challenge (see revision log).",
             "Journey-map pain points link to recommendations and/or Findings cites.",
@@ -1331,21 +1348,28 @@ def build_templates():
             add_bullet(doc, "[  ]  " + item)
         add_online_confirm(doc, "Workflow B reviewer")
         add_heading(doc, "Section C - Joint final confirmation", 2)
-        add_body(doc, "Request Log shows minimum three completed R/FM pairs: [  ] Yes")
+        add_body(doc, "A_B_Exchange/ and Request Log show minimum three completed R/FM pairs: [  ] Yes")
+        add_body(doc, "Drive link to A_B_Exchange/: ________________________________")
         add_online_confirm(doc, "Engagement Lead")
     _template("Cross_Workflow_Handoff_Checklist", "4_Shared_Toolkit",
               "Cross-Workflow Handoff Checklist", handoff)
 
     def analysis_request(doc):
-        add_body(doc, "Workflow A completes one form per ask. Do not prescribe field names you "
-                 "have not been given. Working out what to ask is part of the exercise.")
+        add_body(doc, "OFFICIAL CHANNEL - Workflow A. Complete one form per ask. Export to PDF and "
+                 "save in your team Drive folder A_B_Exchange/ using naming "
+                 "Team_WSA_Rxx_Request_vN.pdf. Also log the request on the Request Log tab. "
+                 "Chat or verbal asks do not count for assessment.")
+        add_body(doc, "Do not prescribe field names you have not been given. Working out what to "
+                 "ask is part of the exercise.")
         add_meta_table(doc, [
             ("Request ID (R-xx)", ""),
             ("Date filed", ""),
-            ("Filed by", ""),
+            ("Filed by (name + role)", ""),
             ("Urgency (routine / needed for options / blocking)", ""),
+            ("Saved to A_B_Exchange? (Y/N)", ""),
         ])
         add_heading(doc, "1. Decision this informs", 2)
+        add_body(doc, "What choice would this answer change?")
         add_body(doc, "________________________________________________________________")
         add_heading(doc, "2. Hypothesis or claim to test", 2)
         add_body(doc, "________________________________________________________________")
@@ -1354,21 +1378,27 @@ def build_templates():
                  "a cost range. Be specific about the decision, not the spreadsheet.)")
         add_body(doc, "________________________________________________________________")
         add_heading(doc, "4. Qualitative sources that prompted this ask", 2)
-        add_body(doc, "(Transcript or document refs)")
+        add_body(doc, "(Transcript or document refs with section/speaker)")
         add_body(doc, "________________________________________________________________")
-        add_heading(doc, "5. Workflow B acknowledgement", 2)
+        add_heading(doc, "5. What would change your mind", 2)
+        add_body(doc, "If the operational record showed X instead of Y, we would ________________")
+        add_body(doc, "________________________________________________________________")
+        add_heading(doc, "6. Workflow B acknowledgement", 2)
         add_meta_table(doc, [("Received by", ""), ("Target return date", ""),
                              ("Findings Memo ID (FM-xx)", "")])
     _template("Analysis_Request", "4_Shared_Toolkit", "Analysis Request", analysis_request)
 
     def findings_memo(doc):
-        add_body(doc, "Workflow B completes one memo per Analysis Request. Write for a non-analyst. "
-                 "Do not attach the raw workbook.")
+        add_body(doc, "OFFICIAL CHANNEL - Workflow B. Complete one memo per Analysis Request. "
+                 "Export to PDF and save in A_B_Exchange/ as Team_WSB_FMxx_Findings_vN.pdf. "
+                 "Update the Request Log to Returned. Do not attach the raw workbook. Write for "
+                 "a non-analyst.")
         add_meta_table(doc, [
             ("Findings Memo ID (FM-xx)", ""),
             ("Responds to Request ID", ""),
             ("Date returned", ""),
-            ("Author", ""),
+            ("Author (name + role)", ""),
+            ("Saved to A_B_Exchange? (Y/N)", ""),
         ])
         add_heading(doc, "1. Question restated", 2)
         add_body(doc, "________________________________________________________________")
@@ -1382,8 +1412,11 @@ def build_templates():
         add_body(doc, "________________________________________________________________")
         add_heading(doc, "5. Caveats and what this does not prove", 2)
         add_body(doc, "________________________________________________________________")
-        add_heading(doc, "6. Attachments", 2)
-        add_body(doc, "List curated charts or summary tables only (max two recommended):")
+        add_heading(doc, "6. Implication for A's decision (optional one sentence)", 2)
+        add_body(doc, "________________________________________________________________")
+        add_heading(doc, "7. Attachments", 2)
+        add_body(doc, "List curated charts or summary tables only (max two recommended). "
+                 "File names of any charts also saved in A_B_Exchange/:")
         add_body(doc, "________________________________________________________________")
     _template("Findings_Memo", "4_Shared_Toolkit", "Findings Memo", findings_memo)
 

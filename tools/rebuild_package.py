@@ -519,6 +519,16 @@ def build_facilitator_docs():
     add_body(d, "Your job is to ask better questions, not to solve the case. Never name "
              "'efficiency versus ethics' or 'elitist outside-in' to participants. Use the "
              "three-level hint ladder. Only move to the next level if the team is genuinely stuck.")
+    add_heading(d, "Staff-only: question themes (do not paste into participant packs)", 1)
+    add_body(d, "Participants should invent asks from transcripts and their issue tree. If they "
+             "only request vanity metrics from D-01, nudge - do not hand them a menu. Useful "
+             "pressure-tests often include:")
+    add_bullet(d, "What actually moves placement (attendance, programme design, or something else)?")
+    add_bullet(d, "Whether mentoring intensity, completion or volunteer capacity matches how "
+               "staff and young people describe it.")
+    add_bullet(d, "Ask only what would change the recommendation - not everything.")
+    add_body(d, "These themes live here so Buddies can guide discovery. They were removed from "
+             "Workflow A's brief so teams are not spoon-fed the analysis agenda.")
     add_heading(d, "The hint ladder", 1)
     for topic, l1, l2, l3 in [
         ("Problem framing",
@@ -537,6 +547,10 @@ def build_facilitator_docs():
          "Transcripts mention mentoring and drop-out - is that a claim or an evidence gap?",
          "What would you ask B if mentoring intensity mattered for your option?",
          "If B is stuck: which tables mention mentors or completion? What would you exclude before averaging?"),
+        ("A_B_Exchange hygiene",
+         "Where is the PDF of that request?",
+         "Is the Findings Memo in A_B_Exchange/ or only in a chat thread?",
+         "Refuse to treat chat as the official record; require R-xx / FM-xx PDFs before handoff."),
         ("Placement rate",
          "What does 'placed' actually mean here?",
          "Whose definition are you using - D-01's or ST-02's?",
@@ -839,6 +853,8 @@ def build_root_pdfs():
         "Fictional case only - no outside data in deliverables.",
         "Workflow A does not hold the operational datasets; use Analysis Requests.",
         "Workflow B does not share the raw workbook; return Findings Memos.",
+        "Official A-B exchange: save R-xx and FM-xx PDFs in team Drive folder A_B_Exchange/.",
+        "Use Analysis_Request and Findings_Memo templates - chat is not the assessment record.",
         "Cite Ref + section (documents) or CODE (Speaker) for transcripts.",
         "Name files: Team_Owner_DeliverableCode_Version.ext and submit via the weekly Google Form.",
         "Download the pack from GitHub: Code > Download ZIP.",
@@ -917,6 +933,29 @@ def main():
     ge.OUT.mkdir(parents=True, exist_ok=True)
     ge.main()
     csv_to_excel(CACHE / "raw", PART / "3_Workflow_B_Operations_and_Analytics" / "GBF_Datasets.xlsx")
+
+    exchange = PART / "4_Shared_Toolkit" / "A_B_Exchange"
+    exchange.mkdir(parents=True, exist_ok=True)
+    (exchange / "README.txt").write_text(
+        "A_B_Exchange - official Workflow A <-> Workflow B communications\n"
+        "================================================================\n\n"
+        "Create this same folder in your TEAM Google Drive (or Microsoft 365).\n"
+        "Markers and Buddies assess the cross-workflow exchange from that Drive folder.\n\n"
+        "Required contents (PDF exports of the Word templates):\n"
+        "  - Analysis Requests filed by Workflow A  (R-01, R-02, R-03...)\n"
+        "  - Findings Memos returned by Workflow B  (FM-01, FM-02, FM-03...)\n"
+        "  - Optional curated charts attached to memos\n\n"
+        "Templates:\n"
+        "  ../Templates/Analysis_Request.docx\n"
+        "  ../Templates/Findings_Memo.docx\n\n"
+        "Naming: TeamShortName_WSA_R01_Request_v1.pdf\n"
+        "        TeamShortName_WSB_FM01_Findings_v1.pdf\n\n"
+        "Also update the Request Log tab in GBF_Consulting_Toolkit.xlsx.\n"
+        "Chat / Zalo / Messenger is fine for logistics only - not the assessment record.\n"
+        "Minimum three completed R/FM pairs before final strategic options.\n",
+        encoding="utf-8",
+    )
+    print(f"  Exchange folder: {exchange.relative_to(ROOT)}")
 
     print("=== Step 5: PowerPoint ===")
     build_ppt(PART / "4_Shared_Toolkit" / "GBF_Board_Deck_Template.pptx")
